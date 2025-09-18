@@ -25,7 +25,7 @@ export PROGRAM ?= coremark
 export SRAM_SIZE ?= 0x80000# Altera -> 0x80000, Xilinx -> 0x40000
 
 export RISCV ?= /opt/rv32imfdcb
-export ARCH ?= rv32imfdc_zba_zbb_zbc_zbs_zicsr_zifencei
+export ARCH ?= rv32imfdcb_zicsr_zifencei
 export ABI ?= ilp32d
 
 export MAXTIME ?= 10000000
