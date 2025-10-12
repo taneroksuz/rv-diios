@@ -1,6 +1,6 @@
-# CPU-MEDIUM
+# RV-DIIOS (RISC-V Dual-Issue In-Order Superscalar)
 
-This cpu is 6-stage in-order dual issue superscalar processor with floating point unit.
+This cpu is 6-stage dual-issue in-order superscalar processor with floating point unit.
 
 ## SPECIFICATIONS
 
@@ -30,7 +30,7 @@ The installation scripts of necessary tools are located in directory **tools**. 
 
 1. Clone the repository:
 ```console
-git clone --recurse-submodules https://github.com/taneroksuz/cpu-medium.git
+git clone --recurse-submodules https://github.com/taneroksuz/rv-diios.git
 ```
 
 2. Install necessary tools for compilation and simulation:
