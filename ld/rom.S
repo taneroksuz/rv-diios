@@ -1,7 +1,9 @@
 #include "encoding.h"
 
 #define UART_TX 0x1000000
-#define UART_RX 0x1000004
+#define UART_RX 0x1000010
+#define UART_TX_IRQ 0x1000008
+#define UART_RX_IRQ 0x1000018
 #define SRAM_BASE 0x80000000
 #define SRAM_SIZE 0x80000
 
@@ -67,10 +69,10 @@ loop:
 
 trap_entry:
 
-  # uart irpt
-  la t5, 0x80000018
+  la t5, UART_RX_IRQ
+  lw t6, 0(t5)
+  la t5, 0x000000FF
 
-  csrr t6, mcause
   bne t5, t6, loop
 
 copy_firmware:

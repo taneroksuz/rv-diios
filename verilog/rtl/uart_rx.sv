@@ -8,7 +8,7 @@ module uart_rx #(
     input logic clock,
     input mem_in_type uart_in,
     output mem_out_type uart_out,
-    output logic uart_irpt,
+    output logic rx_irq,
     input rx
 );
   timeunit 1ns; timeprecision 1ps;
@@ -41,11 +41,18 @@ module uart_rx #(
 
     v.counter = v.counter + 1;
 
+    v.rdata_re = 0;
     v.ready_re = 0;
 
-    if (uart_in.mem_valid == 1 && |uart_in.mem_wstrb == 0 && v.ready == 1) begin
-      v.ready_re = 1;
-      v.ready = 0;
+    if (uart_in.mem_valid == 1 && |uart_in.mem_wstrb == 0) begin
+      if (uart_in.mem_addr == 0) begin
+        v.rdata_re = v.data[8:1];
+        v.ready_re = 1;
+      end else if (uart_in.mem_addr == 8) begin
+        v.rdata_re = {8{v.ready}};
+        v.ready_re = 1;
+        v.ready = 0;
+      end
     end
 
     case (r.state)
@@ -57,10 +64,9 @@ module uart_rx #(
       end
       9: begin
         if (r.counter > full) begin
-          v.rdata_re = v.data[8:1];
-          v.counter  = 0;
-          v.state    = 0;
-          v.ready    = 1;
+          v.counter = 0;
+          v.state   = 0;
+          v.ready   = 1;
         end
       end
       default: begin
@@ -76,12 +82,10 @@ module uart_rx #(
 
   end
 
-  assign uart_out.mem_rdata = {
-    r.rdata_re, r.rdata_re, r.rdata_re, r.rdata_re, r.rdata_re, r.rdata_re, r.rdata_re, r.rdata_re
-  };
+  assign uart_out.mem_rdata = {56'b0, r.rdata_re};
   assign uart_out.mem_error = 0;
   assign uart_out.mem_ready = r.ready_re;
-  assign uart_irpt = r.ready;
+  assign rx_irq = r.ready;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin

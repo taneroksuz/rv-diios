@@ -63,10 +63,12 @@ module soc (
   mem_out_type uart_rx_out;
   mem_out_type uart_tx_out;
 
-  logic [0 : 0] meip = 0;
+  logic [0 : 0] meip = rx_irq | tx_irq;
   logic [0 : 0] msip;
   logic [0 : 0] mtip;
-  logic [0 : 0] irpt;
+
+  logic [0 : 0] rx_irq;
+  logic [0 : 0] tx_irq;
 
   logic [63 : 0] mtime;
 
@@ -318,7 +320,6 @@ module soc (
       .meip(meip),
       .msip(msip),
       .mtip(mtip),
-      .irpt(irpt),
       .mtime(mtime)
   );
 
@@ -394,7 +395,7 @@ module soc (
       .clock(clock),
       .uart_in(uart_rx_in),
       .uart_out(uart_rx_out),
-      .uart_irpt(irpt),
+      .rx_irq(rx_irq),
       .rx(rx)
   );
 
@@ -405,6 +406,7 @@ module soc (
       .clock(clock),
       .uart_in(uart_tx_in),
       .uart_out(uart_tx_out),
+      .tx_irq(tx_irq),
       .tx(tx)
   );
 

@@ -27,10 +27,12 @@ package configure;
   parameter spi_mask_addr = 32'h0FFFFF;
 
   parameter uart_tx_base_addr = 32'h1000000;
-  parameter uart_tx_mask_addr = 32'h0000003;
+  parameter uart_tx_irq_addr  = 32'h1000008;
+  parameter uart_tx_mask_addr = 32'h000000F;
 
-  parameter uart_rx_base_addr = 32'h1000004;
-  parameter uart_rx_mask_addr = 32'h0000003;
+  parameter uart_rx_base_addr = 32'h1000010;
+  parameter uart_rx_irq_addr  = 32'h1000018;
+  parameter uart_rx_mask_addr = 32'h000001F;
 
   parameter clint_base_addr = 32'h2000000;
   parameter clint_mask_addr = 32'h000FFFF;

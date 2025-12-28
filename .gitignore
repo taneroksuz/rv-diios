@@ -1,5 +1,6 @@
 riscv/
 dump/
+bin/
 hex/
 riscv-tests/
 coremark/

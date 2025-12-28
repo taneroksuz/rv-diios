@@ -237,8 +237,6 @@ package constants;
   parameter [7 : 0] interrupt_super_extern = 8'h09;
   parameter [7 : 0] interrupt_mach_extern = 8'h0B;
 
-  parameter [7 : 0] interrupt_uart_extern = 8'h18;
-
   parameter [7 : 0] except_instr_addr_misalign = 8'h00;
   parameter [7 : 0] except_instr_access_fault = 8'h01;
   parameter [7 : 0] except_illegal_instruction = 8'h02;
