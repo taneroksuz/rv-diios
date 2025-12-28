@@ -63,7 +63,7 @@ module soc (
   mem_out_type uart_rx_out;
   mem_out_type uart_tx_out;
 
-  logic [0 : 0] meip = rx_irq | tx_irq;
+  logic [0 : 0] meip;
   logic [0 : 0] msip;
   logic [0 : 0] mtip;
 
@@ -84,6 +84,8 @@ module soc (
 
   logic [31 : 0] mem_addr;
   logic [31 : 0] base_addr;
+
+  assign meip = rx_irq | tx_irq;
 
   always_comb begin
 

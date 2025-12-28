@@ -52,7 +52,7 @@ module uart_tx #(
         logic [0 : 0]  ready;
       } register_type;
 
-      register_type init_register = '{state : 0, data : 10'h3FF, counter : 0, ready : 0};
+      register_type init_register = '{data : 10'h3FF, default: 0};
 
       register_type r, rin, v;
 

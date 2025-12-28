@@ -51,11 +51,11 @@ read_verilog -sv ../../verilog/rtl/cdc.sv
 read_verilog -sv ../../verilog/rtl/clint.sv
 read_verilog -sv ../../verilog/rtl/tim.sv
 read_verilog -sv ../../verilog/rtl/cpu.sv
+read_verilog -sv ../../verilog/rtl/rom.sv
 read_verilog -sv ../../verilog/rtl/ram.sv
 read_verilog -sv ../../verilog/rtl/spi.sv
 read_verilog -sv ../../verilog/rtl/uart_rx.sv
 read_verilog -sv ../../verilog/rtl/uart_tx.sv
-read_verilog -sv rom.sv
 read_verilog -sv ../../verilog/rtl/soc.sv
 read_verilog -sv dram.sv
 read_verilog pll_clk_wiz.v
