@@ -73,7 +73,13 @@ trap_entry:
   lw t6, 0(t5)
   la t5, 0x000000FF
 
-  bne t5, t6, loop
+  beq t5, t6, copy_firmware
+
+  la t5, UART_TX_IRQ
+  lw t6, 0(t5)
+  la t5, 0x000000FF
+
+  mret
 
 copy_firmware:
 
@@ -83,7 +89,7 @@ copy_firmware:
   addi t1,t1,1
   addi t2,t2,1
 
-  bge t2,t3,init
+  bge t2, t3, init
 
   mret
 
