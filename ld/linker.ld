@@ -34,12 +34,26 @@ SECTIONS
 
   OVERLAY :
   {
-    .data
+    .rodata
     {
       *(.rodata*)
       *(.srodata*)
+    }
+  } >tim1 AT>ram
+
+  OVERLAY :
+  {
+    .data
+    {
       *(.data*)
       *(.sdata*)
+    }
+  } >tim1 AT>ram
+
+  OVERLAY :
+  {
+    .bss
+    {
       *(.bss*)
       *(.sbss*)
       _end = .;
@@ -61,4 +75,3 @@ SECTIONS
   PROVIDE(_stack = (__tim1_end));
 
 }
-

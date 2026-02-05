@@ -36,8 +36,8 @@ copy_text:
 
   # copy data section
 
-  la t0, __load_start_data
-  la t1, __load_stop_data
+  la t0, __load_start_rodata
+  la t1, __load_stop_bss
 
   la t2, __tim1_start
   la t3, __tim1_end
