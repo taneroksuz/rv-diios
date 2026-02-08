@@ -4,7 +4,7 @@ package hazard_wires;
   import configure::*;
   import wires::*;
 
-  localparam depth = $clog2(hazard_depth);
+  localparam depth = $clog2(HAZARD_DEPTH);
 
   typedef struct packed {
     logic [0 : 0] wen0;
@@ -36,10 +36,10 @@ module hazard_reg (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(hazard_depth);
+  localparam depth = $clog2(HAZARD_DEPTH);
 
-  instruction_type hazard_reg_array0[0:hazard_depth-1] = '{default: '0};
-  instruction_type hazard_reg_array1[0:hazard_depth-1] = '{default: '0};
+  instruction_type hazard_reg_array0[0:HAZARD_DEPTH-1] = '{default: '0};
+  instruction_type hazard_reg_array1[0:HAZARD_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (hazard_reg_in.wen0 == 1) begin
@@ -68,8 +68,8 @@ module hazard_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(hazard_depth);
-  localparam total = hazard_depth - 2;
+  localparam depth = $clog2(HAZARD_DEPTH);
+  localparam total = HAZARD_DEPTH - 2;
 
   localparam [depth-1:0] one = 1;
 

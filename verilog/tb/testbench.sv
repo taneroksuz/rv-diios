@@ -229,7 +229,7 @@ module testbench ();
   );
 
   ram #(
-      .clock_rate(clk_divider_bit)
+      .clock_rate(CLK_DIVIDER_BIT)
   ) ram_comp (
       .reset  (reset),
       .clock  (clock),

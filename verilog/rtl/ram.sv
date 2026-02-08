@@ -13,9 +13,9 @@ module ram #(
 
   localparam full = clock_rate - 1;
 
-  localparam depth = $clog2(ram_depth);
+  localparam depth = $clog2(RAM_DEPTH);
 
-  logic [63 : 0] ram_block[0:ram_depth-1];
+  logic [63 : 0] ram_block[0:RAM_DEPTH-1];
 
   mem_out_type mem_out = '0;
 

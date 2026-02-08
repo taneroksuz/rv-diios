@@ -3,7 +3,7 @@ package buffer_wires;
 
   import configure::*;
 
-  localparam depth = $clog2(buffer_depth);
+  localparam depth = $clog2(BUFFER_DEPTH);
 
   typedef struct packed {
     logic [0 : 0] wen0;
@@ -65,16 +65,16 @@ module buffer_reg (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(buffer_depth);
+  localparam depth = $clog2(BUFFER_DEPTH);
 
-  logic [47:0] buffer_reg_array0[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array1[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array2[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array3[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array4[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array5[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array6[0:buffer_depth-1] = '{default: '0};
-  logic [47:0] buffer_reg_array7[0:buffer_depth-1] = '{default: '0};
+  logic [47:0] buffer_reg_array0[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array1[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array2[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array3[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array4[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array5[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array6[0:BUFFER_DEPTH-1] = '{default: '0};
+  logic [47:0] buffer_reg_array7[0:BUFFER_DEPTH-1] = '{default: '0};
 
   logic [47:0] rdata0;
   logic [47:0] rdata1;
@@ -167,8 +167,8 @@ module buffer_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(buffer_depth);
-  localparam total = 8 * (buffer_depth - 2);
+  localparam depth = $clog2(BUFFER_DEPTH);
+  localparam total = 8 * (BUFFER_DEPTH - 2);
 
   localparam [depth-1:0] one = 1;
 

@@ -85,7 +85,7 @@ module top
   assign LEDR = REG_LED;
 
   sram #(
-      .clock_rate(clk_divider_per)
+      .clock_rate(CLK_DIVIDER_PER)
   ) sram_comp (
       .reset(RESET),
       .clock(CLOCK_CPU),

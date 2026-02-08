@@ -644,7 +644,7 @@ module fpu_execute (
 endmodule
 
 module fpu #(
-    parameter fpu_enable = 1
+    parameter FPU_ENABLE = 1
 ) (
     input logic reset,
     input logic clock,
@@ -656,7 +656,7 @@ module fpu #(
 
   generate
 
-    if (fpu_enable == 1) begin : fpu_generate
+    if (FPU_ENABLE == 1) begin : fpu_generate
 
       fpu_decode fpu_decode0_comp (
           .fp_decode_in (fpu_in.fp_decode0_in),

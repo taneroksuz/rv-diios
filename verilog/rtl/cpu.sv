@@ -523,7 +523,7 @@ module cpu (
   );
 
   fpu #(
-      .fpu_enable(fpu_enable)
+      .FPU_ENABLE(FPU_ENABLE)
   ) fpu_comp (
       .reset  (reset),
       .clock  (clock),

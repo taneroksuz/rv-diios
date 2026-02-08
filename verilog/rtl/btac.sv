@@ -3,8 +3,8 @@ package btac_wires;
 
   import configure::*;
 
-  localparam btb_depth = $clog2(branchtarget_depth);
-  localparam bht_depth = $clog2(branchhistory_depth);
+  localparam btb_depth = $clog2(BTB_DEPTH);
+  localparam bht_depth = $clog2(BHT_DEPTH);
 
   typedef struct packed {
     logic [0 : 0] wen;
@@ -45,9 +45,9 @@ module btb (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam btb_depth = $clog2(branchtarget_depth);
+  localparam btb_depth = $clog2(BTB_DEPTH);
 
-  logic [62-btb_depth:0] btb_array[0:branchtarget_depth-1] = '{default: '0};
+  logic [62-btb_depth:0] btb_array[0:BTB_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (btb_in.wen == 1) begin
@@ -70,9 +70,9 @@ module bht (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam bht_depth = $clog2(branchhistory_depth);
+  localparam bht_depth = $clog2(BHT_DEPTH);
 
-  logic [1:0] bht_array[0:branchhistory_depth-1] = '{default: '0};
+  logic [1:0] bht_array[0:BHT_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (bht_in.wen == 1) begin
@@ -96,8 +96,8 @@ module btac_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam btb_depth = $clog2(branchtarget_depth);
-  localparam bht_depth = $clog2(branchhistory_depth);
+  localparam btb_depth = $clog2(BTB_DEPTH);
+  localparam bht_depth = $clog2(BHT_DEPTH);
 
   function [1:0] saturation;
     input logic [1:0] sat;
@@ -311,7 +311,7 @@ module btac (
 
   generate
 
-    if (btac_enable == 1) begin
+    if (BTAC_ENABLE == 1) begin
 
       btb_in_type  btb_in;
       btb_out_type btb_out;

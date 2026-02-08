@@ -104,56 +104,56 @@ module soc (
     dtim0_rev = dtim0_rev_reg;
     dtim1_rev = dtim1_rev_reg;
 
-    if (imem0_in.mem_valid & ~|(itim_base_addr ^ (imem0_in.mem_addr & ~itim_mask_addr))) begin
+    if (imem0_in.mem_valid & ~|(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK))) begin
       itim0_in = imem0_in;
-      itim0_in.mem_addr = imem0_in.mem_addr - itim_base_addr;
+      itim0_in.mem_addr = imem0_in.mem_addr - ITIM_BASE;
       itim0_rev = 0;
-    end else if (dmem0_in.mem_valid & ~|(itim_base_addr ^ (dmem0_in.mem_addr & ~itim_mask_addr))) begin
+    end else if (dmem0_in.mem_valid & ~|(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK))) begin
       itim0_in = dmem0_in;
-      itim0_in.mem_addr = dmem0_in.mem_addr - itim_base_addr;
+      itim0_in.mem_addr = dmem0_in.mem_addr - ITIM_BASE;
       itim0_rev = 1;
     end
 
-    if (imem1_in.mem_valid & ~|(itim_base_addr ^ (imem1_in.mem_addr & ~itim_mask_addr))) begin
+    if (imem1_in.mem_valid & ~|(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK))) begin
       itim1_in = imem1_in;
-      itim1_in.mem_addr = imem1_in.mem_addr - itim_base_addr;
+      itim1_in.mem_addr = imem1_in.mem_addr - ITIM_BASE;
       itim1_rev = 0;
-    end else if (dmem1_in.mem_valid & ~|(itim_base_addr ^ (dmem1_in.mem_addr & ~itim_mask_addr))) begin
+    end else if (dmem1_in.mem_valid & ~|(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK))) begin
       itim1_in = dmem1_in;
-      itim1_in.mem_addr = dmem1_in.mem_addr - itim_base_addr;
+      itim1_in.mem_addr = dmem1_in.mem_addr - ITIM_BASE;
       itim1_rev = 1;
     end
 
-    if (imem0_in.mem_valid & ~|(dtim_base_addr ^ (imem0_in.mem_addr & ~dtim_mask_addr))) begin
+    if (imem0_in.mem_valid & ~|(DTIM_BASE ^ (imem0_in.mem_addr & DTIM_MASK))) begin
       dtim0_in = imem0_in;
-      dtim0_in.mem_addr = imem0_in.mem_addr - dtim_base_addr;
+      dtim0_in.mem_addr = imem0_in.mem_addr - DTIM_BASE;
       dtim0_rev = 1;
-    end else if (dmem0_in.mem_valid & ~|(dtim_base_addr ^ (dmem0_in.mem_addr & ~dtim_mask_addr))) begin
+    end else if (dmem0_in.mem_valid & ~|(DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
       dtim0_in = dmem0_in;
-      dtim0_in.mem_addr = dmem0_in.mem_addr - dtim_base_addr;
+      dtim0_in.mem_addr = dmem0_in.mem_addr - DTIM_BASE;
       dtim0_rev = 0;
     end
 
-    if (imem1_in.mem_valid & ~|(dtim_base_addr ^ (imem1_in.mem_addr & ~dtim_mask_addr))) begin
+    if (imem1_in.mem_valid & ~|(DTIM_BASE ^ (imem1_in.mem_addr & DTIM_MASK))) begin
       dtim1_in = imem1_in;
-      dtim1_in.mem_addr = imem1_in.mem_addr - dtim_base_addr;
+      dtim1_in.mem_addr = imem1_in.mem_addr - DTIM_BASE;
       dtim1_rev = 1;
-    end else if (dmem1_in.mem_valid & ~|(dtim_base_addr ^ (dmem1_in.mem_addr & ~dtim_mask_addr))) begin
+    end else if (dmem1_in.mem_valid & ~|(DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
       dtim1_in = dmem1_in;
-      dtim1_in.mem_addr = dmem1_in.mem_addr - dtim_base_addr;
+      dtim1_in.mem_addr = dmem1_in.mem_addr - DTIM_BASE;
       dtim1_rev = 0;
     end
 
-    if (imem0_in.mem_valid & |(itim_base_addr ^ (imem0_in.mem_addr & ~itim_mask_addr)) & |(dtim_base_addr ^ (imem0_in.mem_addr & ~dtim_mask_addr))) begin
+    if (imem0_in.mem_valid & |(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (imem0_in.mem_addr & DTIM_MASK))) begin
       iper0_in = imem0_in;
     end
-    if (imem1_in.mem_valid & |(itim_base_addr ^ (imem1_in.mem_addr & ~itim_mask_addr)) & |(dtim_base_addr ^ (imem1_in.mem_addr & ~dtim_mask_addr))) begin
+    if (imem1_in.mem_valid & |(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (imem1_in.mem_addr & DTIM_MASK))) begin
       iper1_in = imem1_in;
     end
-    if (dmem0_in.mem_valid & |(itim_base_addr ^ (dmem0_in.mem_addr & ~itim_mask_addr)) & |(dtim_base_addr ^ (dmem0_in.mem_addr & ~dtim_mask_addr))) begin
+    if (dmem0_in.mem_valid & |(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
       dper0_in = dmem0_in;
     end
-    if (dmem1_in.mem_valid & |(itim_base_addr ^ (dmem1_in.mem_addr & ~itim_mask_addr)) & |(dtim_base_addr ^ (dmem1_in.mem_addr & ~dtim_mask_addr))) begin
+    if (dmem1_in.mem_valid & |(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
       dper1_in = dmem1_in;
     end
 
@@ -231,34 +231,34 @@ module soc (
 
     error_in.mem_valid = per_in.mem_valid;
 
-    if (per_in.mem_valid & ~|(rom_base_addr ^ (per_in.mem_addr & ~rom_mask_addr))) begin
+    if (per_in.mem_valid & ~|(ROM_BASE ^ (per_in.mem_addr & ROM_MASK))) begin
       rom_in = per_in;
-      base_addr = rom_base_addr;
+      base_addr = ROM_BASE;
       error_in.mem_valid = 0;
     end
-    if (per_in.mem_valid & ~|(ram_base_addr ^ (per_in.mem_addr & ~ram_mask_addr))) begin
+    if (per_in.mem_valid & ~|(RAM_BASE ^ (per_in.mem_addr & RAM_MASK))) begin
       ram_in = per_in;
-      base_addr = ram_base_addr;
+      base_addr = RAM_BASE;
       error_in.mem_valid = 0;
     end
-    if (per_in.mem_valid & ~|(spi_base_addr ^ (per_in.mem_addr & ~spi_mask_addr))) begin
+    if (per_in.mem_valid & ~|(SPI_BASE ^ (per_in.mem_addr & SPI_MASK))) begin
       spi_in = per_in;
-      base_addr = spi_base_addr;
+      base_addr = SPI_BASE;
       error_in.mem_valid = 0;
     end
-    if (per_in.mem_valid & ~|(clint_base_addr ^ (per_in.mem_addr & ~clint_mask_addr))) begin
+    if (per_in.mem_valid & ~|(CLINT_BASE ^ (per_in.mem_addr & CLINT_MASK))) begin
       clint_in = per_in;
-      base_addr = clint_base_addr;
+      base_addr = CLINT_BASE;
       error_in.mem_valid = 0;
     end
-    if (per_in.mem_valid & ~|(uart_rx_base_addr ^ (per_in.mem_addr & ~uart_rx_mask_addr))) begin
+    if (per_in.mem_valid & ~|(UART_RX_BASE ^ (per_in.mem_addr & UART_RX_MASK))) begin
       uart_rx_in = per_in;
-      base_addr = uart_rx_base_addr;
+      base_addr = UART_RX_BASE;
       error_in.mem_valid = 0;
     end
-    if (per_in.mem_valid & ~|(uart_tx_base_addr ^ (per_in.mem_addr & ~uart_tx_mask_addr))) begin
+    if (per_in.mem_valid & ~|(UART_TX_BASE ^ (per_in.mem_addr & UART_TX_MASK))) begin
       uart_tx_in = per_in;
-      base_addr = uart_tx_base_addr;
+      base_addr = UART_TX_BASE;
       error_in.mem_valid = 0;
     end
 
@@ -366,7 +366,7 @@ module soc (
   );
 
   clint #(
-      .clock_rate(clk_divider_rtc)
+      .clock_rate(CLK_DIVIDER_RTC)
   ) clint_comp (
       .reset(reset),
       .clock(clock),
@@ -378,7 +378,7 @@ module soc (
   );
 
   spi #(
-      .clock_rate(clk_divider_per)
+      .clock_rate(CLK_DIVIDER_PER)
   ) spi_comp (
       .reset(reset),
       .clock(clock),
@@ -391,7 +391,7 @@ module soc (
   );
 
   uart_rx #(
-      .clock_rate(clk_divider_bit)
+      .clock_rate(CLK_DIVIDER_BIT)
   ) uart_rx_comp (
       .reset(reset),
       .clock(clock),
@@ -402,7 +402,7 @@ module soc (
   );
 
   uart_tx #(
-      .clock_rate(clk_divider_bit)
+      .clock_rate(CLK_DIVIDER_BIT)
   ) uart_tx_comp (
       .reset(reset),
       .clock(clock),
