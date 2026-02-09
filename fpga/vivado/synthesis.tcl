@@ -47,6 +47,7 @@ read_verilog -sv ../../verilog/rtl/memory_stage.sv
 read_verilog -sv ../../verilog/rtl/writeback_stage.sv
 read_verilog -sv ../../verilog/rtl/fpu.sv
 read_verilog -sv ../../verilog/rtl/arbiter.sv
+read_verilog -sv ../../verilog/rtl/bus.sv
 read_verilog -sv ../../verilog/rtl/cdc.sv
 read_verilog -sv ../../verilog/rtl/clint.sv
 read_verilog -sv ../../verilog/rtl/tim.sv
