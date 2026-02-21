@@ -36,21 +36,17 @@ module bus (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  mem_in_type iper0_in;
-  mem_in_type iper1_in;
-  mem_in_type dper0_in;
-  mem_in_type dper1_in;
+  mem_in_type bridge_in;
+  mem_in_type ibridge0_in;
+  mem_in_type ibridge1_in;
+  mem_in_type dbridge0_in;
+  mem_in_type dbridge1_in;
 
-  mem_out_type iper0_out;
-  mem_out_type iper1_out;
-  mem_out_type dper0_out;
-  mem_out_type dper1_out;
-
-  mem_in_type per_in;
-  mem_in_type error_in;
-
-  mem_out_type per_out;
-  mem_out_type error_out;
+  mem_out_type bridge_out;
+  mem_out_type ibridge0_out;
+  mem_out_type ibridge1_out;
+  mem_out_type dbridge0_out;
+  mem_out_type dbridge1_out;
 
   logic [0 : 0] itim0_rev;
   logic [0 : 0] itim1_rev;
@@ -62,20 +58,17 @@ module bus (
   logic [0 : 0] dtim0_rev_reg;
   logic [0 : 0] dtim1_rev_reg;
 
-  logic [31 : 0] mem_addr;
-  logic [31 : 0] base_addr;
-
   always_comb begin
 
-    itim0_in  = init_mem_in;
-    itim1_in  = init_mem_in;
-    dtim0_in  = init_mem_in;
-    dtim1_in  = init_mem_in;
+    itim0_in = init_mem_in;
+    itim1_in = init_mem_in;
+    dtim0_in = init_mem_in;
+    dtim1_in = init_mem_in;
 
-    iper0_in  = init_mem_in;
-    iper1_in  = init_mem_in;
-    dper0_in  = init_mem_in;
-    dper1_in  = init_mem_in;
+    ibridge0_in = init_mem_in;
+    ibridge1_in = init_mem_in;
+    dbridge0_in = init_mem_in;
+    dbridge1_in = init_mem_in;
 
     itim0_rev = itim0_rev_reg;
     itim1_rev = itim1_rev_reg;
@@ -123,16 +116,16 @@ module bus (
     end
 
     if (imem0_in.mem_valid & |(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (imem0_in.mem_addr & DTIM_MASK))) begin
-      iper0_in = imem0_in;
+      ibridge0_in = imem0_in;
     end
     if (imem1_in.mem_valid & |(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (imem1_in.mem_addr & DTIM_MASK))) begin
-      iper1_in = imem1_in;
+      ibridge1_in = imem1_in;
     end
     if (dmem0_in.mem_valid & |(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
-      dper0_in = dmem0_in;
+      dbridge0_in = dmem0_in;
     end
     if (dmem1_in.mem_valid & |(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
-      dper1_in = dmem1_in;
+      dbridge1_in = dmem1_in;
     end
 
     imem0_out = init_mem_out;
@@ -166,17 +159,17 @@ module bus (
       dmem1_out = dtim1_out;
     end
 
-    if (iper0_out.mem_ready == 1) begin
-      imem0_out = iper0_out;
+    if (ibridge0_out.mem_ready == 1) begin
+      imem0_out = ibridge0_out;
     end
-    if (iper1_out.mem_ready == 1) begin
-      imem1_out = iper1_out;
+    if (ibridge1_out.mem_ready == 1) begin
+      imem1_out = ibridge1_out;
     end
-    if (dper0_out.mem_ready == 1) begin
-      dmem0_out = dper0_out;
+    if (dbridge0_out.mem_ready == 1) begin
+      dmem0_out = dbridge0_out;
     end
-    if (dper1_out.mem_ready == 1) begin
-      dmem1_out = dper1_out;
+    if (dbridge1_out.mem_ready == 1) begin
+      dmem1_out = dbridge1_out;
     end
 
   end
@@ -195,109 +188,38 @@ module bus (
     end
   end
 
-  always_comb begin
-
-    rom_in = init_mem_in;
-    ram_in = init_mem_in;
-    spi_in = init_mem_in;
-    clint_in = init_mem_in;
-    error_in = init_mem_in;
-    uart_rx_in = init_mem_in;
-    uart_tx_in = init_mem_in;
-
-    base_addr = 0;
-
-    error_in.mem_valid = per_in.mem_valid;
-
-    if (per_in.mem_valid & ~|(ROM_BASE ^ (per_in.mem_addr & ROM_MASK))) begin
-      rom_in = per_in;
-      base_addr = ROM_BASE;
-      error_in.mem_valid = 0;
-    end
-    if (per_in.mem_valid & ~|(RAM_BASE ^ (per_in.mem_addr & RAM_MASK))) begin
-      ram_in = per_in;
-      base_addr = RAM_BASE;
-      error_in.mem_valid = 0;
-    end
-    if (per_in.mem_valid & ~|(SPI_BASE ^ (per_in.mem_addr & SPI_MASK))) begin
-      spi_in = per_in;
-      base_addr = SPI_BASE;
-      error_in.mem_valid = 0;
-    end
-    if (per_in.mem_valid & ~|(CLINT_BASE ^ (per_in.mem_addr & CLINT_MASK))) begin
-      clint_in = per_in;
-      base_addr = CLINT_BASE;
-      error_in.mem_valid = 0;
-    end
-    if (per_in.mem_valid & ~|(UART_RX_BASE ^ (per_in.mem_addr & UART_RX_MASK))) begin
-      uart_rx_in = per_in;
-      base_addr = UART_RX_BASE;
-      error_in.mem_valid = 0;
-    end
-    if (per_in.mem_valid & ~|(UART_TX_BASE ^ (per_in.mem_addr & UART_TX_MASK))) begin
-      uart_tx_in = per_in;
-      base_addr = UART_TX_BASE;
-      error_in.mem_valid = 0;
-    end
-
-    mem_addr = per_in.mem_addr - base_addr;
-
-    rom_in.mem_addr = mem_addr;
-    ram_in.mem_addr = mem_addr;
-    spi_in.mem_addr = mem_addr;
-    clint_in.mem_addr = mem_addr;
-    uart_rx_in.mem_addr = mem_addr;
-    uart_tx_in.mem_addr = mem_addr;
-
-    per_out = init_mem_out;
-
-    if (rom_out.mem_ready == 1) begin
-      per_out = rom_out;
-    end
-    if (ram_out.mem_ready == 1) begin
-      per_out = ram_out;
-    end
-    if (spi_out.mem_ready == 1) begin
-      per_out = spi_out;
-    end
-    if (clint_out.mem_ready == 1) begin
-      per_out = clint_out;
-    end
-    if (error_out.mem_ready == 1) begin
-      per_out = error_out;
-    end
-    if (uart_rx_out.mem_ready == 1) begin
-      per_out = uart_rx_out;
-    end
-    if (uart_tx_out.mem_ready == 1) begin
-      per_out = uart_tx_out;
-    end
-
-  end
-
-  always_ff @(posedge clock) begin
-    if (reset == 0) begin
-      error_out <= init_mem_out;
-    end else begin
-      error_out.mem_rdata <= 0;
-      error_out.mem_error <= error_in.mem_valid;
-      error_out.mem_ready <= error_in.mem_valid;
-    end
-  end
-
   arbiter arbiter_comp (
       .reset(reset),
       .clock(clock),
-      .imem0_in(iper0_in),
-      .imem0_out(iper0_out),
-      .imem1_in(iper1_in),
-      .imem1_out(iper1_out),
-      .dmem0_in(dper0_in),
-      .dmem0_out(dper0_out),
-      .dmem1_in(dper1_in),
-      .dmem1_out(dper1_out),
-      .mem_in(per_in),
-      .mem_out(per_out)
+      .imem0_in(ibridge0_in),
+      .imem0_out(ibridge0_out),
+      .imem1_in(ibridge1_in),
+      .imem1_out(ibridge1_out),
+      .dmem0_in(dbridge0_in),
+      .dmem0_out(dbridge0_out),
+      .dmem1_in(dbridge1_in),
+      .dmem1_out(dbridge1_out),
+      .mem_in(bridge_in),
+      .mem_out(bridge_out)
+  );
+
+  bridge bridge_comp (
+      .reset(reset),
+      .clock(clock),
+      .bridge_in(bridge_in),
+      .bridge_out(bridge_out),
+      .rom_in(rom_in),
+      .ram_in(ram_in),
+      .spi_in(spi_in),
+      .clint_in(clint_in),
+      .uart_rx_in(uart_rx_in),
+      .uart_tx_in(uart_tx_in),
+      .rom_out(rom_out),
+      .ram_out(ram_out),
+      .spi_out(spi_out),
+      .clint_out(clint_out),
+      .uart_rx_out(uart_rx_out),
+      .uart_tx_out(uart_tx_out)
   );
 
 endmodule
