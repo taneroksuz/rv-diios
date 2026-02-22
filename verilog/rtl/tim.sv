@@ -3,12 +3,12 @@ package tim_wires;
 
   import configure::*;
 
-  localparam depth = $clog2(TIM_DEPTH);
-  localparam width = $clog2(TIM_WIDTH);
+  localparam DEPTH = $clog2(TIM_DEPTH);
+  localparam WIDTH = $clog2(TIM_WIDTH);
 
   typedef struct packed {
     logic [0 : 0] en;
-    logic [depth-1 : 0] addr;
+    logic [DEPTH-1 : 0] addr;
     logic [7 : 0] strb;
     logic [63 : 0] data;
   } tim_ram_in_type;
@@ -36,8 +36,8 @@ module tim_ram (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(TIM_DEPTH);
-  localparam width = $clog2(TIM_WIDTH);
+  localparam DEPTH = $clog2(TIM_DEPTH);
+  localparam WIDTH = $clog2(TIM_WIDTH);
 
   generate
 
@@ -123,14 +123,14 @@ module tim_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(TIM_DEPTH);
-  localparam width = $clog2(TIM_WIDTH);
+  localparam DEPTH = $clog2(TIM_DEPTH);
+  localparam WIDTH = $clog2(TIM_WIDTH);
 
   typedef struct packed {
-    logic [width-1:0] wid0;
-    logic [width-1:0] wid1;
-    logic [depth-1:0] did0;
-    logic [depth-1:0] did1;
+    logic [WIDTH-1:0] wid0;
+    logic [WIDTH-1:0] wid1;
+    logic [DEPTH-1:0] did0;
+    logic [DEPTH-1:0] did1;
     logic [63:0] data0;
     logic [63:0] data1;
     logic [7:0] strb0;
@@ -140,10 +140,10 @@ module tim_ctrl (
   } front_type;
 
   typedef struct packed {
-    logic [width-1:0] wid0;
-    logic [width-1:0] wid1;
-    logic [depth-1:0] did0;
-    logic [depth-1:0] did1;
+    logic [WIDTH-1:0] wid0;
+    logic [WIDTH-1:0] wid1;
+    logic [DEPTH-1:0] did0;
+    logic [DEPTH-1:0] did1;
     logic [63:0] rdata0;
     logic [63:0] rdata1;
     logic [63:0] data0;
@@ -176,16 +176,16 @@ module tim_ctrl (
       v_f.valid0 = tim0_in.mem_valid;
       v_f.strb0  = tim0_in.mem_wstrb;
       v_f.data0  = tim0_in.mem_wdata;
-      v_f.did0   = tim0_in.mem_addr[(depth+width+2):(width+3)];
-      v_f.wid0   = tim0_in.mem_addr[(width+2):3];
+      v_f.did0   = tim0_in.mem_addr[(DEPTH+WIDTH+2):(WIDTH+3)];
+      v_f.wid0   = tim0_in.mem_addr[(WIDTH+2):3];
     end
 
     if (tim1_in.mem_valid == 1) begin
       v_f.valid1 = tim1_in.mem_valid;
       v_f.strb1  = tim1_in.mem_wstrb;
       v_f.data1  = tim1_in.mem_wdata;
-      v_f.did1   = tim1_in.mem_addr[(depth+width+2):(width+3)];
-      v_f.wid1   = tim1_in.mem_addr[(width+2):3];
+      v_f.did1   = tim1_in.mem_addr[(DEPTH+WIDTH+2):(WIDTH+3)];
+      v_f.wid1   = tim1_in.mem_addr[(WIDTH+2):3];
     end
 
     dvec0_in = init_tim_vec_in;

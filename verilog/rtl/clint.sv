@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module clint #(
-    parameter clock_rate
+    parameter CLOCK_RATE
 ) (
     input logic reset,
     input logic clock,
@@ -14,10 +14,10 @@ module clint #(
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(clock_rate);
-  localparam full = clock_rate - 1;
+  localparam DEPTH = $clog2(CLOCK_RATE);
+  localparam FULL = CLOCK_RATE - 1;
 
-  logic [depth-1 : 0] count = 0;
+  logic [DEPTH-1 : 0] count = 0;
 
   localparam clint_msip_start = 32'h0000;
   localparam clint_msip_end = clint_msip_start + 4;
@@ -128,7 +128,7 @@ module clint #(
       count  <= 0;
       enable <= 0;
     end else begin
-      if (count == full[depth-1:0]) begin
+      if (count == FULL[DEPTH-1:0]) begin
         count  <= 0;
         enable <= 1;
       end else begin

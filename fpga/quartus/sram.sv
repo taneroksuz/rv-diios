@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module sram #(
-    parameter clock_rate
+    parameter CLOCK_RATE
 ) (
     input logic reset,
     input logic clock,
@@ -18,7 +18,7 @@ module sram #(
 );
 timeunit 1ns; timeprecision 1ps;
 
-  localparam full = clock_rate - 1;
+  localparam FULL = CLOCK_RATE - 1;
 
   typedef struct packed {
     logic [31 : 0] counter;
@@ -63,7 +63,7 @@ timeunit 1ns; timeprecision 1ps;
       v.state = {1'b0, v.addr[1:0]} + 3'b001;
     end
 
-    if (v.counter > full) begin
+    if (v.counter > FULL) begin
       if (v.write == 1) begin
         if (v.state == 4) begin
           v.ready = 1;

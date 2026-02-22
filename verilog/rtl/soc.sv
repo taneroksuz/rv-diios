@@ -138,7 +138,7 @@ module soc (
   );
 
   clint #(
-      .clock_rate(CLK_DIVIDER_RTC)
+      .CLOCK_RATE(CLK_DIVIDER_RTC)
   ) clint_comp (
       .reset(reset),
       .clock(clock),
@@ -150,7 +150,7 @@ module soc (
   );
 
   spi #(
-      .clock_rate(CLK_DIVIDER_PER)
+      .CLOCK_RATE(CLK_DIVIDER_PER)
   ) spi_comp (
       .reset(reset),
       .clock(clock),
@@ -163,7 +163,7 @@ module soc (
   );
 
   uart_rx #(
-      .clock_rate(CLK_DIVIDER_BIT)
+      .CLOCK_RATE(CLK_DIVIDER_BIT)
   ) uart_rx_comp (
       .reset(reset),
       .clock(clock),
@@ -174,7 +174,7 @@ module soc (
   );
 
   uart_tx #(
-      .clock_rate(CLK_DIVIDER_BIT)
+      .CLOCK_RATE(CLK_DIVIDER_BIT)
   ) uart_tx_comp (
       .reset(reset),
       .clock(clock),

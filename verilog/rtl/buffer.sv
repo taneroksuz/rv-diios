@@ -3,7 +3,7 @@ package buffer_wires;
 
   import configure::*;
 
-  localparam depth = $clog2(BUFFER_DEPTH);
+  localparam DEPTH = $clog2(BUFFER_DEPTH);
 
   typedef struct packed {
     logic [0 : 0] wen0;
@@ -14,22 +14,22 @@ package buffer_wires;
     logic [0 : 0] wen5;
     logic [0 : 0] wen6;
     logic [0 : 0] wen7;
-    logic [depth-1 : 0] waddr0;
-    logic [depth-1 : 0] waddr1;
-    logic [depth-1 : 0] waddr2;
-    logic [depth-1 : 0] waddr3;
-    logic [depth-1 : 0] waddr4;
-    logic [depth-1 : 0] waddr5;
-    logic [depth-1 : 0] waddr6;
-    logic [depth-1 : 0] waddr7;
-    logic [depth-1 : 0] raddr0;
-    logic [depth-1 : 0] raddr1;
-    logic [depth-1 : 0] raddr2;
-    logic [depth-1 : 0] raddr3;
-    logic [depth-1 : 0] raddr4;
-    logic [depth-1 : 0] raddr5;
-    logic [depth-1 : 0] raddr6;
-    logic [depth-1 : 0] raddr7;
+    logic [DEPTH-1 : 0] waddr0;
+    logic [DEPTH-1 : 0] waddr1;
+    logic [DEPTH-1 : 0] waddr2;
+    logic [DEPTH-1 : 0] waddr3;
+    logic [DEPTH-1 : 0] waddr4;
+    logic [DEPTH-1 : 0] waddr5;
+    logic [DEPTH-1 : 0] waddr6;
+    logic [DEPTH-1 : 0] waddr7;
+    logic [DEPTH-1 : 0] raddr0;
+    logic [DEPTH-1 : 0] raddr1;
+    logic [DEPTH-1 : 0] raddr2;
+    logic [DEPTH-1 : 0] raddr3;
+    logic [DEPTH-1 : 0] raddr4;
+    logic [DEPTH-1 : 0] raddr5;
+    logic [DEPTH-1 : 0] raddr6;
+    logic [DEPTH-1 : 0] raddr7;
     logic [47 : 0] wdata0;
     logic [47 : 0] wdata1;
     logic [47 : 0] wdata2;
@@ -65,7 +65,7 @@ module buffer_reg (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(BUFFER_DEPTH);
+  localparam DEPTH = $clog2(BUFFER_DEPTH);
 
   logic [47:0] buffer_reg_array0[0:BUFFER_DEPTH-1] = '{default: '0};
   logic [47:0] buffer_reg_array1[0:BUFFER_DEPTH-1] = '{default: '0};
@@ -167,17 +167,17 @@ module buffer_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(BUFFER_DEPTH);
+  localparam DEPTH = $clog2(BUFFER_DEPTH);
   localparam total = 8 * (BUFFER_DEPTH - 2);
 
-  localparam [depth-1:0] one = 1;
+  localparam [DEPTH-1:0] one = 1;
 
   typedef struct packed {
-    logic [depth+2 : 0] wid;
-    logic [depth+2 : 0] rid;
-    logic [depth+2 : 0] diff;
-    logic [depth+2 : 0] count;
-    logic [depth+2 : 0] align;
+    logic [DEPTH+2 : 0] wid;
+    logic [DEPTH+2 : 0] rid;
+    logic [DEPTH+2 : 0] diff;
+    logic [DEPTH+2 : 0] count;
+    logic [DEPTH+2 : 0] align;
     logic [47 : 0] wdata0;
     logic [47 : 0] wdata1;
     logic [47 : 0] wdata2;
@@ -268,8 +268,8 @@ module buffer_ctrl (
     end
 
     if (r.clear == 1 && buffer_in.clear == 0 && buffer_in.ready == 1) begin
-      v.rid   = {{depth + 1{1'b0}}, buffer_in.pc0[2:1]};
-      v.align = {{depth + 1{1'b0}}, buffer_in.pc0[2:1]};
+      v.rid   = {{DEPTH + 1{1'b0}}, buffer_in.pc0[2:1]};
+      v.align = {{DEPTH + 1{1'b0}}, buffer_in.pc0[2:1]};
       v.clear = 0;
     end
 
@@ -292,14 +292,14 @@ module buffer_ctrl (
     buffer_reg_in.wen5 = v.wen;
     buffer_reg_in.wen6 = v.wen;
     buffer_reg_in.wen7 = v.wen;
-    buffer_reg_in.waddr0 = v.wid[depth+2:3];
-    buffer_reg_in.waddr1 = v.wid[depth+2:3];
-    buffer_reg_in.waddr2 = v.wid[depth+2:3];
-    buffer_reg_in.waddr3 = v.wid[depth+2:3];
-    buffer_reg_in.waddr4 = v.wid[depth+2:3];
-    buffer_reg_in.waddr5 = v.wid[depth+2:3];
-    buffer_reg_in.waddr6 = v.wid[depth+2:3];
-    buffer_reg_in.waddr7 = v.wid[depth+2:3];
+    buffer_reg_in.waddr0 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr1 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr2 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr3 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr4 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr5 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr6 = v.wid[DEPTH+2:3];
+    buffer_reg_in.waddr7 = v.wid[DEPTH+2:3];
     buffer_reg_in.wdata0 = v.wdata0;
     buffer_reg_in.wdata1 = v.wdata1;
     buffer_reg_in.wdata2 = v.wdata2;
@@ -310,86 +310,86 @@ module buffer_ctrl (
     buffer_reg_in.wdata7 = v.wdata7;
 
     if (v.rid[2:0] == 0) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3];
-      buffer_reg_in.raddr1 = v.rid[depth+2:3];
-      buffer_reg_in.raddr2 = v.rid[depth+2:3];
-      buffer_reg_in.raddr3 = v.rid[depth+2:3];
-      buffer_reg_in.raddr4 = v.rid[depth+2:3];
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 1) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3];
-      buffer_reg_in.raddr2 = v.rid[depth+2:3];
-      buffer_reg_in.raddr3 = v.rid[depth+2:3];
-      buffer_reg_in.raddr4 = v.rid[depth+2:3];
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 2) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3];
-      buffer_reg_in.raddr3 = v.rid[depth+2:3];
-      buffer_reg_in.raddr4 = v.rid[depth+2:3];
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 2) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr3 = v.rid[depth+2:3];
-      buffer_reg_in.raddr4 = v.rid[depth+2:3];
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 3) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr3 = v.rid[depth+2:3];
-      buffer_reg_in.raddr4 = v.rid[depth+2:3];
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 4) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr3 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr4 = v.rid[depth+2:3];
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 5) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr3 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr4 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr5 = v.rid[depth+2:3];
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else if (v.rid[2:0] == 6) begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr3 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr4 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr5 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr6 = v.rid[depth+2:3];
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3];
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end else begin
-      buffer_reg_in.raddr0 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr1 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr2 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr3 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr4 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr5 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr6 = v.rid[depth+2:3] + one;
-      buffer_reg_in.raddr7 = v.rid[depth+2:3];
+      buffer_reg_in.raddr0 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr1 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr2 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr3 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr4 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr5 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr6 = v.rid[DEPTH+2:3] + one;
+      buffer_reg_in.raddr7 = v.rid[DEPTH+2:3];
     end
 
     if (v.rid[2:0] == 0) begin

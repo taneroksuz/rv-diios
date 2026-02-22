@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module uart_rx #(
-    parameter clock_rate
+    parameter CLOCK_RATE
 ) (
     input logic reset,
     input logic clock,
@@ -13,7 +13,7 @@ module uart_rx #(
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam full = clock_rate - 1;
+  localparam FULL = CLOCK_RATE - 1;
 
   typedef struct packed {
     logic [31 : 0] counter;
@@ -63,14 +63,14 @@ module uart_rx #(
         v.counter = 0;
       end
       9: begin
-        if (r.counter > full) begin
+        if (r.counter > FULL) begin
           v.counter = 0;
           v.state   = 0;
           v.ready   = 1;
         end
       end
       default: begin
-        if (r.counter > full) begin
+        if (r.counter > FULL) begin
           v.data = {rx, v.data[8:1]};
           v.state = v.state + 4'h1;
           v.counter = 0;

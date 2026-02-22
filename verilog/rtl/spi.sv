@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module spi #(
-    parameter clock_rate
+    parameter CLOCK_RATE
 ) (
     input logic reset,
     input logic clock,
@@ -15,7 +15,7 @@ module spi #(
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam full = clock_rate - 1;
+  localparam FULL = CLOCK_RATE - 1;
 
   typedef struct packed {
     logic [31 : 0] counter;
@@ -42,7 +42,7 @@ module spi #(
     v.ready = 0;
     v.ss = 1;
 
-    if (v.counter > full) begin
+    if (v.counter > FULL) begin
       v.counter = 0;
       v.sclk = ~v.sclk;
     end

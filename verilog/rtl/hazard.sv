@@ -4,15 +4,15 @@ package hazard_wires;
   import configure::*;
   import wires::*;
 
-  localparam depth = $clog2(HAZARD_DEPTH);
+  localparam DEPTH = $clog2(HAZARD_DEPTH);
 
   typedef struct packed {
     logic [0 : 0] wen0;
     logic [0 : 0] wen1;
-    logic [depth-1 : 0] waddr0;
-    logic [depth-1 : 0] waddr1;
-    logic [depth-1 : 0] raddr0;
-    logic [depth-1 : 0] raddr1;
+    logic [DEPTH-1 : 0] waddr0;
+    logic [DEPTH-1 : 0] waddr1;
+    logic [DEPTH-1 : 0] raddr0;
+    logic [DEPTH-1 : 0] raddr1;
     instruction_type wdata0;
     instruction_type wdata1;
   } hazard_reg_in_type;
@@ -36,7 +36,7 @@ module hazard_reg (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(HAZARD_DEPTH);
+  localparam DEPTH = $clog2(HAZARD_DEPTH);
 
   instruction_type hazard_reg_array0[0:HAZARD_DEPTH-1] = '{default: '0};
   instruction_type hazard_reg_array1[0:HAZARD_DEPTH-1] = '{default: '0};
@@ -68,10 +68,10 @@ module hazard_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam depth = $clog2(HAZARD_DEPTH);
+  localparam DEPTH = $clog2(HAZARD_DEPTH);
   localparam total = HAZARD_DEPTH - 2;
 
-  localparam [depth-1:0] one = 1;
+  localparam [DEPTH-1:0] one = 1;
 
   typedef struct packed {
     instruction_type wdata0;
@@ -80,10 +80,10 @@ module hazard_ctrl (
     instruction_type instr1;
     calculation_type calc0;
     calculation_type calc1;
-    logic [depth-1 : 0] wid;
-    logic [depth : 0] rid;
-    logic [depth : 0] diff;
-    logic [depth : 0] count;
+    logic [DEPTH-1 : 0] wid;
+    logic [DEPTH : 0] rid;
+    logic [DEPTH : 0] diff;
+    logic [DEPTH : 0] count;
     logic [0 : 0] wen;
     logic [0 : 0] single;
     logic [0 : 0] stall;
@@ -129,9 +129,9 @@ module hazard_ctrl (
     hazard_reg_in.wdata1 = v.wdata1;
 
     if (v.rid[0] == 0) begin
-      hazard_reg_in.raddr0 = v.rid[depth:1];
-      hazard_reg_in.raddr1 = v.rid[depth:1];
-      if (v.wid == v.rid[depth:1]) begin
+      hazard_reg_in.raddr0 = v.rid[DEPTH:1];
+      hazard_reg_in.raddr1 = v.rid[DEPTH:1];
+      if (v.wid == v.rid[DEPTH:1]) begin
         v.instr0 = v.wdata0;
         v.instr1 = v.wdata1;
       end else begin
@@ -139,12 +139,12 @@ module hazard_ctrl (
         v.instr1 = hazard_reg_out.rdata1;
       end
     end else begin
-      hazard_reg_in.raddr0 = v.rid[depth:1] + one;
-      hazard_reg_in.raddr1 = v.rid[depth:1];
-      if (v.wid == v.rid[depth:1]) begin
+      hazard_reg_in.raddr0 = v.rid[DEPTH:1] + one;
+      hazard_reg_in.raddr1 = v.rid[DEPTH:1];
+      if (v.wid == v.rid[DEPTH:1]) begin
         v.instr0 = v.wdata1;
         v.instr1 = v.wdata0;
-      end else if (v.wid == v.rid[depth:1] + one) begin
+      end else if (v.wid == v.rid[DEPTH:1] + one) begin
         v.instr0 = hazard_reg_out.rdata1;
         v.instr1 = v.wdata0;
       end else begin
