@@ -3,27 +3,27 @@ package btac_wires;
 
   import configure::*;
 
-  localparam btb_depth = $clog2(BTB_DEPTH);
-  localparam bht_depth = $clog2(BHT_DEPTH);
+  localparam B_DEPTH = $clog2(BTB_DEPTH);
+  localparam T_DEPTH = $clog2(BHT_DEPTH);
 
   typedef struct packed {
     logic [0 : 0] wen;
-    logic [btb_depth-1 : 0] waddr;
-    logic [btb_depth-1 : 0] raddr0;
-    logic [btb_depth-1 : 0] raddr1;
-    logic [62-btb_depth : 0] wdata;
+    logic [B_DEPTH-1 : 0] waddr;
+    logic [B_DEPTH-1 : 0] raddr0;
+    logic [B_DEPTH-1 : 0] raddr1;
+    logic [62-B_DEPTH : 0] wdata;
   } btb_in_type;
 
   typedef struct packed {
-    logic [62-btb_depth : 0] rdata0;
-    logic [62-btb_depth : 0] rdata1;
+    logic [62-B_DEPTH : 0] rdata0;
+    logic [62-B_DEPTH : 0] rdata1;
   } btb_out_type;
 
   typedef struct packed {
     logic [0 : 0] wen;
-    logic [bht_depth-1 : 0] waddr;
-    logic [bht_depth-1 : 0] raddr0;
-    logic [bht_depth-1 : 0] raddr1;
+    logic [T_DEPTH-1 : 0] waddr;
+    logic [T_DEPTH-1 : 0] raddr0;
+    logic [T_DEPTH-1 : 0] raddr1;
     logic [1 : 0] wdata;
   } bht_in_type;
 
@@ -45,9 +45,9 @@ module btb (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam btb_depth = $clog2(BTB_DEPTH);
+  localparam B_DEPTH = $clog2(BTB_DEPTH);
 
-  logic [62-btb_depth:0] btb_array[0:BTB_DEPTH-1] = '{default: '0};
+  logic [62-B_DEPTH:0] btb_array[0:BTB_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (btb_in.wen == 1) begin
@@ -70,7 +70,7 @@ module bht (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam bht_depth = $clog2(BHT_DEPTH);
+  localparam T_DEPTH = $clog2(BHT_DEPTH);
 
   logic [1:0] bht_array[0:BHT_DEPTH-1] = '{default: '0};
 
@@ -96,8 +96,8 @@ module btac_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam btb_depth = $clog2(BTB_DEPTH);
-  localparam bht_depth = $clog2(BHT_DEPTH);
+  localparam B_DEPTH = $clog2(BTB_DEPTH);
+  localparam T_DEPTH = $clog2(BHT_DEPTH);
 
   function [1:0] saturation;
     input logic [1:0] sat;
@@ -110,10 +110,10 @@ module btac_ctrl (
   endfunction
 
   typedef struct packed {
-    logic [btb_depth-1 : 0] waddr;
-    logic [btb_depth-1 : 0] raddr0;
-    logic [btb_depth-1 : 0] raddr1;
-    logic [62-btb_depth : 0] wdata;
+    logic [B_DEPTH-1 : 0] waddr;
+    logic [B_DEPTH-1 : 0] raddr0;
+    logic [B_DEPTH-1 : 0] raddr1;
+    logic [62-B_DEPTH : 0] wdata;
     logic [0 : 0] wen;
     logic [31 : 0] pc0;
     logic [31 : 0] pc1;
@@ -146,9 +146,9 @@ module btac_ctrl (
   };
 
   typedef struct packed {
-    logic [bht_depth-1 : 0] waddr;
-    logic [bht_depth-1 : 0] raddr0;
-    logic [bht_depth-1 : 0] raddr1;
+    logic [T_DEPTH-1 : 0] waddr;
+    logic [T_DEPTH-1 : 0] raddr0;
+    logic [T_DEPTH-1 : 0] raddr1;
     logic [1 : 0] wdata;
     logic [0 : 0] wen;
     logic [1 : 0] sat0;
@@ -176,12 +176,12 @@ module btac_ctrl (
     if (btac_in.clear == 0) begin
       v_btb.pc0 = btac_in.get_pc0;
       v_btb.pc1 = btac_in.get_pc1;
-      v_btb.raddr0 = btac_in.get_pc0[btb_depth:1];
-      v_btb.raddr1 = btac_in.get_pc1[btb_depth:1];
+      v_btb.raddr0 = btac_in.get_pc0[B_DEPTH:1];
+      v_btb.raddr1 = btac_in.get_pc1[B_DEPTH:1];
     end
     if (btac_in.clear == 0) begin
-      v_bht.raddr0 = btac_in.get_pc0[bht_depth:1];
-      v_bht.raddr1 = btac_in.get_pc1[bht_depth:1];
+      v_bht.raddr0 = btac_in.get_pc0[T_DEPTH:1];
+      v_bht.raddr1 = btac_in.get_pc1[T_DEPTH:1];
     end
 
     btb_in.raddr0 = v_btb.raddr0;
@@ -197,8 +197,8 @@ module btac_ctrl (
       btac_out.pred1.taddr = 0;
     end
     if (btac_in.stall == 0 && btac_in.clear == 0) begin
-      btac_out.pred0.taken = bht_out.rdata0[1] & (~(|(btb_out.rdata0[62-btb_depth:32] ^ r_btb.pc0[31:btb_depth+1])));
-      btac_out.pred1.taken = bht_out.rdata1[1] & (~(|(btb_out.rdata1[62-btb_depth:32] ^ r_btb.pc1[31:btb_depth+1])));
+      btac_out.pred0.taken = bht_out.rdata0[1] & (~(|(btb_out.rdata0[62-B_DEPTH:32] ^ r_btb.pc0[31:B_DEPTH+1])));
+      btac_out.pred1.taken = bht_out.rdata1[1] & (~(|(btb_out.rdata1[62-B_DEPTH:32] ^ r_btb.pc1[31:B_DEPTH+1])));
       btac_out.pred0.tsat = bht_out.rdata0;
       btac_out.pred1.tsat = bht_out.rdata1;
     end else begin
@@ -261,13 +261,13 @@ module btac_ctrl (
 
     if (btac_in.clear == 0) begin
       v_btb.wen = (v_btb.hit0 | v_btb.miss0) | (v_btb.hit1 | v_btb.miss1);
-      v_btb.waddr = (v_btb.hit0 | v_btb.miss0) ? btac_in.upd_pc0[btb_depth:1] : btac_in.upd_pc1[btb_depth:1];
-      v_btb.wdata = (v_btb.hit0 | v_btb.miss0) ? {btac_in.upd_pc0[31:btb_depth+1],v_btb.uaddr0} : {btac_in.upd_pc1[31:btb_depth+1],v_btb.uaddr1};
+      v_btb.waddr = (v_btb.hit0 | v_btb.miss0) ? btac_in.upd_pc0[B_DEPTH:1] : btac_in.upd_pc1[B_DEPTH:1];
+      v_btb.wdata = (v_btb.hit0 | v_btb.miss0) ? {btac_in.upd_pc0[31:B_DEPTH+1],v_btb.uaddr0} : {btac_in.upd_pc1[31:B_DEPTH+1],v_btb.uaddr1};
     end
 
     if (btac_in.clear == 0) begin
       v_bht.wen = (v_btb.hit0 | v_btb.miss0) | (v_btb.hit1 | v_btb.miss1);
-      v_bht.waddr = (v_btb.hit0 | v_btb.miss0) ? btac_in.upd_pc0[bht_depth:1] : btac_in.upd_pc1[bht_depth:1];
+      v_bht.waddr = (v_btb.hit0 | v_btb.miss0) ? btac_in.upd_pc0[T_DEPTH:1] : btac_in.upd_pc1[T_DEPTH:1];
       v_bht.sat0 = saturation(btac_in.upd_pred0.tsat, btac_in.upd_jump0);
       v_bht.sat1 = saturation(btac_in.upd_pred1.tsat, btac_in.upd_jump1);
       v_bht.wdata = (v_btb.hit0 | v_btb.miss0) ? v_bht.sat0 : v_bht.sat1;
