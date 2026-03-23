@@ -1,6 +1,6 @@
 # RV-DIIOS (RISC-V Dual-Issue In-Order Superscalar)
 
-This cpu is 6-stage dual-issue in-order superscalar processor with floating point unit.
+This cpu is 6-stage dual-issue in-order superscalar processor.
 
 ## SPECIFICATIONS
 
