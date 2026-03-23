@@ -9,7 +9,7 @@ module axi
   input  logic [0  : 0] axi_instr,
   input  logic [31 : 0] axi_addr,
   input  logic [31 : 0] axi_wdata,
-  input  logic [7  : 0] axi_wstrb,
+  input  logic [3  : 0] axi_wstrb,
   output logic [31 : 0] axi_rdata,
   output logic [0  : 0] axi_ready,
   /////////////////////////////////
@@ -27,7 +27,7 @@ module axi
   /////////////////////////////////
   // Write data channel
   output logic [31 : 0] m_axi_wdata,
-  output logic [7  : 0] m_axi_wstrb,
+  output logic [3  : 0] m_axi_wstrb,
   output logic [0  : 0] m_axi_wlast,
   output logic [0  : 0] m_axi_wvalid,
   input  logic [0  : 0] m_axi_wready,
@@ -83,8 +83,8 @@ module axi
   logic [2 :0] prot_reg;
   logic [31:0] wdata;
   logic [31:0] wdata_reg;
-  logic [7 :0] wstrb;
-  logic [7 :0] wstrb_reg;
+  logic [3 :0] wstrb;
+  logic [3 :0] wstrb_reg;
   logic [0 :0] wlast;
   logic [0 :0] wlast_reg;
 
