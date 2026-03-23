@@ -64,9 +64,10 @@ module uart_rx #(
       end
       9: begin
         if (r.counter > FULL) begin
-          v.counter = 0;
-          v.state   = 0;
-          v.ready   = 1;
+          v.rdata_re = v.data[8:1];
+          v.counter  = 0;
+          v.state    = 0;
+          v.ready    = 1;
         end
       end
       default: begin
@@ -82,7 +83,7 @@ module uart_rx #(
 
   end
 
-  assign uart_out.mem_rdata = {56'b0, r.rdata_re};
+  assign uart_out.mem_rdata = {24'b0, r.rdata_re};
   assign uart_out.mem_error = 0;
   assign uart_out.mem_ready = r.ready_re;
   assign rx_irq = r.ready;

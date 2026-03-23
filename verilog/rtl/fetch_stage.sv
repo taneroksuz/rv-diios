@@ -117,10 +117,10 @@ module fetch_stage (
     end else if (v.stall == 0) begin
       v.fence = 0;
       v.spec  = 0;
-      v.ipc0  = v.ipc0 + 16;
+      v.ipc0  = v.ipc0 + 8;
     end
 
-    v.ipc1 = v.ipc0 + 8;
+    v.ipc1 = v.ipc0 + 4;
 
     case (v.state)
       idle: begin

@@ -16,14 +16,14 @@ module sram #(
     inout [15:0] sram_dq,
     output [17:0] sram_addr
 );
-timeunit 1ns; timeprecision 1ps;
+  timeunit 1ns; timeprecision 1ps;
 
   localparam FULL = CLOCK_RATE - 1;
 
   typedef struct packed {
     logic [31 : 0] counter;
-    logic [63 : 0] data;
-    logic [7 : 0]  strb;
+    logic [31 : 0] data;
+    logic [3 : 0]  strb;
     logic [15 : 0] dq;
     logic [17 : 0] addr;
     logic [0 : 0]  ce_n;
@@ -31,7 +31,7 @@ timeunit 1ns; timeprecision 1ps;
     logic [0 : 0]  oe_n;
     logic [0 : 0]  ub_n;
     logic [0 : 0]  lb_n;
-    logic [2 : 0]  state;
+    logic [1 : 0]  state;
     logic [0 : 0]  write;
     logic [0 : 0]  read;
     logic [0 : 0]  ready;
@@ -60,66 +60,36 @@ timeunit 1ns; timeprecision 1ps;
       v.write = |v.strb;
       v.read = ~v.write;
       v.counter = 0;
-      v.state = {1'b0, v.addr[1:0]} + 3'b001;
+      v.state = {1'b0, v.addr[0]} + 2'b01;
     end
 
     if (v.counter > FULL) begin
       if (v.write == 1) begin
-        if (v.state == 4) begin
+        if (v.state == 2) begin
           v.ready = 1;
           v.write = 0;
           v.state = 0;
         end
-        if (v.state == 3) begin
-          v.addr[1:0] = 2'b11;
-          v.state = 4;
-        end
-        if (v.state == 2) begin
-          v.addr[1:0] = 2'b10;
-          v.state = 3;
-        end
         if (v.state == 1) begin
-          v.addr[1:0] = 2'b01;
-          v.state = 2;
+          v.addr[0] = 1'b1;
+          v.state   = 2;
         end
       end
       if (v.read == 1) begin
-        if (v.state == 4) begin
+        if (v.state == 2) begin
           v.ready = 1;
           v.read  = 0;
           v.state = 0;
         end
-        if (v.state == 3) begin
-          v.addr[1:0] = 2'b11;
-          v.state = 4;
-        end
-        if (v.state == 2) begin
-          v.addr[1:0] = 2'b10;
-          v.state = 3;
-        end
         if (v.state == 1) begin
-          v.addr[1:0] = 2'b01;
-          v.state = 2;
+          v.addr[0] = 1'b1;
+          v.state   = 2;
         end
       end
       v.counter = 0;
     end
 
     if (v.write == 1) begin
-      if (v.state == 4) begin
-        v.dq   = v.data[63:48];
-        v.ce_n = ~(|v.strb[7:6]);
-        v.we_n = ~(|v.strb[7:6]);
-        v.ub_n = ~v.strb[7];
-        v.lb_n = ~v.strb[6];
-      end
-      if (v.state == 3) begin
-        v.dq   = v.data[47:32];
-        v.ce_n = ~(|v.strb[5:4]);
-        v.we_n = ~(|v.strb[5:4]);
-        v.ub_n = ~v.strb[5];
-        v.lb_n = ~v.strb[4];
-      end
       if (v.state == 2) begin
         v.dq   = v.data[31:16];
         v.ce_n = ~(|v.strb[3:2]);
@@ -135,20 +105,6 @@ timeunit 1ns; timeprecision 1ps;
         v.lb_n = ~v.strb[0];
       end
     end else if (v.read == 1) begin
-      if (v.state == 4) begin
-        v.data[63:48] = sram_dq;
-        v.ce_n = 0;
-        v.oe_n = 0;
-        v.ub_n = 0;
-        v.lb_n = 0;
-      end
-      if (v.state == 3) begin
-        v.data[47:32] = sram_dq;
-        v.ce_n = 0;
-        v.oe_n = 0;
-        v.ub_n = 0;
-        v.lb_n = 0;
-      end
       if (v.state == 2) begin
         v.data[31:16] = sram_dq;
         v.ce_n = 0;

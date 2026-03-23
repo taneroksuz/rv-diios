@@ -17,15 +17,10 @@ module memory_stage (
     input csr_out_type csr_out,
     output forwarding_memory_in_type forwarding0_min,
     output forwarding_memory_in_type forwarding1_min,
-    output fp_forwarding_memory_in_type fp_forwarding_min,
     output register_write_in_type register0_win,
     output register_write_in_type register1_win,
-    output fp_register_write_in_type fp_register_win,
     output csr_write_in_type csr_win,
     output csr_exception_in_type csr_ein,
-    input fp_csr_out_type fp_csr_out,
-    output fp_csr_write_in_type fp_csr_win,
-    output fp_csr_exception_in_type fp_csr_ein,
     input memory_in_type a,
     input memory_in_type d,
     output memory_out_type y,
@@ -51,31 +46,21 @@ module memory_stage (
 
     v.stall = 0;
 
-    dmem0_in.mem_valid = a.e.calc0.op.load | a.e.calc0.op.store | a.e.calc0.op.fload | a.e.calc0.op.fstore;
+    dmem0_in.mem_valid = a.e.calc0.op.load | a.e.calc0.op.store;
     dmem0_in.mem_instr = 0;
     dmem0_in.mem_mode = 0;
     dmem0_in.mem_addr = a.e.calc0.address;
-    dmem0_in.mem_wdata = store_data(
-      a.e.calc0.sdata,
-      a.e.calc0.lsu_op.lsu_sb,
-      a.e.calc0.lsu_op.lsu_sh,
-      a.e.calc0.lsu_op.lsu_sw,
-      a.e.calc0.lsu_op.lsu_sd
-    );
-    dmem0_in.mem_wstrb = (a.e.calc0.op.load | a.e.calc0.op.fload) == 1 ? 8'h00 : a.e.calc0.byteenable;
+    dmem0_in.mem_wdata = store_data(a.e.calc0.sdata, a.e.calc0.lsu_op.lsu_sb,
+                                    a.e.calc0.lsu_op.lsu_sh, a.e.calc0.lsu_op.lsu_sw);
+    dmem0_in.mem_wstrb = (a.e.calc0.op.load) == 1 ? 4'h00 : a.e.calc0.byteenable;
 
-    dmem1_in.mem_valid = a.e.calc1.op.load | a.e.calc1.op.store | a.e.calc1.op.fload | a.e.calc1.op.fstore;
+    dmem1_in.mem_valid = a.e.calc1.op.load | a.e.calc1.op.store;
     dmem1_in.mem_instr = 0;
     dmem1_in.mem_mode = 0;
     dmem1_in.mem_addr = a.e.calc1.address;
-    dmem1_in.mem_wdata = store_data(
-      a.e.calc1.sdata,
-      a.e.calc1.lsu_op.lsu_sb,
-      a.e.calc1.lsu_op.lsu_sh,
-      a.e.calc1.lsu_op.lsu_sw,
-      a.e.calc1.lsu_op.lsu_sd
-    );
-    dmem1_in.mem_wstrb = (a.e.calc1.op.load | a.e.calc1.op.fload) == 1 ? 8'h00 : a.e.calc1.byteenable;
+    dmem1_in.mem_wdata = store_data(a.e.calc1.sdata, a.e.calc1.lsu_op.lsu_sb,
+                                    a.e.calc1.lsu_op.lsu_sh, a.e.calc1.lsu_op.lsu_sw);
+    dmem1_in.mem_wstrb = (a.e.calc1.op.load) == 1 ? 4'h00 : a.e.calc1.byteenable;
 
     lsu0_in.ldata = dmem0_out.mem_rdata;
     lsu0_in.byteenable = v.calc0.byteenable;
@@ -92,8 +77,6 @@ module memory_stage (
     if (dmem0_out.mem_ready == 1) begin
       if (v.calc0.op.load == 1) begin
         v.calc0.wdata = v.calc0.ldata[31:0];
-      end else if (v.calc0.op.fload == 1) begin
-        v.calc0.fdata = nan_box(v.calc0.ldata, v.calc0.lsu_op.lsu_lw);
       end
       v.ready0 = 1;
     end
@@ -101,17 +84,15 @@ module memory_stage (
     if (dmem1_out.mem_ready == 1) begin
       if (v.calc1.op.load == 1) begin
         v.calc1.wdata = v.calc1.ldata[31:0];
-      end else if (v.calc1.op.fload == 1) begin
-        v.calc1.fdata = nan_box(v.calc1.ldata, v.calc1.lsu_op.lsu_lw);
       end
       v.ready1 = 1;
     end
 
-    if ((v.calc0.op.load | v.calc0.op.store | v.calc0.op.fload | v.calc0.op.fstore) == 1) begin
+    if ((v.calc0.op.load | v.calc0.op.store) == 1) begin
       v.stall = ~v.ready0;
     end
 
-    if ((v.calc1.op.load | v.calc1.op.store | v.calc1.op.fload | v.calc1.op.fstore) == 1) begin
+    if ((v.calc1.op.load | v.calc1.op.store) == 1) begin
       v.stall = v.stall | ~v.ready1;
     end
 
@@ -147,10 +128,6 @@ module memory_stage (
     forwarding1_min.waddr = v.calc1.waddr;
     forwarding1_min.wdata = v.calc1.wdata;
 
-    fp_forwarding_min.wren = v.calc0.op.fwren | v.calc1.op.fwren;
-    fp_forwarding_min.waddr = v.calc0.op.fwren ? v.calc0.waddr : v.calc1.waddr;
-    fp_forwarding_min.wdata = v.calc0.op.fwren ? v.calc0.fdata : v.calc1.fdata;
-
     register0_win.wren = v.calc0.op.wren & |(v.calc0.waddr);
     register0_win.waddr = v.calc0.waddr;
     register0_win.wdata = v.calc0.wdata;
@@ -158,10 +135,6 @@ module memory_stage (
     register1_win.wren = v.calc1.op.wren & |(v.calc1.waddr);
     register1_win.waddr = v.calc1.waddr;
     register1_win.wdata = v.calc1.wdata;
-
-    fp_register_win.wren = v.calc0.op.fwren | v.calc1.op.fwren;
-    fp_register_win.waddr = v.calc0.op.fwren ? v.calc0.waddr : v.calc1.waddr;
-    fp_register_win.wdata = v.calc0.op.fwren ? v.calc0.fdata : v.calc1.fdata;
 
     csr_win.cwren = v.calc0.op.cwren | v.calc1.op.cwren;
     csr_win.cwaddr = v.calc0.op.cwren ? v.calc0.caddr : v.calc1.caddr;
@@ -175,13 +148,6 @@ module memory_stage (
     csr_ein.epc = v.calc0.op.exception ? v.calc0.pc : v.calc1.pc;
     csr_ein.ecause = v.calc0.op.exception ? v.calc0.ecause : v.calc1.ecause;
     csr_ein.etval = v.calc0.op.exception ? v.calc0.etval : v.calc1.etval;
-
-    fp_csr_win.cwren = v.calc0.op.cwren | v.calc1.op.cwren;
-    fp_csr_win.cwaddr = v.calc0.op.cwren ? v.calc0.caddr : v.calc1.caddr;
-    fp_csr_win.cdata = v.calc0.op.cwren ? v.calc0.cwdata : v.calc1.cwdata;
-
-    fp_csr_ein.fpunit = v.calc0.op.fpuf | v.calc1.op.fpuf;
-    fp_csr_ein.fflags = v.calc0.op.fpuf ? v.calc0.flags : v.calc1.flags;
 
     rin = v;
 

@@ -11,7 +11,7 @@ module ram (
 
   localparam DEPTH = $clog2(RAM_DEPTH);
 
-  logic [63 : 0] ram_block[0:RAM_DEPTH-1];
+  logic [31 : 0] ram_block[0:RAM_DEPTH-1];
 
   mem_out_type mem_out = '0;
 
@@ -26,23 +26,15 @@ module ram (
     if (ram_in.mem_valid == 1) begin
 
       if (ram_in.mem_wstrb[0] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][7:0] <= ram_in.mem_wdata[7:0];
+        ram_block[ram_in.mem_addr[(DEPTH+1):2]][7:0] <= ram_in.mem_wdata[7:0];
       if (ram_in.mem_wstrb[1] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][15:8] <= ram_in.mem_wdata[15:8];
+        ram_block[ram_in.mem_addr[(DEPTH+1):2]][15:8] <= ram_in.mem_wdata[15:8];
       if (ram_in.mem_wstrb[2] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][23:16] <= ram_in.mem_wdata[23:16];
+        ram_block[ram_in.mem_addr[(DEPTH+1):2]][23:16] <= ram_in.mem_wdata[23:16];
       if (ram_in.mem_wstrb[3] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][31:24] <= ram_in.mem_wdata[31:24];
-      if (ram_in.mem_wstrb[4] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][39:32] <= ram_in.mem_wdata[39:32];
-      if (ram_in.mem_wstrb[5] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][47:40] <= ram_in.mem_wdata[47:40];
-      if (ram_in.mem_wstrb[6] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][55:48] <= ram_in.mem_wdata[55:48];
-      if (ram_in.mem_wstrb[7] == 1)
-        ram_block[ram_in.mem_addr[(DEPTH+2):3]][63:56] <= ram_in.mem_wdata[63:56];
+        ram_block[ram_in.mem_addr[(DEPTH+1):2]][31:24] <= ram_in.mem_wdata[31:24];
 
-      mem_out.mem_rdata <= ram_block[ram_in.mem_addr[(DEPTH+2):3]];
+      mem_out.mem_rdata <= ram_block[ram_in.mem_addr[(DEPTH+1):2]];
       mem_out.mem_error <= 0;
       mem_out.mem_ready <= 1;
 

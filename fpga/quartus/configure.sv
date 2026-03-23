@@ -7,14 +7,12 @@ package configure;
 
   parameter HAZARD_DEPTH = 4;
 
-  parameter TIM_WIDTH = 16;
+  parameter TIM_WIDTH = 32;
   parameter TIM_DEPTH = 1024;
 
   parameter RAM_DEPTH = 1;
 
   parameter RAM_TYPE = 1;
-
-  parameter FPU_ENABLE = 1;
 
   parameter BTAC_ENABLE = 1;
   parameter BTB_DEPTH = 512;

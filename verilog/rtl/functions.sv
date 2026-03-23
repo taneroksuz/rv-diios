@@ -11,37 +11,16 @@ package functions;
     end
   endfunction
 
-  function [63:0] store_data;
-    input [63:0] sdata;
+  function [31:0] store_data;
+    input [31:0] sdata;
     input [0:0] sb;
     input [0:0] sh;
     input [0:0] sw;
-    input [0:0] sd;
     begin
-      if (sb == 1)
-        store_data = {
-          sdata[7:0],
-          sdata[7:0],
-          sdata[7:0],
-          sdata[7:0],
-          sdata[7:0],
-          sdata[7:0],
-          sdata[7:0],
-          sdata[7:0]
-        };
-      else if (sh == 1) store_data = {sdata[15:0], sdata[15:0], sdata[15:0], sdata[15:0]};
-      else if (sw == 1) store_data = {sdata[31:0], sdata[31:0]};
-      else if (sd == 1) store_data = sdata;
+      if (sb == 1) store_data = {sdata[7:0], sdata[7:0], sdata[7:0], sdata[7:0]};
+      else if (sh == 1) store_data = {sdata[15:0], sdata[15:0]};
+      else if (sw == 1) store_data = sdata;
       else store_data = 0;
-    end
-  endfunction
-
-  function [63:0] nan_box;
-    input [63:0] ldata;
-    input [0:0] flw;
-    begin
-      nan_box = ldata;
-      if (flw == 1) nan_box[63:32] = 32'hFFFFFFFF;
     end
   endfunction
 

@@ -8,9 +8,9 @@ module axi
   input  logic [0  : 0] axi_valid,
   input  logic [0  : 0] axi_instr,
   input  logic [31 : 0] axi_addr,
-  input  logic [63 : 0] axi_wdata,
+  input  logic [31 : 0] axi_wdata,
   input  logic [7  : 0] axi_wstrb,
-  output logic [63 : 0] axi_rdata,
+  output logic [31 : 0] axi_rdata,
   output logic [0  : 0] axi_ready,
   /////////////////////////////////
   // Write address channel
@@ -26,7 +26,7 @@ module axi
   input  logic [0  : 0] m_axi_awready,
   /////////////////////////////////
   // Write data channel
-  output logic [63 : 0] m_axi_wdata,
+  output logic [31 : 0] m_axi_wdata,
   output logic [7  : 0] m_axi_wstrb,
   output logic [0  : 0] m_axi_wlast,
   output logic [0  : 0] m_axi_wvalid,
@@ -50,7 +50,7 @@ module axi
   input  logic [0  : 0] m_axi_arready,
   /////////////////////////////////
   // Read data channel
-  input  logic [63 : 0] m_axi_rdata,
+  input  logic [31 : 0] m_axi_rdata,
   input  logic [1  : 0] m_axi_rresp,
   input  logic [0  : 0] m_axi_rlast,
   input  logic [0  : 0] m_axi_rvalid,
@@ -81,15 +81,15 @@ module axi
   logic [31:0] addr_reg;
   logic [2 :0] prot;
   logic [2 :0] prot_reg;
-  logic [63:0] wdata;
-  logic [63:0] wdata_reg;
+  logic [31:0] wdata;
+  logic [31:0] wdata_reg;
   logic [7 :0] wstrb;
   logic [7 :0] wstrb_reg;
   logic [0 :0] wlast;
   logic [0 :0] wlast_reg;
 
-  logic [63:0] rdata;
-  logic [63:0] rdata_reg;
+  logic [31:0] rdata;
+  logic [31:0] rdata_reg;
   logic [0 :0] ready;
   logic [0 :0] ready_reg;
 

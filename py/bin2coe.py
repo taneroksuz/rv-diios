@@ -38,57 +38,33 @@ if __name__ == '__main__':
             string1 = "00"
             string2 = "00"
             string3 = "00"
-            string4 = "00"
-            string5 = "00"
-            string6 = "00"
-            string7 = "00"
         elif address-start_address < lines:
-            if (address-start_address+7) < lines:
-                string0 = "{:02X}".format(content[address-start_address+7])
+            if (address-start_address+3) < lines:
+                string0 = "{:02X}".format(content[address-start_address+3])
             else:
                 string0 = "00"
-            if (address-start_address+6) < lines:
-                string1 = "{:02X}".format(content[address-start_address+6])
+            if (address-start_address+2) < lines:
+                string1 = "{:02X}".format(content[address-start_address+2])
             else:
                 string1 = "00"
-            if (address-start_address+5) < lines:
-                string2 = "{:02X}".format(content[address-start_address+5])
+            if (address-start_address+1) < lines:
+                string2 = "{:02X}".format(content[address-start_address+1])
             else:
                 string2 = "00"
-            if (address-start_address+4) < lines:
-                string3 = "{:02X}".format(content[address-start_address+4])
+            if (address-start_address) < lines:
+                string3 = "{:02X}".format(content[address-start_address])
             else:
                 string3 = "00"
-            if (address-start_address+3) < lines:
-                string4 = "{:02X}".format(content[address-start_address+3])
-            else:
-                string4 = "00"
-            if (address-start_address+2) < lines:
-                string5 = "{:02X}".format(content[address-start_address+2])
-            else:
-                string5 = "00"
-            if (address-start_address+1) < lines:
-                string6 = "{:02X}".format(content[address-start_address+1])
-            else:
-                string6 = "00"
-            if (address-start_address) < lines:
-                string7 = "{:02X}".format(content[address-start_address])
-            else:
-                string7 = "00"
         else:
             string0 = "00"
             string1 = "00"
             string2 = "00"
             string3 = "00"
-            string4 = "00"
-            string5 = "00"
-            string6 = "00"
-            string7 = "00"
-        if address<(offset-8):
-            string = string0 + string1 + string2 + string3 + string4 + string5 + string6 + string7 + ",\n"
+        if address<(offset-4):
+            string = string0 + string1 + string2 + string3 + ",\n"
         else:
-            string = string0 + string1 + string2 + string3 + string4 + string5 + string6 + string7 + ";"
+            string = string0 + string1 + string2 + string3 + ";"
         output.write(string.encode('ascii'))
-        address = address + 8
+        address = address + 4
 
     output.close()

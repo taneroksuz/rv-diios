@@ -12,29 +12,29 @@ def read_binary_file(filename):
         sys.exit(1)
 
 def bytes_to_words(data):
-    """Convert byte array to 64-bit words (little-endian)"""
+    """Convert byte array to 32-bit words (little-endian)"""
     words = []
     
-    # Pad to 8-byte boundary
-    padding = (8 - len(data) % 8) % 8
+    # Pad to 4-byte boundary
+    padding = (4 - len(data) % 4) % 4
     data = data + b'\x00' * padding
     
-    # Convert to 64-bit words
-    for i in range(0, len(data), 8):
-        word = int.from_bytes(data[i:i+8], byteorder='little')
+    # Convert to words
+    for i in range(0, len(data), 4):
+        word = int.from_bytes(data[i:i+4], byteorder='little')
         words.append(word)
     
     return words
 
 def generate_case_rom(words):
-    """Generate clocked case statement ROM with 64-bit data"""
+    """Generate clocked case statement ROM"""
     
     num_words = len(words)
     
     # Calculate address width (round up to power of 2)
     addr_width = max(1, (num_words - 1).bit_length())
     total_entries = 2 ** addr_width
-    
+
     print("always_ff @(posedge clock) begin")
     print("  case (raddr)")
     
@@ -47,7 +47,7 @@ def generate_case_rom(words):
         else:
             word = 0  # Zero padding
         
-        print(f"    {addr_width}'b{addr_binary}: rdata <= 64'h{word:016X};")
+        print(f"    {addr_width}'b{addr_binary}: rdata <= 32'h{word:08X};")
     
     print("  endcase")
     print("end")

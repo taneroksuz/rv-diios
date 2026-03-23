@@ -42,8 +42,8 @@ module dram (
     logic [0:0]   mem_instr;
     logic [1:0]   mem_mode;
     logic [31:0]  mem_addr;
-    logic [63:0]  mem_wdata;
-    logic [7:0]   mem_wstrb;
+    logic [31:0]  mem_wdata;
+    logic [3:0]   mem_wstrb;
     logic [26:0]  app_addr;
     logic [2:0]   app_cmd;
     logic         app_en;
@@ -162,12 +162,14 @@ module dram (
     end
 
     if (r_in.state == stPreset) begin
-      v_in.app_wdf_data = {v_in.mem_wdata,v_in.mem_wdata};
+      v_in.app_wdf_data = {v_in.mem_wdata,v_in.mem_wdata,v_in.mem_wdata,v_in.mem_wdata};
       v_in.app_wdf_mask = 16'hFFFF;
       v_in.app_addr     = {v_in.mem_addr[26:4],4'b0000};
-      unique case (v_in.mem_addr[3])
-        0 : v_in.app_wdf_mask[7:0] = ~v_in.mem_wstrb;
-        1 : v_in.app_wdf_mask[15:8] = ~v_in.mem_wstrb;
+      unique case (v_in.mem_addr[3:2])
+        0 : v_in.app_wdf_mask[3:0] = ~v_in.mem_wstrb;
+        1 : v_in.app_wdf_mask[7:4] = ~v_in.mem_wstrb;
+        2 : v_in.app_wdf_mask[11:8] = ~v_in.mem_wstrb;
+        3 : v_in.app_wdf_mask[15:12] = ~v_in.mem_wstrb;
         default : ;
       endcase
     end
@@ -187,9 +189,11 @@ module dram (
     if (r_in.state == stRecvData) begin
       if (r_out.app_rd_data_valid) begin
         mem_out.mem_ready = 1;
-        unique case (v_in.mem_addr[3])
-          0 : mem_out.mem_rdata = r_out.app_rd_data[63:0];
-          1 : mem_out.mem_rdata = r_out.app_rd_data[127:64];
+        unique case (v_in.mem_addr[3:2])
+          0 : mem_out.mem_rdata = r_out.app_rd_data[31:0];
+          1 : mem_out.mem_rdata = r_out.app_rd_data[63:32];
+          2 : mem_out.mem_rdata = r_out.app_rd_data[95:64];
+          3 : mem_out.mem_rdata = r_out.app_rd_data[127:96];
           default : ;
         endcase
       end

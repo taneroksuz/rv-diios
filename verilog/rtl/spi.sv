@@ -80,7 +80,7 @@ module spi #(
 
   end
 
-  assign spi_out.mem_rdata = {56'h0, r.data};
+  assign spi_out.mem_rdata = {24'h0, r.data};
   assign spi_out.mem_error = 0;
   assign spi_out.mem_ready = r.ready;
 

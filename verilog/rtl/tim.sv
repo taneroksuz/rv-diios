@@ -9,11 +9,11 @@ package tim_wires;
   typedef struct packed {
     logic [0 : 0] en;
     logic [DEPTH-1 : 0] addr;
-    logic [7 : 0] strb;
-    logic [63 : 0] data;
+    logic [3 : 0] strb;
+    logic [31 : 0] data;
   } tim_ram_in_type;
 
-  typedef struct packed {logic [63 : 0] data;} tim_ram_out_type;
+  typedef struct packed {logic [31 : 0] data;} tim_ram_out_type;
 
   typedef tim_ram_in_type tim_vec_in_type[TIM_WIDTH];
   typedef tim_ram_out_type tim_vec_out_type[TIM_WIDTH];
@@ -43,7 +43,7 @@ module tim_ram (
 
     if (RAM_TYPE == 0) begin
 
-      logic [63 : 0] tim_ram[0:TIM_DEPTH-1] = '{default: '0};
+      logic [31 : 0] tim_ram[0:TIM_DEPTH-1] = '{default: '0};
 
       always_ff @(posedge clock) begin
         if (tim0_ram_in.en == 1) begin
@@ -51,10 +51,6 @@ module tim_ram (
           if (tim0_ram_in.strb[1]) tim_ram[tim0_ram_in.addr][15:8] <= tim0_ram_in.data[15:8];
           if (tim0_ram_in.strb[2]) tim_ram[tim0_ram_in.addr][23:16] <= tim0_ram_in.data[23:16];
           if (tim0_ram_in.strb[3]) tim_ram[tim0_ram_in.addr][31:24] <= tim0_ram_in.data[31:24];
-          if (tim0_ram_in.strb[4]) tim_ram[tim0_ram_in.addr][39:32] <= tim0_ram_in.data[39:32];
-          if (tim0_ram_in.strb[5]) tim_ram[tim0_ram_in.addr][47:40] <= tim0_ram_in.data[47:40];
-          if (tim0_ram_in.strb[6]) tim_ram[tim0_ram_in.addr][55:48] <= tim0_ram_in.data[55:48];
-          if (tim0_ram_in.strb[7]) tim_ram[tim0_ram_in.addr][63:56] <= tim0_ram_in.data[63:56];
           tim0_ram_out.data <= tim_ram[tim0_ram_in.addr];
         end
       end
@@ -64,10 +60,6 @@ module tim_ram (
           if (tim1_ram_in.strb[1]) tim_ram[tim1_ram_in.addr][15:8] <= tim1_ram_in.data[15:8];
           if (tim1_ram_in.strb[2]) tim_ram[tim1_ram_in.addr][23:16] <= tim1_ram_in.data[23:16];
           if (tim1_ram_in.strb[3]) tim_ram[tim1_ram_in.addr][31:24] <= tim1_ram_in.data[31:24];
-          if (tim1_ram_in.strb[4]) tim_ram[tim1_ram_in.addr][39:32] <= tim1_ram_in.data[39:32];
-          if (tim1_ram_in.strb[5]) tim_ram[tim1_ram_in.addr][47:40] <= tim1_ram_in.data[47:40];
-          if (tim1_ram_in.strb[6]) tim_ram[tim1_ram_in.addr][55:48] <= tim1_ram_in.data[55:48];
-          if (tim1_ram_in.strb[7]) tim_ram[tim1_ram_in.addr][63:56] <= tim1_ram_in.data[63:56];
           tim1_ram_out.data <= tim_ram[tim1_ram_in.addr];
         end
       end
@@ -78,17 +70,13 @@ module tim_ram (
 
       /* synthesis syn_ramstyle = "MLAB, no_rw_check"*/
 
-      logic [7 : 0][7 : 0] tim_ram[0:TIM_DEPTH-1] = '{default: '0};
+      logic [3 : 0][7 : 0] tim_ram[0:TIM_DEPTH-1] = '{default: '0};
 
       always_ff @(posedge clock) begin
         if (tim0_ram_in.strb[0]) tim_ram[tim0_ram_in.addr][0] <= tim0_ram_in.data[7:0];
         if (tim0_ram_in.strb[1]) tim_ram[tim0_ram_in.addr][1] <= tim0_ram_in.data[15:8];
         if (tim0_ram_in.strb[2]) tim_ram[tim0_ram_in.addr][2] <= tim0_ram_in.data[23:16];
         if (tim0_ram_in.strb[3]) tim_ram[tim0_ram_in.addr][3] <= tim0_ram_in.data[31:24];
-        if (tim0_ram_in.strb[4]) tim_ram[tim0_ram_in.addr][4] <= tim0_ram_in.data[39:32];
-        if (tim0_ram_in.strb[5]) tim_ram[tim0_ram_in.addr][5] <= tim0_ram_in.data[47:40];
-        if (tim0_ram_in.strb[6]) tim_ram[tim0_ram_in.addr][6] <= tim0_ram_in.data[55:48];
-        if (tim0_ram_in.strb[7]) tim_ram[tim0_ram_in.addr][7] <= tim0_ram_in.data[63:56];
         tim0_ram_out.data <= tim_ram[tim0_ram_in.addr];
       end
       always_ff @(posedge clock) begin
@@ -96,10 +84,6 @@ module tim_ram (
         if (tim1_ram_in.strb[1]) tim_ram[tim1_ram_in.addr][1] <= tim1_ram_in.data[15:8];
         if (tim1_ram_in.strb[2]) tim_ram[tim1_ram_in.addr][2] <= tim1_ram_in.data[23:16];
         if (tim1_ram_in.strb[3]) tim_ram[tim1_ram_in.addr][3] <= tim1_ram_in.data[31:24];
-        if (tim1_ram_in.strb[4]) tim_ram[tim1_ram_in.addr][4] <= tim1_ram_in.data[39:32];
-        if (tim1_ram_in.strb[5]) tim_ram[tim1_ram_in.addr][5] <= tim1_ram_in.data[47:40];
-        if (tim1_ram_in.strb[6]) tim_ram[tim1_ram_in.addr][6] <= tim1_ram_in.data[55:48];
-        if (tim1_ram_in.strb[7]) tim_ram[tim1_ram_in.addr][7] <= tim1_ram_in.data[63:56];
         tim1_ram_out.data <= tim_ram[tim1_ram_in.addr];
       end
 
@@ -131,10 +115,10 @@ module tim_ctrl (
     logic [WIDTH-1:0] wid1;
     logic [DEPTH-1:0] did0;
     logic [DEPTH-1:0] did1;
-    logic [63:0] data0;
-    logic [63:0] data1;
-    logic [7:0] strb0;
-    logic [7:0] strb1;
+    logic [31:0] data0;
+    logic [31:0] data1;
+    logic [3:0] strb0;
+    logic [3:0] strb1;
     logic [0:0] valid0;
     logic [0:0] valid1;
   } front_type;
@@ -144,12 +128,12 @@ module tim_ctrl (
     logic [WIDTH-1:0] wid1;
     logic [DEPTH-1:0] did0;
     logic [DEPTH-1:0] did1;
-    logic [63:0] rdata0;
-    logic [63:0] rdata1;
-    logic [63:0] data0;
-    logic [63:0] data1;
-    logic [7:0] strb0;
-    logic [7:0] strb1;
+    logic [31:0] rdata0;
+    logic [31:0] rdata1;
+    logic [31:0] data0;
+    logic [31:0] data1;
+    logic [3:0] strb0;
+    logic [3:0] strb1;
     logic [0:0] valid0;
     logic [0:0] valid1;
   } back_type;
@@ -176,16 +160,16 @@ module tim_ctrl (
       v_f.valid0 = tim0_in.mem_valid;
       v_f.strb0  = tim0_in.mem_wstrb;
       v_f.data0  = tim0_in.mem_wdata;
-      v_f.did0   = tim0_in.mem_addr[(DEPTH+WIDTH+2):(WIDTH+3)];
-      v_f.wid0   = tim0_in.mem_addr[(WIDTH+2):3];
+      v_f.did0   = tim0_in.mem_addr[(DEPTH+WIDTH+1):(WIDTH+2)];
+      v_f.wid0   = tim0_in.mem_addr[(WIDTH+1):2];
     end
 
     if (tim1_in.mem_valid == 1) begin
       v_f.valid1 = tim1_in.mem_valid;
       v_f.strb1  = tim1_in.mem_wstrb;
       v_f.data1  = tim1_in.mem_wdata;
-      v_f.did1   = tim1_in.mem_addr[(DEPTH+WIDTH+2):(WIDTH+3)];
-      v_f.wid1   = tim1_in.mem_addr[(WIDTH+2):3];
+      v_f.did1   = tim1_in.mem_addr[(DEPTH+WIDTH+1):(WIDTH+2)];
+      v_f.wid1   = tim1_in.mem_addr[(WIDTH+1):2];
     end
 
     dvec0_in = init_tim_vec_in;

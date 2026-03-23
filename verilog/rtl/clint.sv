@@ -34,9 +34,9 @@ module clint #(
 
   logic [ 0 : 0] enable = 0;
 
-  logic [63 : 0] rdata_ms = 0;
-  logic [63 : 0] rdata_mt = 0;
-  logic [63 : 0] rdata_mtc = 0;
+  logic [31 : 0] rdata_ms = 0;
+  logic [31 : 0] rdata_mt = 0;
+  logic [31 : 0] rdata_mtc = 0;
 
   logic [ 0 : 0] ready_ms = 0;
   logic [ 0 : 0] ready_mt = 0;
@@ -78,10 +78,18 @@ module clint #(
       if (clint_in.mem_valid == 1) begin
         if (clint_in.mem_addr >= clint_mtime_start && clint_in.mem_addr < clint_mtime_end) begin
           if (|clint_in.mem_wstrb == 0) begin
-            rdata_mt <= mtime;
+            if (clint_in.mem_addr[2] == 0) begin
+              rdata_mt <= mtime[31:0];
+            end else begin
+              rdata_mt <= mtime[63:32];
+            end
             ready_mt <= 1;
           end else begin
-            mtime <= clint_in.mem_wdata;
+            if (clint_in.mem_addr[2] == 0) begin
+              mtime[31:0] <= clint_in.mem_wdata;
+            end else begin
+              mtime[63:32] <= clint_in.mem_wdata;
+            end
             ready_mt <= 1;
           end
         end
@@ -100,10 +108,18 @@ module clint #(
       if (clint_in.mem_valid == 1) begin
         if (clint_in.mem_addr >= clint_mtimecmp_start && clint_in.mem_addr < clint_mtimecmp_end) begin
           if (|clint_in.mem_wstrb == 0) begin
-            rdata_mtc <= mtimecmp;
+            if (clint_in.mem_addr[2] == 0) begin
+              rdata_mtc <= mtimecmp[31:0];
+            end else begin
+              rdata_mtc <= mtimecmp[63:32];
+            end
             ready_mtc <= 1;
           end else begin
-            mtimecmp  <= clint_in.mem_wdata;
+            if (clint_in.mem_addr[2] == 0) begin
+              mtimecmp[31:0] <= clint_in.mem_wdata;
+            end else begin
+              mtimecmp[63:32] <= clint_in.mem_wdata;
+            end
             ready_mtc <= 1;
           end
         end

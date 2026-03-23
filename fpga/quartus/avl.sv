@@ -8,16 +8,16 @@ module avl
   input  logic [0  : 0] avl_valid,
   input  logic [0  : 0] avl_instr,
   input  logic [31 : 0] avl_addr,
-  input  logic [63 : 0] avl_wdata,
+  input  logic [31 : 0] avl_wdata,
   input  logic [7  : 0] avl_wstrb,
-  output logic [63 : 0] avl_rdata,
+  output logic [31 : 0] avl_rdata,
   output logic [0  : 0] avl_ready,
   /////////////////////////////////
   output logic [31 : 0] m_avl_address,
   output logic [7  : 0] m_avl_byteenable,
   output logic [0  : 0] m_avl_lock,
   output logic [0  : 0] m_avl_read,
-  output logic [63 : 0] m_avl_writedata,
+  output logic [31 : 0] m_avl_writedata,
   output logic [0  : 0] m_avl_write,
   output logic [2  : 0] m_avl_burstcount,
   /////////////////////////////////
@@ -44,13 +44,13 @@ module avl
   logic [7 :0] byteenable_reg;
   logic [0 :0] read;
   logic [0 :0] read_reg;
-  logic [63:0] writedata;
-  logic [63:0] writedata_reg;
+  logic [31:0] writedata;
+  logic [31:0] writedata_reg;
   logic [0 :0] write;
   logic [0 :0] write_reg;
 
-  logic [63:0] rdata;
-  logic [63:0] rdata_reg;
+  logic [31:0] rdata;
+  logic [31:0] rdata_reg;
   logic [0 :0] ready;
   logic [0 :0] ready_reg;
 
