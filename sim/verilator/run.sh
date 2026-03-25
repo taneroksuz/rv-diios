@@ -62,7 +62,7 @@ $VERILATOR --binary --trace --trace-structs --top-module testbench -Wno-UNOPTFLA
             $BASEDIR/verilog/rtl/soc.sv \
             $BASEDIR/verilog/tb/testbench.sv 2>&1 > /dev/null
 
-make -s -j -C obj_dir/ -f Vtestbench.mk Vtestbench
+make -s -j$(nproc) -C obj_dir/ -f Vtestbench.mk Vtestbench
 
 cp $BASEDIR/riscv/$PROGRAM.riscv $BASEDIR/sim/verilator/output/$PROGRAM.riscv
 
