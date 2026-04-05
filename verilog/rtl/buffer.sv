@@ -113,11 +113,11 @@ module buffer_ctrl (
   localparam [DEPTH-1:0] one = 1;
 
   typedef struct packed {
-    logic [DEPTH+2 : 0] wid;
-    logic [DEPTH+2 : 0] rid;
-    logic [DEPTH+2 : 0] diff;
-    logic [DEPTH+2 : 0] count;
-    logic [DEPTH+2 : 0] align;
+    logic [DEPTH+1 : 0] wid;
+    logic [DEPTH+1 : 0] rid;
+    logic [DEPTH+1 : 0] diff;
+    logic [DEPTH+1 : 0] count;
+    logic [DEPTH+1 : 0] align;
     logic [47 : 0] wdata0;
     logic [47 : 0] wdata1;
     logic [47 : 0] wdata2;
@@ -184,8 +184,8 @@ module buffer_ctrl (
     end
 
     if (r.clear == 1 && buffer_in.clear == 0 && buffer_in.ready == 1) begin
-      v.rid   = {{DEPTH + 2{1'b0}}, buffer_in.pc0[1]};
-      v.align = {{DEPTH + 2{1'b0}}, buffer_in.pc0[1]};
+      v.rid   = {{DEPTH + 1{1'b0}}, buffer_in.pc0[1]};
+      v.align = {{DEPTH + 1{1'b0}}, buffer_in.pc0[1]};
       v.clear = 0;
     end
 
