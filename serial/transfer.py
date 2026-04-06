@@ -38,7 +38,7 @@ if __name__ == '__main__':
         line = ser.readline()
         if line == b'':
             break
-        print(line.decode("ascii"))
+        print(line.decode("ascii"),end='')
 
     ser.close()
 
