@@ -108,7 +108,7 @@ module buffer_ctrl (
   timeunit 1ns; timeprecision 1ps;
 
   localparam DEPTH = $clog2(BUFFER_DEPTH);
-  localparam total = 4 * (BUFFER_DEPTH - 2);
+  localparam TOTAL = 4 * (BUFFER_DEPTH - 2);
 
   localparam [DEPTH-1:0] one = 1;
 
@@ -340,7 +340,7 @@ module buffer_ctrl (
 
     v.stall = 0;
 
-    if (v.count > total) begin
+    if (v.count > TOTAL) begin
       v.stall = 1;
     end
 
