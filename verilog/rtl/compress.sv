@@ -218,7 +218,6 @@ module compress (
               instr_str = "c.lui";
               imm = imm_u;
               wren = nonzero_imm_u;
-              rden1 = nonzero_imm_u;
               lui = nonzero_imm_u;
               valid = nonzero_imm_u;
             end

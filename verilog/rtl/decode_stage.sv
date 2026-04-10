@@ -129,7 +129,7 @@ module decode_stage (
     compress0_in.instr = v.instr0.instr;
 
     if (compress0_out.valid == 1) begin
-      v.instr0.instr_str = decoder1_out.instr_str;
+      v.instr0.instr_str = compress0_out.instr_str;
       v.instr0.imm = compress0_out.imm;
       v.instr0.waddr = compress0_out.waddr;
       v.instr0.raddr1 = compress0_out.raddr1;
@@ -155,7 +155,7 @@ module decode_stage (
     compress1_in.instr = v.instr1.instr;
 
     if (compress1_out.valid == 1) begin
-      v.instr1.instr_str = decoder1_out.instr_str;
+      v.instr1.instr_str = compress1_out.instr_str;
       v.instr1.imm = compress1_out.imm;
       v.instr1.waddr = compress1_out.waddr;
       v.instr1.raddr1 = compress1_out.raddr1;
