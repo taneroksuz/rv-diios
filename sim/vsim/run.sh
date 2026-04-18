@@ -21,7 +21,8 @@ start=`date +%s`
 
 $VLIB .
 
-$VLOG -sv -svinputport=relaxed $BASEDIR/verilog/conf/configure.sv \
+$VLOG -quiet -sv -svinputport=relaxed \
+                    $BASEDIR/verilog/conf/configure.sv \
                     $BASEDIR/verilog/rtl/constants.sv \
                     $BASEDIR/verilog/rtl/functions.sv \
                     $BASEDIR/verilog/rtl/wires.sv \
@@ -61,23 +62,26 @@ $VLOG -sv -svinputport=relaxed $BASEDIR/verilog/conf/configure.sv \
                     $BASEDIR/verilog/rtl/uart_rx.sv \
                     $BASEDIR/verilog/rtl/uart_tx.sv \
                     $BASEDIR/verilog/rtl/soc.sv \
-                    $BASEDIR/verilog/tb/testbench.sv
+                    $BASEDIR/verilog/tb/testbench.sv 2>&1 > /dev/null
 
-cp $BASEDIR/riscv/$PROGRAM.riscv $BASEDIR/sim/vsim/output/$PROGRAM.riscv
-
-FILE=$BASEDIR/sim/vsim/output/$PROGRAM
-
-${RISCV}/bin/riscv32-unknown-elf-nm -A ${FILE}.riscv | grep -sw 'tohost' | sed -e 's/.*:\(.*\) D.*/\1/' > ${FILE}.host
-${RISCV}/bin/riscv32-unknown-elf-objcopy -O binary ${FILE}.riscv ${FILE}.bin
-$PYTHON $BASEDIR/py/bin2dat.py --input ${FILE}.riscv --address 0x0 --offset 0x100000
-cp ${FILE}.dat ram.dat
-cp ${FILE}.host host.dat
-if [ "$DUMP" = "1" ]
-then
-  $VSIM -c testbench -do "add wave -recursive *; run -all" +MAXTIME=$MAXTIME +REGFILE=${FILE}.reg +CSRFILE=${FILE}.csr +MEMFILE=${FILE}.mem -wlf ${FILE}.wlf
-else
-  $VSIM -c testbench -do "run -all" +MAXTIME=$MAXTIME
-fi
+for FILE in $BASEDIR/riscv/*.riscv; do
+  BASE="${FILE##*/}"
+  NAME="${BASE%.*}"
+  if [[ "$NAME" == "$PROGRAM"* ]]; then
+    cp $BASEDIR/riscv/$NAME.riscv $BASEDIR/sim/vsim/output/$NAME.riscv
+    $RISCV/bin/riscv32-unknown-elf-nm -A $BASEDIR/sim/vsim/output/$NAME.riscv | grep -sw 'tohost' | sed -e 's/.*:\(.*\) D.*/\1/' > $BASEDIR/sim/vsim/output/$NAME.host
+    $RISCV/bin/riscv32-unknown-elf-objcopy -O binary $BASEDIR/sim/vsim/output/$NAME.riscv $BASEDIR/sim/vsim/output/$NAME.bin
+    $PYTHON $BASEDIR/py/bin2dat.py --input $BASEDIR/sim/vsim/output/$NAME.riscv --address 0x0 --offset 0x100000
+    cp $BASEDIR/sim/vsim/output/$NAME.dat ram.dat
+    cp $BASEDIR/sim/vsim/output/$NAME.host host.dat
+    if [ "$DUMP" = "1" ]
+    then
+      $VSIM -quiet -c testbench -do "add wave -recursive *; run -all" +MAXTIME=$MAXTIME +REGFILE=$BASEDIR/sim/vsim/output/$NAME.reg +CSRFILE=$BASEDIR/sim/vsim/output/$NAME.csr +MEMFILE=$BASEDIR/sim/vsim/output/$NAME.mem -wlf $BASEDIR/sim/vsim/output/$NAME.wlf 2>&1
+    else
+      $VSIM -quiet -c testbench -do "run -all" +MAXTIME=$MAXTIME 2>&1
+    fi
+  fi
+done
 
 end=`date +%s`
 echo Execution time was `expr $end - $start` seconds.
