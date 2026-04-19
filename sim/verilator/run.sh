@@ -76,7 +76,7 @@ for FILE in $BASEDIR/riscv/*.riscv; do
     cp $BASEDIR/sim/verilator/output/$NAME.host host.dat
     if [ "$DUMP" = "1" ]
     then
-      obj_dir/Vtestbench +MAXTIME=$MAXTIME +REGFILE=$BASEDIR/sim/verilator/output/$NAME.reg +CSRFILE=$$BASEDIR/sim/verilator/output/NAME.csr +MEMFILE=$BASEDIR/sim/verilator/output/$NAME.mem +FILENAME=$BASEDIR/sim/verilator/output/$NAME.vcd
+      obj_dir/Vtestbench +MAXTIME=$MAXTIME +REGFILE=$BASEDIR/sim/verilator/output/$NAME.reg +CSRFILE=$BASEDIR/sim/verilator/output/$NAME.csr +MEMFILE=$BASEDIR/sim/verilator/output/$NAME.mem +FILENAME=$BASEDIR/sim/verilator/output/$NAME.vcd
     else
       obj_dir/Vtestbench +MAXTIME=$MAXTIME
     fi
