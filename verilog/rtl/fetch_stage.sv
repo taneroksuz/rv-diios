@@ -22,11 +22,6 @@ module fetch_stage (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam [1:0] idle = 0;
-  localparam [1:0] busy = 1;
-  localparam [1:0] ctrl = 2;
-  localparam [1:0] inv = 3;
-
   fetch_reg_type r, rin;
   fetch_reg_type v;
 
@@ -37,8 +32,12 @@ module fetch_stage (
     v.valid = 0;
     v.stall = buffer_out.stall;
 
-    v.fence = 0;
-    v.spec = 0;
+    v.spec = clear | csr_out.trap
+                   | csr_out.mret
+                   | btac_out.pred_miss
+                   | d.m.calc0.op.fence
+                   | btac_out.pred0.taken
+                   | btac_out.pred1.taken;
 
     if (imem0_out.mem_ready == 1) begin
       v.irdata0 = imem0_out.mem_rdata;
@@ -68,18 +67,15 @@ module fetch_stage (
     v.ready1 = buffer_out.ready1;
 
     case (v.state)
-      idle: begin
+      IDLE: begin
         v.stall = 1;
       end
-      busy: begin
+      BUSY: begin
         if (v.ready == 0) begin
           v.stall = 1;
         end
       end
-      ctrl: begin
-        v.stall = 1;
-      end
-      inv: begin
+      INVALID: begin
         v.stall = 1;
       end
       default: begin
@@ -87,79 +83,50 @@ module fetch_stage (
     endcase
 
     if (clear == 1) begin
-      v.fence = 0;
-      v.spec  = 1;
-      v.ipc0  = 0;
+      v.ipc0 = 0;
     end else if (csr_out.trap == 1) begin
-      v.fence = 0;
-      v.spec  = 1;
-      v.ipc0  = csr_out.mtvec;
+      v.ipc0 = csr_out.mtvec;
     end else if (csr_out.mret == 1) begin
-      v.fence = 0;
-      v.spec  = 1;
-      v.ipc0  = csr_out.mepc;
+      v.ipc0 = csr_out.mepc;
     end else if (btac_out.pred_miss == 1) begin
-      v.fence = 0;
-      v.spec  = 1;
-      v.ipc0  = btac_out.pred_maddr;
+      v.ipc0 = btac_out.pred_maddr;
     end else if (d.m.calc0.op.fence == 1) begin
-      v.fence = 1;
-      v.spec  = 1;
-      v.ipc0  = d.m.calc0.npc;
+      v.ipc0 = d.m.calc0.npc;
     end else if (btac_out.pred0.taken == 1) begin
-      v.fence = 0;
-      v.spec  = 1;
-      v.ipc0  = btac_out.pred0.taddr;
+      v.ipc0 = btac_out.pred0.taddr;
     end else if (btac_out.pred1.taken == 1) begin
-      v.fence = 0;
-      v.spec  = 1;
-      v.ipc0  = btac_out.pred1.taddr;
+      v.ipc0 = btac_out.pred1.taddr;
     end else if (v.stall == 0) begin
-      v.fence = 0;
-      v.spec  = 0;
-      v.ipc0  = v.ipc0 + 8;
+      v.ipc0 = v.ipc0 + 8;
     end
 
     v.ipc1 = v.ipc0 + 4;
 
     case (v.state)
-      idle: begin
+      IDLE: begin
         if (clear == 0) begin
-          v.state = busy;
+          v.state = BUSY;
           v.valid = 1;
         end
       end
-      busy: begin
+      BUSY: begin
         if (v.ready == 1) begin
-          v.state = busy;
+          v.state = BUSY;
           v.valid = 1;
         end else if (v.spec == 1) begin
-          v.state = ctrl;
-          v.valid = 0;
-        end else if (v.fence == 1) begin
-          v.state = inv;
+          v.state = INVALID;
           v.valid = 0;
         end else begin
-          v.state = busy;
+          v.state = BUSY;
           v.valid = 0;
         end
       end
-      ctrl: begin
+      INVALID: begin
         if (v.ready == 1) begin
-          v.state = busy;
+          v.state = BUSY;
           v.valid = 1;
         end else begin
-          v.state = ctrl;
-          v.valid = 0;
-        end
-        v.ready = 0;
-      end
-      inv: begin
-        if (v.ready == 1) begin
-          v.state = busy;
-          v.valid = 1;
-        end else begin
-          v.state = inv;
+          v.state = INVALID;
           v.valid = 0;
         end
         v.ready = 0;
