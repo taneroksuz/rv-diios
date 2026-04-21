@@ -12,8 +12,6 @@ package configure;
 
   parameter RAM_DEPTH = 262144;
 
-  parameter RAM_TYPE = 0;
-
   parameter BTAC_ENABLE = 1;
   parameter BTB_DEPTH = 512;
   parameter BHT_DEPTH = 1024;

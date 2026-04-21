@@ -44,26 +44,67 @@ module tim_ram (
   localparam DEPTH = $clog2(TIM_DEPTH);
   localparam WIDTH = $clog2(TIM_WIDTH);
 
-  logic [31 : 0] tim_ram[0:TIM_DEPTH-1] = '{default: '0};
+  logic [31:0] q_a;
+  logic [31:0] q_b;
+  logic        wren_a;
+  logic        wren_b;
 
-  always_ff @(posedge clock) begin
-    if (tim_ram_in.en0 == 1) begin
-      if (tim_ram_in.strb0[0]) tim_ram[tim_ram_in.addr0][7:0] <= tim_ram_in.data0[7:0];
-      if (tim_ram_in.strb0[1]) tim_ram[tim_ram_in.addr0][15:8] <= tim_ram_in.data0[15:8];
-      if (tim_ram_in.strb0[2]) tim_ram[tim_ram_in.addr0][23:16] <= tim_ram_in.data0[23:16];
-      if (tim_ram_in.strb0[3]) tim_ram[tim_ram_in.addr0][31:24] <= tim_ram_in.data0[31:24];
-      tim_ram_out.data0 <= tim_ram[tim_ram_in.addr0];
-    end
-  end
-  always_ff @(posedge clock) begin
-    if (tim_ram_in.en1 == 1) begin
-      if (tim_ram_in.strb1[0]) tim_ram[tim_ram_in.addr1][7:0] <= tim_ram_in.data1[7:0];
-      if (tim_ram_in.strb1[1]) tim_ram[tim_ram_in.addr1][15:8] <= tim_ram_in.data1[15:8];
-      if (tim_ram_in.strb1[2]) tim_ram[tim_ram_in.addr1][23:16] <= tim_ram_in.data1[23:16];
-      if (tim_ram_in.strb1[3]) tim_ram[tim_ram_in.addr1][31:24] <= tim_ram_in.data1[31:24];
-      tim_ram_out.data1 <= tim_ram[tim_ram_in.addr1];
-    end
-  end
+  assign wren_a = tim_ram_in.en0 && (|tim_ram_in.strb0);
+  assign wren_b = tim_ram_in.en1 && (|tim_ram_in.strb1);
+
+  assign tim_ram_out.data0 = q_a;
+  assign tim_ram_out.data1 = q_b;
+
+  altsyncram altsyncram_component (
+        .clock0         (clock),
+        .clock1         (clock),
+        .clocken0       (1'b1),
+        .clocken1       (1'b1),
+        .clocken2       (1'b1),
+        .clocken3       (1'b1),
+        .aclr0          (1'b0),
+        .aclr1          (1'b0),
+        .addressstall_a (1'b0),
+        .addressstall_b (1'b0),
+
+        .address_a      (tim_ram_in.addr0),
+        .address_b      (tim_ram_in.addr1),
+        .data_a         (tim_ram_in.data0),
+        .data_b         (tim_ram_in.data1),
+        .wren_a         (wren_a),
+        .wren_b         (wren_b),
+        .byteena_a      (tim_ram_in.strb0),
+        .byteena_b      (tim_ram_in.strb1),
+        .q_a            (q_a),
+        .q_b            (q_b),
+
+        .eccstatus      ()
+    );
+
+    defparam
+        altsyncram_component.operation_mode = "BIDIR_DUAL_PORT",
+        altsyncram_component.width_a = 32,
+        altsyncram_component.widthad_a = DEPTH,
+        altsyncram_component.numwords_a = TIM_DEPTH,
+        altsyncram_component.width_b = 32,
+        altsyncram_component.widthad_b = DEPTH,
+        altsyncram_component.numwords_b = TIM_DEPTH,
+        altsyncram_component.byte_size = 8,
+        altsyncram_component.width_byteena_a = 4,
+        altsyncram_component.width_byteena_b = 4,
+        altsyncram_component.outdata_reg_a = "UNREGISTERED",
+        altsyncram_component.outdata_reg_b = "UNREGISTERED",
+        altsyncram_component.power_up_uninitialized = "FALSE",
+        altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_NO_NBE_READ",
+        altsyncram_component.read_during_write_mode_port_b = "NEW_DATA_NO_NBE_READ",
+        altsyncram_component.read_during_write_mode_mixed_ports = "DONT_CARE",
+        altsyncram_component.clock_enable_input_a = "BYPASS",
+        altsyncram_component.clock_enable_input_b = "BYPASS",
+        altsyncram_component.clock_enable_output_a = "BYPASS",
+        altsyncram_component.clock_enable_output_b = "BYPASS",
+        altsyncram_component.intended_device_family = "Cyclone V",
+        altsyncram_component.ram_block_type = "M10K",
+        altsyncram_component.lpm_type = "altsyncram";
 
 endmodule
 
