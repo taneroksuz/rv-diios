@@ -19,7 +19,7 @@ cd $BASEDIR/sim/verilator/work
 
 start=`date +%s`
 
-$VERILATOR --binary -j 0 --build-jobs 0 --trace --trace-structs --top-module testbench -Wno-UNOPTFLAT \
+$VERILATOR --binary -j 0 --build-jobs 0 --trace-fst --trace-structs --top-module testbench -Wno-UNOPTFLAT \
             $BASEDIR/verilog/conf/configure.sv \
             $BASEDIR/verilog/rtl/constants.sv \
             $BASEDIR/verilog/rtl/functions.sv \
@@ -76,7 +76,7 @@ for FILE in $BASEDIR/riscv/*.riscv; do
     cp $BASEDIR/sim/verilator/output/$NAME.host host.dat
     if [ "$DUMP" = "1" ]
     then
-      obj_dir/Vtestbench +MAXTIME=$MAXTIME +REGFILE=$BASEDIR/sim/verilator/output/$NAME.reg +CSRFILE=$BASEDIR/sim/verilator/output/$NAME.csr +MEMFILE=$BASEDIR/sim/verilator/output/$NAME.mem +FILENAME=$BASEDIR/sim/verilator/output/$NAME.vcd
+      obj_dir/Vtestbench +MAXTIME=$MAXTIME +REGFILE=$BASEDIR/sim/verilator/output/$NAME.reg +CSRFILE=$BASEDIR/sim/verilator/output/$NAME.csr +MEMFILE=$BASEDIR/sim/verilator/output/$NAME.mem +FILENAME=$BASEDIR/sim/verilator/output/$NAME.fst
     else
       obj_dir/Vtestbench +MAXTIME=$MAXTIME
     fi
