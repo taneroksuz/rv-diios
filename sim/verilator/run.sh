@@ -19,7 +19,7 @@ cd $BASEDIR/sim/verilator/work
 
 start=`date +%s`
 
-$VERILATOR --binary --trace --trace-structs --top-module testbench -Wno-UNOPTFLAT \
+$VERILATOR --binary -j 0 --build-jobs 0 --trace --trace-structs --top-module testbench -Wno-UNOPTFLAT \
             $BASEDIR/verilog/conf/configure.sv \
             $BASEDIR/verilog/rtl/constants.sv \
             $BASEDIR/verilog/rtl/functions.sv \

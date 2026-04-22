@@ -76,9 +76,9 @@ for FILE in $BASEDIR/riscv/*.riscv; do
     cp $BASEDIR/sim/xsim/output/$NAME.host host.dat
     if [ "$DUMP" = "1" ]
     then
-      $XSIM testbench_snapshot -nolog -testplusarg "MAXTIME=$MAXTIME" -testplusarg "REGFILE=$BASEDIR/sim/xsim/output/$NAME.reg" -testplusarg "CSRFILE=$BASEDIR/sim/xsim/output/$NAME.csr" -testplusarg "MEMFILE=$BASEDIR/sim/xsim/output/$NAME.mem" -tclbatch $BASEDIR/sim/xsim/run.tcl --wdb $BASEDIR/sim/xsim/output/$NAME.wdb -nolog 2>&1
+      $XSIM testbench_snapshot -nolog -testplusarg "MAXTIME=$MAXTIME" -testplusarg "REGFILE=$BASEDIR/sim/xsim/output/$NAME.reg" -testplusarg "CSRFILE=$BASEDIR/sim/xsim/output/$NAME.csr" -testplusarg "MEMFILE=$BASEDIR/sim/xsim/output/$NAME.mem" -tclbatch $BASEDIR/sim/xsim/run.tcl --wdb $BASEDIR/sim/xsim/output/$NAME.wdb 2>&1
     else
-      $XSIM testbench_snapshot -nolog -R -testplusarg "MAXTIME=$MAXTIME" -nolog 2>&1
+      $XSIM testbench_snapshot -nolog -R -testplusarg "MAXTIME=$MAXTIME" 2>&1
     fi
   fi
 done
