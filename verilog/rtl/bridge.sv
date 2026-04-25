@@ -2,22 +2,22 @@ import configure::*;
 import wires::*;
 
 module bridge (
-    input  logic        reset,
-    input  logic        clock,
-    input  mem_in_type  bridge_in,
-    output mem_out_type bridge_out,
-    input  mem_out_type rom_out,
-    input  mem_out_type ram_out,
-    input  mem_out_type spi_out,
-    input  mem_out_type clint_out,
-    input  mem_out_type uart_rx_out,
-    input  mem_out_type uart_tx_out,
-    output mem_in_type  rom_in,
-    output mem_in_type  ram_in,
-    output mem_in_type  spi_in,
-    output mem_in_type  clint_in,
-    output mem_in_type  uart_rx_in,
-    output mem_in_type  uart_tx_in
+  input  logic        reset,
+  input  logic        clock,
+  input  mem_in_type  bridge_in,
+  output mem_out_type bridge_out,
+  input  mem_out_type rom_out,
+  input  mem_out_type ram_out,
+  input  mem_out_type spi_out,
+  input  mem_out_type clint_out,
+  input  mem_out_type uart_rx_out,
+  input  mem_out_type uart_tx_out,
+  output mem_in_type  rom_in,
+  output mem_in_type  ram_in,
+  output mem_in_type  spi_in,
+  output mem_in_type  clint_in,
+  output mem_in_type  uart_rx_in,
+  output mem_in_type  uart_tx_in
 );
   timeunit 1ns; timeprecision 1ps;
 

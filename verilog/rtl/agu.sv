@@ -3,8 +3,8 @@ import wires::*;
 import functions::*;
 
 module agu (
-    input  agu_in_type  agu_in,
-    output agu_out_type agu_out
+  input  agu_in_type  agu_in,
+  output agu_out_type agu_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -41,7 +41,7 @@ module agu (
 
     if (imem_access == 1) begin
       case (address[0])
-        0: byteenable = 4'hF;
+        0:       byteenable = 4'hF;
         default: misalign = 1;
       endcase
     end
@@ -49,23 +49,23 @@ module agu (
     if (dmem_access == 1) begin
       if (agu_in.lsu_op.lsu_sb == 1 || agu_in.lsu_op.lsu_lb == 1 || agu_in.lsu_op.lsu_lbu == 1) begin
         case (address[1:0])
-          0: byteenable = 4'h1;
-          1: byteenable = 4'h2;
-          2: byteenable = 4'h4;
-          3: byteenable = 4'h8;
+          0:       byteenable = 4'h1;
+          1:       byteenable = 4'h2;
+          2:       byteenable = 4'h4;
+          3:       byteenable = 4'h8;
           default: misalign = 1;
         endcase
       end
       if (agu_in.lsu_op.lsu_sh == 1 || agu_in.lsu_op.lsu_lh == 1 || agu_in.lsu_op.lsu_lhu == 1) begin
         case (address[1:0])
-          0: byteenable = 4'h3;
-          2: byteenable = 4'hC;
+          0:       byteenable = 4'h3;
+          2:       byteenable = 4'hC;
           default: misalign = 1;
         endcase
       end
       if (agu_in.lsu_op.lsu_sw == 1 || agu_in.lsu_op.lsu_lw == 1) begin
         case (address[1:0])
-          0: byteenable = 4'hF;
+          0:       byteenable = 4'hF;
           default: misalign = 1;
         endcase
       end

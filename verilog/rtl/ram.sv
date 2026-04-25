@@ -2,10 +2,10 @@ import configure::*;
 import wires::*;
 
 module ram (
-    input  logic        reset,
-    input  logic        clock,
-    input  mem_in_type  ram_in,
-    output mem_out_type ram_out
+  input  logic        reset,
+  input  logic        clock,
+  input  mem_in_type  ram_in,
+  output mem_out_type ram_out
 );
   timeunit 1ns; timeprecision 1ps;
 

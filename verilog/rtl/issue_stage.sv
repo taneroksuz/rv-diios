@@ -3,26 +3,26 @@ import wires::*;
 import functions::*;
 
 module issue_stage (
-    input  logic                       reset,
-    input  logic                       clear,
-    input  logic                       clock,
-    input  hazard_out_type             hazard_out,
-    output hazard_in_type              hazard_in,
-    output register_read_in_type       register0_rin,
-    output register_read_in_type       register1_rin,
-    input  register_out_type           register0_out,
-    input  register_out_type           register1_out,
-    input  forwarding_out_type         forwarding0_out,
-    input  forwarding_out_type         forwarding1_out,
-    output forwarding_register_in_type forwarding0_rin,
-    output forwarding_register_in_type forwarding1_rin,
-    input  csr_out_type                csr_out,
-    output csr_read_in_type            csr_rin,
-    input  btac_out_type               btac_out,
-    input  issue_in_type               a,
-    input  issue_in_type               d,
-    output issue_out_type              y,
-    output issue_out_type              q
+  input  logic                       reset,
+  input  logic                       clear,
+  input  logic                       clock,
+  input  hazard_out_type             hazard_out,
+  output hazard_in_type              hazard_in,
+  output register_read_in_type       register0_rin,
+  output register_read_in_type       register1_rin,
+  input  register_out_type           register0_out,
+  input  register_out_type           register1_out,
+  input  forwarding_out_type         forwarding0_out,
+  input  forwarding_out_type         forwarding1_out,
+  output forwarding_register_in_type forwarding0_rin,
+  output forwarding_register_in_type forwarding1_rin,
+  input  csr_out_type                csr_out,
+  output csr_read_in_type            csr_rin,
+  input  btac_out_type               btac_out,
+  input  issue_in_type               a,
+  input  issue_in_type               d,
+  output issue_out_type              y,
+  output issue_out_type              q
 );
   timeunit 1ns; timeprecision 1ps;
 

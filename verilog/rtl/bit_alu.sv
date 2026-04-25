@@ -2,8 +2,8 @@ import wires::*;
 import functions::*;
 
 module bit_alu (
-    input  bit_alu_in_type  bit_alu_in,
-    output bit_alu_out_type bit_alu_out
+  input  bit_alu_in_type  bit_alu_in,
+  output bit_alu_out_type bit_alu_out
 );
   timeunit 1ns; timeprecision 1ps;
 

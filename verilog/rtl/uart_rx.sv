@@ -4,12 +4,12 @@ import wires::*;
 module uart_rx #(
     parameter CLOCK_RATE
 ) (
-    input  logic        reset,
-    input  logic        clock,
-    input  mem_in_type  uart_in,
-    output mem_out_type uart_out,
-    output logic        rx_irq,
-    input               rx
+  input  logic        reset,
+  input  logic        clock,
+  input  mem_in_type  uart_in,
+  output mem_out_type uart_out,
+  output logic        rx_irq,
+  input               rx
 );
   timeunit 1ns; timeprecision 1ps;
 

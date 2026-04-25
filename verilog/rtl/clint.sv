@@ -4,13 +4,13 @@ import wires::*;
 module clint #(
     parameter CLOCK_RATE
 ) (
-    input  logic                 reset,
-    input  logic                 clock,
-    input  mem_in_type           clint_in,
-    output mem_out_type          clint_out,
-    output logic        [63 : 0] clint_mtime,
-    output logic                 clint_msip,
-    output logic                 clint_mtip
+  input  logic                 reset,
+  input  logic                 clock,
+  input  mem_in_type           clint_in,
+  output mem_out_type          clint_out,
+  output logic        [63 : 0] clint_mtime,
+  output logic                 clint_msip,
+  output logic                 clint_mtip
 );
   timeunit 1ns; timeprecision 1ps;
 

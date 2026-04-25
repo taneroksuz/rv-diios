@@ -30,9 +30,9 @@ import wires::*;
 import hazard_wires::*;
 
 module hazard_reg (
-    input  logic               clock,
-    input  hazard_reg_in_type  hazard_reg_in,
-    output hazard_reg_out_type hazard_reg_out
+  input  logic               clock,
+  input  hazard_reg_in_type  hazard_reg_in,
+  output hazard_reg_out_type hazard_reg_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -59,12 +59,12 @@ module hazard_reg (
 endmodule
 
 module hazard_ctrl (
-    input  logic               reset,
-    input  logic               clock,
-    input  hazard_in_type      hazard_in,
-    output hazard_out_type     hazard_out,
-    input  hazard_reg_out_type hazard_reg_out,
-    output hazard_reg_in_type  hazard_reg_in
+  input  logic               reset,
+  input  logic               clock,
+  input  hazard_in_type      hazard_in,
+  output hazard_out_type     hazard_out,
+  input  hazard_reg_out_type hazard_reg_out,
+  output hazard_reg_in_type  hazard_reg_in
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -263,10 +263,10 @@ module hazard_ctrl (
 endmodule
 
 module hazard (
-    input  logic           reset,
-    input  logic           clock,
-    input  hazard_in_type  hazard_in,
-    output hazard_out_type hazard_out
+  input  logic           reset,
+  input  logic           clock,
+  input  hazard_in_type  hazard_in,
+  output hazard_out_type hazard_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -274,18 +274,18 @@ module hazard (
   hazard_reg_out_type hazard_reg_out;
 
   hazard_reg hazard_reg_comp (
-      .clock         (clock),
-      .hazard_reg_in (hazard_reg_in),
-      .hazard_reg_out(hazard_reg_out)
+    .clock         (clock),
+    .hazard_reg_in (hazard_reg_in),
+    .hazard_reg_out(hazard_reg_out)
   );
 
   hazard_ctrl hazard_ctrl_comp (
-      .reset         (reset),
-      .clock         (clock),
-      .hazard_in     (hazard_in),
-      .hazard_out    (hazard_out),
-      .hazard_reg_in (hazard_reg_in),
-      .hazard_reg_out(hazard_reg_out)
+    .reset         (reset),
+    .clock         (clock),
+    .hazard_in     (hazard_in),
+    .hazard_out    (hazard_out),
+    .hazard_reg_in (hazard_reg_in),
+    .hazard_reg_out(hazard_reg_out)
   );
 
 endmodule

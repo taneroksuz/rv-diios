@@ -2,16 +2,16 @@ import constants::*;
 import wires::*;
 
 module csr (
-    input  logic                        reset,
-    input  logic                        clock,
-    input  csr_read_in_type             csr_rin,
-    input  csr_write_in_type            csr_win,
-    input  csr_exception_in_type        csr_ein,
-    output csr_out_type                 csr_out,
-    input  logic                 [ 0:0] meip,
-    input  logic                 [ 0:0] msip,
-    input  logic                 [ 0:0] mtip,
-    input  logic                 [63:0] mtime
+  input  logic                        reset,
+  input  logic                        clock,
+  input  csr_read_in_type             csr_rin,
+  input  csr_write_in_type            csr_win,
+  input  csr_exception_in_type        csr_ein,
+  output csr_out_type                 csr_out,
+  input  logic                 [ 0:0] meip,
+  input  logic                 [ 0:0] msip,
+  input  logic                 [ 0:0] mtip,
+  input  logic                 [63:0] mtime
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -160,11 +160,11 @@ module csr (
             csr_machine_reg.mstatus.sie  <= csr_win.cdata[1];
             csr_machine_reg.mstatus.uie  <= csr_win.cdata[0];
           end
-          csr_mtvec: csr_machine_reg.mtvec <= csr_win.cdata;
-          csr_mscratch: csr_machine_reg.mscratch <= csr_win.cdata;
-          csr_mepc: csr_machine_reg.mepc <= csr_win.cdata;
-          csr_mcause: csr_machine_reg.mcause <= csr_win.cdata;
-          csr_mtval: csr_machine_reg.mtval <= csr_win.cdata;
+          csr_mtvec:     csr_machine_reg.mtvec <= csr_win.cdata;
+          csr_mscratch:  csr_machine_reg.mscratch <= csr_win.cdata;
+          csr_mepc:      csr_machine_reg.mepc <= csr_win.cdata;
+          csr_mcause:    csr_machine_reg.mcause <= csr_win.cdata;
+          csr_mtval:     csr_machine_reg.mtval <= csr_win.cdata;
           csr_mie: begin
             csr_machine_reg.mie.meie <= csr_win.cdata[11];
             csr_machine_reg.mie.seie <= csr_win.cdata[9];
@@ -184,11 +184,11 @@ module csr (
             csr_machine_reg.mip.ssip <= csr_win.cdata[1];
             csr_machine_reg.mip.usip <= csr_win.cdata[0];
           end
-          csr_mcycle: csr_machine_reg.mcycle[31:0] <= csr_win.cdata;
-          csr_mcycleh: csr_machine_reg.mcycle[63:32] <= csr_win.cdata;
-          csr_minstret: csr_machine_reg.minstret[31:0] <= csr_win.cdata;
+          csr_mcycle:    csr_machine_reg.mcycle[31:0] <= csr_win.cdata;
+          csr_mcycleh:   csr_machine_reg.mcycle[63:32] <= csr_win.cdata;
+          csr_minstret:  csr_machine_reg.minstret[31:0] <= csr_win.cdata;
           csr_minstreth: csr_machine_reg.minstret[63:32] <= csr_win.cdata;
-          default: ;
+          default:       ;
         endcase
       end
 

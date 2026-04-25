@@ -1,10 +1,10 @@
 import wires::*;
 
 module mul (
-    input  logic        reset,
-    input  logic        clock,
-    input  mul_in_type  mul_in,
-    output mul_out_type mul_out
+  input  logic        reset,
+  input  logic        clock,
+  input  mul_in_type  mul_in,
+  output mul_out_type mul_out
 );
   timeunit 1ns; timeprecision 1ps;
 

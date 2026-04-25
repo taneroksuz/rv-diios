@@ -3,22 +3,22 @@ import functions::*;
 import wires::*;
 
 module fetch_stage (
-    input  logic           reset,
-    input  logic           clear,
-    input  logic           clock,
-    input  buffer_out_type buffer_out,
-    output buffer_in_type  buffer_in,
-    input  csr_out_type    csr_out,
-    input  btac_out_type   btac_out,
-    output btac_in_type    btac_in,
-    input  mem_out_type    imem0_out,
-    input  mem_out_type    imem1_out,
-    output mem_in_type     imem0_in,
-    output mem_in_type     imem1_in,
-    input  fetch_in_type   a,
-    input  fetch_in_type   d,
-    output fetch_out_type  y,
-    output fetch_out_type  q
+  input  logic           reset,
+  input  logic           clear,
+  input  logic           clock,
+  input  buffer_out_type buffer_out,
+  output buffer_in_type  buffer_in,
+  input  csr_out_type    csr_out,
+  input  btac_out_type   btac_out,
+  output btac_in_type    btac_in,
+  input  mem_out_type    imem0_out,
+  input  mem_out_type    imem1_out,
+  output mem_in_type     imem0_in,
+  output mem_in_type     imem1_in,
+  input  fetch_in_type   a,
+  input  fetch_in_type   d,
+  output fetch_out_type  y,
+  output fetch_out_type  q
 );
   timeunit 1ns; timeprecision 1ps;
 

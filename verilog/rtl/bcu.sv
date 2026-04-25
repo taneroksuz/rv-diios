@@ -1,8 +1,8 @@
 import wires::*;
 
 module bcu (
-    input  bcu_in_type  bcu_in,
-    output bcu_out_type bcu_out
+  input  bcu_in_type  bcu_in,
+  output bcu_out_type bcu_out
 );
   timeunit 1ns; timeprecision 1ps;
 

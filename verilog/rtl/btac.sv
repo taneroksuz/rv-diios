@@ -39,9 +39,9 @@ import wires::*;
 import btac_wires::*;
 
 module btb (
-    input  logic        clock,
-    input  btb_in_type  btb_in,
-    output btb_out_type btb_out
+  input  logic        clock,
+  input  btb_in_type  btb_in,
+  output btb_out_type btb_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -64,9 +64,9 @@ import wires::*;
 import btac_wires::*;
 
 module bht (
-    input  logic        clock,
-    input  bht_in_type  bht_in,
-    output bht_out_type bht_out
+  input  logic        clock,
+  input  bht_in_type  bht_in,
+  output bht_out_type bht_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -85,14 +85,14 @@ module bht (
 endmodule
 
 module btac_ctrl (
-    input  logic         reset,
-    input  logic         clock,
-    input  btac_in_type  btac_in,
-    output btac_out_type btac_out,
-    input  btb_out_type  btb_out,
-    output btb_in_type   btb_in,
-    input  bht_out_type  bht_out,
-    output bht_in_type   bht_in
+  input  logic         reset,
+  input  logic         clock,
+  input  btac_in_type  btac_in,
+  output btac_out_type btac_out,
+  input  btb_out_type  btb_out,
+  output btb_in_type   btb_in,
+  input  bht_out_type  bht_out,
+  output bht_in_type   bht_in
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -302,10 +302,10 @@ module btac_ctrl (
 endmodule
 
 module btac (
-    input  logic         reset,
-    input  logic         clock,
-    input  btac_in_type  btac_in,
-    output btac_out_type btac_out
+  input  logic         reset,
+  input  logic         clock,
+  input  btac_in_type  btac_in,
+  output btac_out_type btac_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -319,26 +319,26 @@ module btac (
       bht_out_type bht_out;
 
       btb btb_comp (
-          .clock  (clock),
-          .btb_in (btb_in),
-          .btb_out(btb_out)
+        .clock  (clock),
+        .btb_in (btb_in),
+        .btb_out(btb_out)
       );
 
       bht bht_comp (
-          .clock  (clock),
-          .bht_in (bht_in),
-          .bht_out(bht_out)
+        .clock  (clock),
+        .bht_in (bht_in),
+        .bht_out(bht_out)
       );
 
       btac_ctrl btac_ctrl_comp (
-          .reset   (reset),
-          .clock   (clock),
-          .btac_in (btac_in),
-          .btac_out(btac_out),
-          .btb_in  (btb_in),
-          .btb_out (btb_out),
-          .bht_in  (bht_in),
-          .bht_out (bht_out)
+        .reset   (reset),
+        .clock   (clock),
+        .btac_in (btac_in),
+        .btac_out(btac_out),
+        .btb_in  (btb_in),
+        .btb_out (btb_out),
+        .bht_in  (bht_in),
+        .bht_out (bht_out)
       );
 
     end else begin

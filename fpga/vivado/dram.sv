@@ -2,40 +2,47 @@ import configure::*;
 import wires::*;
 
 module dram (
-  input  logic        reset_cpu,
-  input  logic        clock_cpu,
-  input  logic        clock_ddr,
-  input  mem_in_type  dram_in,
-  output mem_out_type dram_out,
-  output logic [12:0] ddr2_addr,
-  output logic [2:0]  ddr2_ba,
-  output logic        ddr2_ras_n,
-  output logic        ddr2_cas_n,
-  output logic        ddr2_we_n,
-  output logic        ddr2_ck_p,
-  output logic        ddr2_ck_n,
-  output logic        ddr2_cke,
-  output logic        ddr2_cs_n,
-  output logic [1:0]  ddr2_dm,
-  output logic        ddr2_odt,
-  inout  tri   [15:0] ddr2_dq,
-  inout  tri   [1:0]  ddr2_dqs_p,
-  inout  tri   [1:0]  ddr2_dqs_n,
-  output logic        ddr2_complete
+  input  logic               reset_cpu,
+  input  logic               clock_cpu,
+  input  logic               clock_ddr,
+  input  mem_in_type         dram_in,
+  output mem_out_type        dram_out,
+  output logic        [12:0] ddr2_addr,
+  output logic        [ 2:0] ddr2_ba,
+  output logic               ddr2_ras_n,
+  output logic               ddr2_cas_n,
+  output logic               ddr2_we_n,
+  output logic               ddr2_ck_p,
+  output logic               ddr2_ck_n,
+  output logic               ddr2_cke,
+  output logic               ddr2_cs_n,
+  output logic        [ 1:0] ddr2_dm,
+  output logic               ddr2_odt,
+  inout  tri          [15:0] ddr2_dq,
+  inout  tri          [ 1:0] ddr2_dqs_p,
+  inout  tri          [ 1:0] ddr2_dqs_n,
+  output logic               ddr2_complete
 );
   timeunit 1ns; timeprecision 1ps;
 
-  mem_in_type   mem_in;
-  mem_out_type  mem_out;
+  mem_in_type        mem_in;
+  mem_out_type       mem_out;
 
-  logic [1:0]   reset_sync;
-  logic         reset_ddr;
+  logic        [1:0] reset_sync;
+  logic              reset_ddr;
 
-  logic         app_ui_clk;
-  logic         app_ui_rst;
-  logic         calib_complete;
+  logic              app_ui_clk;
+  logic              app_ui_rst;
+  logic              calib_complete;
 
-  typedef enum logic [2:0] { stIdle, stPreset, stSendData, stSetCmdRd, stSetCmdWr, stRecvData } state_t;
+  typedef enum logic [2:0] {
+    stIdle,
+    stPreset,
+    stSendData,
+    stSetCmdRd,
+    stSetCmdWr,
+    stRecvData
+  } state_t;
 
   typedef struct packed {
     logic [0:0]   mem_valid;
@@ -87,64 +94,64 @@ module dram (
     v_in = r_in;
 
     unique case (r_in.state)
-      stIdle     : begin
+      stIdle: begin
         if (mem_in.mem_valid && calib_complete) begin
           v_in.state = stPreset;
         end
       end
-      stPreset   : begin
+      stPreset: begin
         if (|v_in.mem_wstrb) begin
           v_in.state = stSendData;
         end else begin
           v_in.state = stSetCmdRd;
         end
       end
-      stSendData : begin
+      stSendData: begin
         if (r_out.app_wdf_rdy) begin
           v_in.state = stSetCmdWr;
         end
       end
-      stSetCmdWr : begin
+      stSetCmdWr: begin
         if (r_out.app_rdy) begin
           v_in.state = stIdle;
         end
       end
-      stSetCmdRd : begin
+      stSetCmdRd: begin
         if (r_out.app_rdy) begin
           v_in.state = stRecvData;
         end
       end
-      stRecvData  : begin
+      stRecvData: begin
         if (r_out.app_rd_data_valid) begin
           v_in.state = stIdle;
         end
       end
-      default    : begin
+      default: begin
         v_in.state = stIdle;
       end
     endcase
 
     unique case (r_in.state)
-      stSendData : begin
+      stSendData: begin
         v_in.app_wdf_wren = 1'b1;
         v_in.app_wdf_end  = 1'b1;
       end
-      default    : begin
+      default: begin
         v_in.app_wdf_wren = 1'b0;
         v_in.app_wdf_end  = 1'b0;
       end
     endcase
 
     unique case (r_in.state)
-      stSetCmdWr : begin
+      stSetCmdWr: begin
         v_in.app_en  = 1'b1;
         v_in.app_cmd = 3'b000;
       end
-      stSetCmdRd : begin
+      stSetCmdRd: begin
         v_in.app_en  = 1'b1;
         v_in.app_cmd = 3'b001;
       end
-      default    : begin
+      default: begin
         v_in.app_en  = 1'b0;
         v_in.app_cmd = 3'b000;
       end
@@ -162,19 +169,19 @@ module dram (
     end
 
     if (r_in.state == stPreset) begin
-      v_in.app_wdf_data = {v_in.mem_wdata,v_in.mem_wdata,v_in.mem_wdata,v_in.mem_wdata};
+      v_in.app_wdf_data = {v_in.mem_wdata, v_in.mem_wdata, v_in.mem_wdata, v_in.mem_wdata};
       v_in.app_wdf_mask = 16'hFFFF;
-      v_in.app_addr     = {v_in.mem_addr[26:4],4'b0000};
+      v_in.app_addr     = {v_in.mem_addr[26:4], 4'b0000};
       unique case (v_in.mem_addr[3:2])
-        0 : v_in.app_wdf_mask[3:0] = ~v_in.mem_wstrb;
-        1 : v_in.app_wdf_mask[7:4] = ~v_in.mem_wstrb;
-        2 : v_in.app_wdf_mask[11:8] = ~v_in.mem_wstrb;
-        3 : v_in.app_wdf_mask[15:12] = ~v_in.mem_wstrb;
-        default : ;
+        0:       v_in.app_wdf_mask[3:0] = ~v_in.mem_wstrb;
+        1:       v_in.app_wdf_mask[7:4] = ~v_in.mem_wstrb;
+        2:       v_in.app_wdf_mask[11:8] = ~v_in.mem_wstrb;
+        3:       v_in.app_wdf_mask[15:12] = ~v_in.mem_wstrb;
+        default: ;
       endcase
     end
 
-    rin_in = v_in;
+    rin_in            = v_in;
 
     mem_out.mem_rdata = 0;
     mem_out.mem_ready = 0;
@@ -190,11 +197,11 @@ module dram (
       if (r_out.app_rd_data_valid) begin
         mem_out.mem_ready = 1;
         unique case (v_in.mem_addr[3:2])
-          0 : mem_out.mem_rdata = r_out.app_rd_data[31:0];
-          1 : mem_out.mem_rdata = r_out.app_rd_data[63:32];
-          2 : mem_out.mem_rdata = r_out.app_rd_data[95:64];
-          3 : mem_out.mem_rdata = r_out.app_rd_data[127:96];
-          default : ;
+          0:       mem_out.mem_rdata = r_out.app_rd_data[31:0];
+          1:       mem_out.mem_rdata = r_out.app_rd_data[63:32];
+          2:       mem_out.mem_rdata = r_out.app_rd_data[95:64];
+          3:       mem_out.mem_rdata = r_out.app_rd_data[127:96];
+          default: ;
         endcase
       end
     end
@@ -211,61 +218,61 @@ module dram (
 
   always_ff @(posedge clock_ddr)
     if (reset_cpu == 0) reset_sync <= 2'b00;
-    else                reset_sync <= {reset_sync[0],1'b1};
+    else reset_sync <= {reset_sync[0], 1'b1};
 
-  assign reset_ddr = reset_sync[1];
+  assign reset_ddr     = reset_sync[1];
 
   assign ddr2_complete = calib_complete;
 
   cdc cdc_comp (
-    .src_clk(clock_cpu),
-    .src_rstn(reset_cpu),
-    .src_mem_in(dram_in),
+    .src_clk    (clock_cpu),
+    .src_rstn   (reset_cpu),
+    .src_mem_in (dram_in),
     .src_mem_out(dram_out),
-    .dst_clk(app_ui_clk),
-    .dst_rstn(~app_ui_rst),
-    .dst_mem_in(mem_in),
+    .dst_clk    (app_ui_clk),
+    .dst_rstn   (~app_ui_rst),
+    .dst_mem_in (mem_in),
     .dst_mem_out(mem_out)
   );
 
   mig u_mig (
-    .ddr2_dq             (ddr2_dq),
-    .ddr2_dqs_p          (ddr2_dqs_p),
-    .ddr2_dqs_n          (ddr2_dqs_n),
-    .ddr2_addr           (ddr2_addr),
-    .ddr2_ba             (ddr2_ba),
-    .ddr2_ras_n          (ddr2_ras_n),
-    .ddr2_cas_n          (ddr2_cas_n),
-    .ddr2_we_n           (ddr2_we_n),
-    .ddr2_ck_p           (ddr2_ck_p),
-    .ddr2_ck_n           (ddr2_ck_n),
-    .ddr2_cke            (ddr2_cke),
-    .ddr2_cs_n           (ddr2_cs_n),
-    .ddr2_dm             (ddr2_dm),
-    .ddr2_odt            (ddr2_odt),
-    .sys_clk_i           (clock_ddr),
-    .sys_rst             (reset_ddr),
-    .app_addr            (rin_in.app_addr),
-    .app_cmd             (rin_in.app_cmd),
-    .app_en              (rin_in.app_en),
-    .app_wdf_data        (rin_in.app_wdf_data),
-    .app_wdf_end         (rin_in.app_wdf_end),
-    .app_wdf_mask        (rin_in.app_wdf_mask),
-    .app_wdf_wren        (rin_in.app_wdf_wren),
-    .app_rd_data         (r_out.app_rd_data),
-    .app_rd_data_end     (r_out.app_rd_data_end),
-    .app_rd_data_valid   (r_out.app_rd_data_valid),
-    .app_rdy             (r_out.app_rdy),
-    .app_wdf_rdy         (r_out.app_wdf_rdy),
-    .app_sr_req          (1'b0),
-    .app_ref_req         (1'b0),
-    .app_zq_req          (1'b0),
-    .app_sr_active       (),
-    .app_ref_ack         (),
-    .app_zq_ack          (),
-    .ui_clk              (app_ui_clk),
-    .ui_clk_sync_rst     (app_ui_rst),
-    .init_calib_complete (calib_complete)
+    .ddr2_dq            (ddr2_dq),
+    .ddr2_dqs_p         (ddr2_dqs_p),
+    .ddr2_dqs_n         (ddr2_dqs_n),
+    .ddr2_addr          (ddr2_addr),
+    .ddr2_ba            (ddr2_ba),
+    .ddr2_ras_n         (ddr2_ras_n),
+    .ddr2_cas_n         (ddr2_cas_n),
+    .ddr2_we_n          (ddr2_we_n),
+    .ddr2_ck_p          (ddr2_ck_p),
+    .ddr2_ck_n          (ddr2_ck_n),
+    .ddr2_cke           (ddr2_cke),
+    .ddr2_cs_n          (ddr2_cs_n),
+    .ddr2_dm            (ddr2_dm),
+    .ddr2_odt           (ddr2_odt),
+    .sys_clk_i          (clock_ddr),
+    .sys_rst            (reset_ddr),
+    .app_addr           (rin_in.app_addr),
+    .app_cmd            (rin_in.app_cmd),
+    .app_en             (rin_in.app_en),
+    .app_wdf_data       (rin_in.app_wdf_data),
+    .app_wdf_end        (rin_in.app_wdf_end),
+    .app_wdf_mask       (rin_in.app_wdf_mask),
+    .app_wdf_wren       (rin_in.app_wdf_wren),
+    .app_rd_data        (r_out.app_rd_data),
+    .app_rd_data_end    (r_out.app_rd_data_end),
+    .app_rd_data_valid  (r_out.app_rd_data_valid),
+    .app_rdy            (r_out.app_rdy),
+    .app_wdf_rdy        (r_out.app_wdf_rdy),
+    .app_sr_req         (1'b0),
+    .app_ref_req        (1'b0),
+    .app_zq_req         (1'b0),
+    .app_sr_active      (),
+    .app_ref_ack        (),
+    .app_zq_ack         (),
+    .ui_clk             (app_ui_clk),
+    .ui_clk_sync_rst    (app_ui_rst),
+    .init_calib_complete(calib_complete)
   );
 
 endmodule

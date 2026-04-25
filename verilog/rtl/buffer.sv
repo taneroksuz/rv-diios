@@ -39,9 +39,9 @@ import wires::*;
 import buffer_wires::*;
 
 module buffer_reg (
-    input  logic               clock,
-    input  buffer_reg_in_type  buffer_reg_in,
-    output buffer_reg_out_type buffer_reg_out
+  input  logic               clock,
+  input  buffer_reg_in_type  buffer_reg_in,
+  output buffer_reg_out_type buffer_reg_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -98,12 +98,12 @@ module buffer_reg (
 endmodule
 
 module buffer_ctrl (
-    input  logic               reset,
-    input  logic               clock,
-    input  buffer_in_type      buffer_in,
-    output buffer_out_type     buffer_out,
-    input  buffer_reg_out_type buffer_reg_out,
-    output buffer_reg_in_type  buffer_reg_in
+  input  logic               reset,
+  input  logic               clock,
+  input  buffer_in_type      buffer_in,
+  output buffer_out_type     buffer_out,
+  input  buffer_reg_out_type buffer_reg_out,
+  output buffer_reg_in_type  buffer_reg_in
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -367,10 +367,10 @@ module buffer_ctrl (
 endmodule
 
 module buffer (
-    input  logic           reset,
-    input  logic           clock,
-    input  buffer_in_type  buffer_in,
-    output buffer_out_type buffer_out
+  input  logic           reset,
+  input  logic           clock,
+  input  buffer_in_type  buffer_in,
+  output buffer_out_type buffer_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -378,18 +378,18 @@ module buffer (
   buffer_reg_out_type buffer_reg_out;
 
   buffer_reg buffer_reg_comp (
-      .clock         (clock),
-      .buffer_reg_in (buffer_reg_in),
-      .buffer_reg_out(buffer_reg_out)
+    .clock         (clock),
+    .buffer_reg_in (buffer_reg_in),
+    .buffer_reg_out(buffer_reg_out)
   );
 
   buffer_ctrl buffer_ctrl_comp (
-      .reset         (reset),
-      .clock         (clock),
-      .buffer_in     (buffer_in),
-      .buffer_out    (buffer_out),
-      .buffer_reg_in (buffer_reg_in),
-      .buffer_reg_out(buffer_reg_out)
+    .reset         (reset),
+    .clock         (clock),
+    .buffer_in     (buffer_in),
+    .buffer_out    (buffer_out),
+    .buffer_reg_in (buffer_reg_in),
+    .buffer_reg_out(buffer_reg_out)
   );
 
 endmodule

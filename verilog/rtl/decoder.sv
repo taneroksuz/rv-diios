@@ -2,8 +2,8 @@ import constants::*;
 import wires::*;
 
 module decoder (
-    input  decoder_in_type  decoder_in,
-    output decoder_out_type decoder_out
+  input  decoder_in_type  decoder_in,
+  output decoder_out_type decoder_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -183,13 +183,13 @@ module decoder (
         rden2     = 1;
         branch    = 1;
         case (funct3)
-          funct_beq: bcu_op.bcu_beq = 1;
-          funct_bne: bcu_op.bcu_bne = 1;
-          funct_blt: bcu_op.bcu_blt = 1;
-          funct_bge: bcu_op.bcu_bge = 1;
+          funct_beq:  bcu_op.bcu_beq = 1;
+          funct_bne:  bcu_op.bcu_bne = 1;
+          funct_blt:  bcu_op.bcu_blt = 1;
+          funct_bge:  bcu_op.bcu_bge = 1;
           funct_bltu: bcu_op.bcu_bltu = 1;
           funct_bgeu: bcu_op.bcu_bgeu = 1;
-          default: valid = 0;
+          default:    valid = 0;
         endcase
       end
       opcode_load: begin

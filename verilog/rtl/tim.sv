@@ -35,9 +35,9 @@ import wires::*;
 import tim_wires::*;
 
 module tim_ram (
-    input  logic            clock,
-    input  tim_ram_in_type  tim_ram_in,
-    output tim_ram_out_type tim_ram_out
+  input  logic            clock,
+  input  tim_ram_in_type  tim_ram_in,
+  output tim_ram_out_type tim_ram_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -68,14 +68,14 @@ module tim_ram (
 endmodule
 
 module tim_ctrl (
-    input  logic            reset,
-    input  logic            clock,
-    input  tim_vec_out_type dvec_out,
-    output tim_vec_in_type  dvec_in,
-    input  mem_in_type      tim0_in,
-    input  mem_in_type      tim1_in,
-    output mem_out_type     tim0_out,
-    output mem_out_type     tim1_out
+  input  logic            reset,
+  input  logic            clock,
+  input  tim_vec_out_type dvec_out,
+  output tim_vec_in_type  dvec_in,
+  input  mem_in_type      tim0_in,
+  input  mem_in_type      tim1_in,
+  output mem_out_type     tim0_out,
+  output mem_out_type     tim1_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -202,12 +202,12 @@ module tim_ctrl (
 endmodule
 
 module tim (
-    input  logic        reset,
-    input  logic        clock,
-    input  mem_in_type  tim0_in,
-    input  mem_in_type  tim1_in,
-    output mem_out_type tim0_out,
-    output mem_out_type tim1_out
+  input  logic        reset,
+  input  logic        clock,
+  input  mem_in_type  tim0_in,
+  input  mem_in_type  tim1_in,
+  output mem_out_type tim0_out,
+  output mem_out_type tim1_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -220,23 +220,23 @@ module tim (
 
     for (i = 0; i < TIM_WIDTH; i = i + 1) begin : tim_ram
       tim_ram tim_ram_comp (
-          .clock      (clock),
-          .tim_ram_in (dvec_in[i]),
-          .tim_ram_out(dvec_out[i])
+        .clock      (clock),
+        .tim_ram_in (dvec_in[i]),
+        .tim_ram_out(dvec_out[i])
       );
     end
 
   endgenerate
 
   tim_ctrl tim_ctrl_comp (
-      .reset   (reset),
-      .clock   (clock),
-      .dvec_out(dvec_out),
-      .dvec_in (dvec_in),
-      .tim0_in (tim0_in),
-      .tim1_in (tim1_in),
-      .tim0_out(tim0_out),
-      .tim1_out(tim1_out)
+    .reset   (reset),
+    .clock   (clock),
+    .dvec_out(dvec_out),
+    .dvec_in (dvec_in),
+    .tim0_in (tim0_in),
+    .tim1_in (tim1_in),
+    .tim0_out(tim0_out),
+    .tim1_out(tim1_out)
   );
 
 endmodule

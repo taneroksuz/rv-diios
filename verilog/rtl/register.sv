@@ -1,14 +1,14 @@
 import wires::*;
 
 module register (
-    input  logic                  reset,
-    input  logic                  clock,
-    input  register_read_in_type  register0_rin,
-    input  register_read_in_type  register1_rin,
-    input  register_write_in_type register0_win,
-    input  register_write_in_type register1_win,
-    output register_out_type      register0_out,
-    output register_out_type      register1_out
+  input  logic                  reset,
+  input  logic                  clock,
+  input  register_read_in_type  register0_rin,
+  input  register_read_in_type  register1_rin,
+  input  register_write_in_type register0_win,
+  input  register_write_in_type register1_win,
+  output register_out_type      register0_out,
+  output register_out_type      register1_out
 );
   timeunit 1ns; timeprecision 1ps;
 

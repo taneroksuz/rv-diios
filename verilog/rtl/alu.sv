@@ -2,8 +2,8 @@ import wires::*;
 import functions::*;
 
 module alu (
-    input  alu_in_type  alu_in,
-    output alu_out_type alu_out
+  input  alu_in_type  alu_in,
+  output alu_out_type alu_out
 );
   timeunit 1ns; timeprecision 1ps;
 

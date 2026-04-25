@@ -1,10 +1,10 @@
 import wires::*;
 
 module div (
-    input  logic        reset,
-    input  logic        clock,
-    input  div_in_type  div_in,
-    output div_out_type div_out
+  input  logic        reset,
+  input  logic        clock,
+  input  div_in_type  div_in,
+  output div_out_type div_out
 );
   timeunit 1ns; timeprecision 1ps;
 

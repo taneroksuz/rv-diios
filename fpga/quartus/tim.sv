@@ -35,88 +35,112 @@ import wires::*;
 import tim_wires::*;
 
 module tim_ram (
-    input logic clock,
-    input tim_ram_in_type tim_ram_in,
-    output tim_ram_out_type tim_ram_out
+  input  logic            clock,
+  input  tim_ram_in_type  tim_ram_in,
+  output tim_ram_out_type tim_ram_out
 );
   timeunit 1ns; timeprecision 1ps;
 
   localparam DEPTH = $clog2(TIM_DEPTH);
   localparam WIDTH = $clog2(TIM_WIDTH);
 
-  logic [31:0] q_a;
-  logic [31:0] q_b;
-  logic        wren_a;
-  logic        wren_b;
+  logic             we_a;
+  logic             we_b;
+  logic [      7:0] q0_a;
+  logic [      7:0] q1_a;
+  logic [      7:0] q2_a;
+  logic [      7:0] q3_a;
+  logic [      7:0] q0_b;
+  logic [      7:0] q1_b;
+  logic [      7:0] q2_b;
+  logic [      7:0] q3_b;
+  logic [      7:0] d0_a;
+  logic [      7:0] d1_a;
+  logic [      7:0] d2_a;
+  logic [      7:0] d3_a;
+  logic [      7:0] d0_b;
+  logic [      7:0] d1_b;
+  logic [      7:0] d2_b;
+  logic [      7:0] d3_b;
+  logic [      3:0] be_a;
+  logic [      3:0] be_b;
+  logic [DEPTH-1:0] addr_a;
+  logic [DEPTH-1:0] addr_b;
 
-  assign wren_a = tim_ram_in.en0 && (|tim_ram_in.strb0);
-  assign wren_b = tim_ram_in.en1 && (|tim_ram_in.strb1);
+  assign we_a              = tim_ram_in.en0 && (|tim_ram_in.strb0);
+  assign we_b              = tim_ram_in.en1 && (|tim_ram_in.strb1);
+  assign d0_a              = tim_ram_in.data0[7:0];
+  assign d1_a              = tim_ram_in.data0[15:8];
+  assign d2_a              = tim_ram_in.data0[23:16];
+  assign d3_a              = tim_ram_in.data0[31:24];
+  assign d0_b              = tim_ram_in.data1[7:0];
+  assign d1_b              = tim_ram_in.data1[15:8];
+  assign d2_b              = tim_ram_in.data1[23:16];
+  assign d3_b              = tim_ram_in.data1[31:24];
+  assign be_a              = tim_ram_in.strb0;
+  assign be_b              = tim_ram_in.strb1;
+  assign addr_a            = tim_ram_in.addr0;
+  assign addr_b            = tim_ram_in.addr1;
 
-  assign tim_ram_out.data0 = q_a;
-  assign tim_ram_out.data1 = q_b;
+  assign tim_ram_out.data0 = {q3_a, q2_a, q1_a, q0_a};
+  assign tim_ram_out.data1 = {q3_b, q2_b, q1_b, q0_b};
 
-  altsyncram altsyncram_component (
-        .clock0         (clock),
-        .clock1         (clock),
-        .clocken0       (1'b1),
-        .clocken1       (1'b1),
-        .clocken2       (1'b1),
-        .clocken3       (1'b1),
-        .aclr0          (1'b0),
-        .aclr1          (1'b0),
-        .addressstall_a (1'b0),
-        .addressstall_b (1'b0),
+  logic [7:0] mem0[0:TIM_DEPTH-1]  /* synthesis ramstyle = "no_rw_check" */;
+  logic [7:0] mem1[0:TIM_DEPTH-1]  /* synthesis ramstyle = "no_rw_check" */;
+  logic [7:0] mem2[0:TIM_DEPTH-1]  /* synthesis ramstyle = "no_rw_check" */;
+  logic [7:0] mem3[0:TIM_DEPTH-1]  /* synthesis ramstyle = "no_rw_check" */;
 
-        .address_a      (tim_ram_in.addr0),
-        .address_b      (tim_ram_in.addr1),
-        .data_a         (tim_ram_in.data0),
-        .data_b         (tim_ram_in.data1),
-        .wren_a         (wren_a),
-        .wren_b         (wren_b),
-        .byteena_a      (tim_ram_in.strb0),
-        .byteena_b      (tim_ram_in.strb1),
-        .q_a            (q_a),
-        .q_b            (q_b),
+  always_ff @(posedge clock) begin
+    if (we_a && be_a[0]) mem0[addr_a] <= d0_a;
+    q0_a <= mem0[addr_a];
+  end
 
-        .eccstatus      ()
-    );
+  always_ff @(posedge clock) begin
+    if (we_a && be_a[1]) mem1[addr_a] <= d1_a;
+    q1_a <= mem1[addr_a];
+  end
 
-    defparam
-        altsyncram_component.operation_mode = "BIDIR_DUAL_PORT",
-        altsyncram_component.width_a = 32,
-        altsyncram_component.widthad_a = DEPTH,
-        altsyncram_component.numwords_a = TIM_DEPTH,
-        altsyncram_component.width_b = 32,
-        altsyncram_component.widthad_b = DEPTH,
-        altsyncram_component.numwords_b = TIM_DEPTH,
-        altsyncram_component.byte_size = 8,
-        altsyncram_component.width_byteena_a = 4,
-        altsyncram_component.width_byteena_b = 4,
-        altsyncram_component.outdata_reg_a = "UNREGISTERED",
-        altsyncram_component.outdata_reg_b = "UNREGISTERED",
-        altsyncram_component.power_up_uninitialized = "FALSE",
-        altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_NO_NBE_READ",
-        altsyncram_component.read_during_write_mode_port_b = "NEW_DATA_NO_NBE_READ",
-        altsyncram_component.read_during_write_mode_mixed_ports = "DONT_CARE",
-        altsyncram_component.clock_enable_input_a = "BYPASS",
-        altsyncram_component.clock_enable_input_b = "BYPASS",
-        altsyncram_component.clock_enable_output_a = "BYPASS",
-        altsyncram_component.clock_enable_output_b = "BYPASS",
-        altsyncram_component.intended_device_family = "Cyclone V",
-        altsyncram_component.ram_block_type = "M10K",
-        altsyncram_component.lpm_type = "altsyncram";
+  always_ff @(posedge clock) begin
+    if (we_a && be_a[2]) mem2[addr_a] <= d2_a;
+    q2_a <= mem2[addr_a];
+  end
+
+  always_ff @(posedge clock) begin
+    if (we_a && be_a[3]) mem3[addr_a] <= d3_a;
+    q3_a <= mem3[addr_a];
+  end
+
+  always_ff @(posedge clock) begin
+    if (we_b && be_b[0]) mem0[addr_b] <= d0_b;
+    q0_b <= mem0[addr_b];
+  end
+
+  always_ff @(posedge clock) begin
+    if (we_b && be_b[1]) mem1[addr_b] <= d1_b;
+    q1_b <= mem1[addr_b];
+  end
+
+  always_ff @(posedge clock) begin
+    if (we_b && be_b[2]) mem2[addr_b] <= d2_b;
+    q2_b <= mem2[addr_b];
+  end
+
+  always_ff @(posedge clock) begin
+    if (we_b && be_b[3]) mem3[addr_b] <= d3_b;
+    q3_b <= mem3[addr_b];
+  end
 
 endmodule
 
 module tim_ctrl (
-    input logic reset,
-    input logic clock,
-    input tim_vec_out_type dvec_out,
-    output tim_vec_in_type dvec_in,
-    input mem_in_type tim0_in,
-    input mem_in_type tim1_in,
-    output mem_out_type tim0_out,
-    output mem_out_type tim1_out
+  input  logic            reset,
+  input  logic            clock,
+  input  tim_vec_out_type dvec_out,
+  output tim_vec_in_type  dvec_in,
+  input  mem_in_type      tim0_in,
+  input  mem_in_type      tim1_in,
+  output mem_out_type     tim0_out,
+  output mem_out_type     tim1_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -162,12 +186,12 @@ module tim_ctrl (
 
   always_comb begin
 
-    v_f = r_f;
+    v_f        = r_f;
 
     v_f.valid0 = 0;
     v_f.valid1 = 0;
-    v_f.strb0 = 0;
-    v_f.strb1 = 0;
+    v_f.strb0  = 0;
+    v_f.strb1  = 0;
 
     if (tim0_in.mem_valid == 1) begin
       v_f.valid0 = tim0_in.mem_valid;
@@ -185,10 +209,10 @@ module tim_ctrl (
       v_f.wid1   = tim1_in.mem_addr[(WIDTH+1):2];
     end
 
-    dvec_in = init_tim_vec_in;
+    dvec_in                 = init_tim_vec_in;
 
-    dvec_in[v_f.wid0].en0 = v_f.valid0;
-    dvec_in[v_f.wid1].en1 = v_f.valid1;
+    dvec_in[v_f.wid0].en0   = v_f.valid0;
+    dvec_in[v_f.wid1].en1   = v_f.valid1;
     dvec_in[v_f.wid0].strb0 = v_f.strb0;
     dvec_in[v_f.wid1].strb1 = v_f.strb1;
     dvec_in[v_f.wid0].addr0 = v_f.did0;
@@ -196,27 +220,27 @@ module tim_ctrl (
     dvec_in[v_f.wid0].data0 = v_f.data0;
     dvec_in[v_f.wid1].data1 = v_f.data1;
 
-    rin_f = v_f;
+    rin_f                   = v_f;
 
   end
 
   always_comb begin
 
-    v_b = r_b;
+    v_b                = r_b;
 
-    v_b.valid0 = r_f.valid0;
-    v_b.valid1 = r_f.valid1;
-    v_b.data0 = r_f.data0;
-    v_b.data1 = r_f.data1;
-    v_b.strb0 = r_f.strb0;
-    v_b.strb1 = r_f.strb1;
-    v_b.wid0 = r_f.wid0;
-    v_b.wid1 = r_f.wid1;
-    v_b.did0 = r_f.did0;
-    v_b.did1 = r_f.did1;
+    v_b.valid0         = r_f.valid0;
+    v_b.valid1         = r_f.valid1;
+    v_b.data0          = r_f.data0;
+    v_b.data1          = r_f.data1;
+    v_b.strb0          = r_f.strb0;
+    v_b.strb1          = r_f.strb1;
+    v_b.wid0           = r_f.wid0;
+    v_b.wid1           = r_f.wid1;
+    v_b.did0           = r_f.did0;
+    v_b.did1           = r_f.did1;
 
-    v_b.rdata0 = dvec_out[v_b.wid0].data0;
-    v_b.rdata1 = dvec_out[v_b.wid1].data1;
+    v_b.rdata0         = dvec_out[v_b.wid0].data0;
+    v_b.rdata1         = dvec_out[v_b.wid1].data1;
 
     tim0_out.mem_rdata = v_b.rdata0;
     tim0_out.mem_error = 0;
@@ -226,7 +250,7 @@ module tim_ctrl (
     tim1_out.mem_error = 0;
     tim1_out.mem_ready = v_b.valid1;
 
-    rin_b = v_b;
+    rin_b              = v_b;
 
   end
 
@@ -243,12 +267,12 @@ module tim_ctrl (
 endmodule
 
 module tim (
-    input logic reset,
-    input logic clock,
-    input mem_in_type tim0_in,
-    input mem_in_type tim1_in,
-    output mem_out_type tim0_out,
-    output mem_out_type tim1_out
+  input  logic        reset,
+  input  logic        clock,
+  input  mem_in_type  tim0_in,
+  input  mem_in_type  tim1_in,
+  output mem_out_type tim0_out,
+  output mem_out_type tim1_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -261,23 +285,23 @@ module tim (
 
     for (i = 0; i < TIM_WIDTH; i = i + 1) begin : tim_ram
       tim_ram tim_ram_comp (
-          .clock(clock),
-          .tim_ram_in(dvec_in[i]),
-          .tim_ram_out(dvec_out[i])
+        .clock      (clock),
+        .tim_ram_in (dvec_in[i]),
+        .tim_ram_out(dvec_out[i])
       );
     end
 
   endgenerate
 
   tim_ctrl tim_ctrl_comp (
-      .reset(reset),
-      .clock(clock),
-      .dvec_out(dvec_out),
-      .dvec_in(dvec_in),
-      .tim0_in(tim0_in),
-      .tim1_in(tim1_in),
-      .tim0_out(tim0_out),
-      .tim1_out(tim1_out)
+    .reset   (reset),
+    .clock   (clock),
+    .dvec_out(dvec_out),
+    .dvec_in (dvec_in),
+    .tim0_in (tim0_in),
+    .tim1_in (tim1_in),
+    .tim0_out(tim0_out),
+    .tim1_out(tim1_out)
   );
 
 endmodule

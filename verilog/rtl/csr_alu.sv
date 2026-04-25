@@ -2,8 +2,8 @@ import wires::*;
 import functions::*;
 
 module csr_alu (
-    input  csr_alu_in_type  csr_alu_in,
-    output csr_alu_out_type csr_alu_out
+  input  csr_alu_in_type  csr_alu_in,
+  output csr_alu_out_type csr_alu_out
 );
   timeunit 1ns; timeprecision 1ps;
 

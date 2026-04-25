@@ -2,15 +2,15 @@ import wires::*;
 import constants::*;
 
 module cdc (
-    input  logic        src_clk,
-    input  logic        src_rstn,
-    input  mem_in_type  src_mem_in,
-    output mem_out_type src_mem_out,
+  input  logic        src_clk,
+  input  logic        src_rstn,
+  input  mem_in_type  src_mem_in,
+  output mem_out_type src_mem_out,
 
-    input  logic        dst_clk,
-    input  logic        dst_rstn,
-    output mem_in_type  dst_mem_in,
-    input  mem_out_type dst_mem_out
+  input  logic        dst_clk,
+  input  logic        dst_rstn,
+  output mem_in_type  dst_mem_in,
+  input  mem_out_type dst_mem_out
 );
   timeunit 1ns; timeprecision 1ps;
 

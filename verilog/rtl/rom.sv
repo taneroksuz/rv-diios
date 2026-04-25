@@ -2,10 +2,10 @@ import configure::*;
 import wires::*;
 
 module rom (
-    input  logic        reset,
-    input  logic        clock,
-    input  mem_in_type  rom_in,
-    output mem_out_type rom_out
+  input  logic        reset,
+  input  logic        clock,
+  input  mem_in_type  rom_in,
+  output mem_out_type rom_out
 );
   timeunit 1ns; timeprecision 1ps;
 

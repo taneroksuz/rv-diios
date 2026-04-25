@@ -1,8 +1,8 @@
 import wires::*;
 
 module lsu (
-    input  lsu_in_type  lsu_in,
-    output lsu_out_type lsu_out
+  input  lsu_in_type  lsu_in,
+  output lsu_out_type lsu_out
 );
   timeunit 1ns; timeprecision 1ps;
 
