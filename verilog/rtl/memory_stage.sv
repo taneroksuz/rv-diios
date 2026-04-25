@@ -44,35 +44,33 @@ module memory_stage (
       v.calc1.op = r.calc1.op_b;
     end
 
-    v.stall = 0;
+    v.stall            = 0;
 
     dmem0_in.mem_valid = a.e.calc0.op.load | a.e.calc0.op.store;
     dmem0_in.mem_instr = 0;
-    dmem0_in.mem_mode = 0;
-    dmem0_in.mem_addr = a.e.calc0.address;
-    dmem0_in.mem_wdata = store_data(a.e.calc0.sdata, a.e.calc0.lsu_op.lsu_sb,
-                                    a.e.calc0.lsu_op.lsu_sh, a.e.calc0.lsu_op.lsu_sw);
+    dmem0_in.mem_mode  = 0;
+    dmem0_in.mem_addr  = a.e.calc0.address;
+    dmem0_in.mem_wdata = a.e.calc0.sdata;
     dmem0_in.mem_wstrb = (a.e.calc0.op.load) == 1 ? 4'h00 : a.e.calc0.byteenable;
 
     dmem1_in.mem_valid = a.e.calc1.op.load | a.e.calc1.op.store;
     dmem1_in.mem_instr = 0;
-    dmem1_in.mem_mode = 0;
-    dmem1_in.mem_addr = a.e.calc1.address;
-    dmem1_in.mem_wdata = store_data(a.e.calc1.sdata, a.e.calc1.lsu_op.lsu_sb,
-                                    a.e.calc1.lsu_op.lsu_sh, a.e.calc1.lsu_op.lsu_sw);
+    dmem1_in.mem_mode  = 0;
+    dmem1_in.mem_addr  = a.e.calc1.address;
+    dmem1_in.mem_wdata = a.e.calc1.sdata;
     dmem1_in.mem_wstrb = (a.e.calc1.op.load) == 1 ? 4'h00 : a.e.calc1.byteenable;
 
-    lsu0_in.ldata = dmem0_out.mem_rdata;
+    lsu0_in.ldata      = dmem0_out.mem_rdata;
     lsu0_in.byteenable = v.calc0.byteenable;
-    lsu0_in.lsu_op = v.calc0.lsu_op;
+    lsu0_in.lsu_op     = v.calc0.lsu_op;
 
-    v.calc0.ldata = lsu0_out.result;
+    v.calc0.ldata      = lsu0_out.result;
 
-    lsu1_in.ldata = dmem1_out.mem_rdata;
+    lsu1_in.ldata      = dmem1_out.mem_rdata;
     lsu1_in.byteenable = v.calc1.byteenable;
-    lsu1_in.lsu_op = v.calc1.lsu_op;
+    lsu1_in.lsu_op     = v.calc1.lsu_op;
 
-    v.calc1.ldata = lsu1_out.result;
+    v.calc1.ldata      = lsu1_out.result;
 
     if (dmem0_out.mem_ready == 1) begin
       if (v.calc0.op.load == 1) begin

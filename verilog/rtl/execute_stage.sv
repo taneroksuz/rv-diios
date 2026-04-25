@@ -178,51 +178,53 @@ module execute_stage (
       end
     end
 
-    v.calc0.sdata       = v.calc0.rdata2;
-    v.calc1.sdata       = v.calc1.rdata2;
+    v.calc0.sdata = store_data(v.calc0.rdata2, v.calc0.lsu_op.lsu_sb, v.calc0.lsu_op.lsu_sh,
+                               v.calc0.lsu_op.lsu_sw);
+    v.calc1.sdata = store_data(v.calc1.rdata2, v.calc1.lsu_op.lsu_sb, v.calc1.lsu_op.lsu_sh,
+                               v.calc1.lsu_op.lsu_sw);
 
-    mul_in.rdata1       = v.calc0.op.mult ? v.calc0.rdata1 : v.calc1.rdata1;
-    mul_in.rdata2       = v.calc0.op.mult ? v.calc0.rdata2 : v.calc1.rdata2;
-    mul_in.mul_op       = v.calc0.op.mult ? v.calc0.mul_op : v.calc1.mul_op;
+    mul_in.rdata1 = v.calc0.op.mult ? v.calc0.rdata1 : v.calc1.rdata1;
+    mul_in.rdata2 = v.calc0.op.mult ? v.calc0.rdata2 : v.calc1.rdata2;
+    mul_in.mul_op = v.calc0.op.mult ? v.calc0.mul_op : v.calc1.mul_op;
 
-    v.calc0.mdata       = mul_out.result;
-    v.calc1.mdata       = mul_out.result;
+    v.calc0.mdata = mul_out.result;
+    v.calc1.mdata = mul_out.result;
 
-    bit_alu0_in.rdata1  = v.calc0.rdata1;
-    bit_alu0_in.rdata2  = v.calc0.rdata2;
-    bit_alu0_in.imm     = v.calc0.imm;
-    bit_alu0_in.sel     = v.calc0.op.rden2;
-    bit_alu0_in.bit_op  = v.calc0.bit_op;
+    bit_alu0_in.rdata1 = v.calc0.rdata1;
+    bit_alu0_in.rdata2 = v.calc0.rdata2;
+    bit_alu0_in.imm = v.calc0.imm;
+    bit_alu0_in.sel = v.calc0.op.rden2;
+    bit_alu0_in.bit_op = v.calc0.bit_op;
 
-    v.calc0.bdata       = bit_alu0_out.result;
+    v.calc0.bdata = bit_alu0_out.result;
 
-    bit_alu1_in.rdata1  = v.calc1.rdata1;
-    bit_alu1_in.rdata2  = v.calc1.rdata2;
-    bit_alu1_in.imm     = v.calc1.imm;
-    bit_alu1_in.sel     = v.calc1.op.rden2;
-    bit_alu1_in.bit_op  = v.calc1.bit_op;
+    bit_alu1_in.rdata1 = v.calc1.rdata1;
+    bit_alu1_in.rdata2 = v.calc1.rdata2;
+    bit_alu1_in.imm = v.calc1.imm;
+    bit_alu1_in.sel = v.calc1.op.rden2;
+    bit_alu1_in.bit_op = v.calc1.bit_op;
 
-    v.calc1.bdata       = bit_alu1_out.result;
+    v.calc1.bdata = bit_alu1_out.result;
 
-    div_in.rdata1       = v.calc0.op.division ? v.calc0.rdata1 : v.calc1.rdata1;
-    div_in.rdata2       = v.calc0.op.division ? v.calc0.rdata2 : v.calc1.rdata2;
-    div_in.div_op       = v.calc0.op.division ? v.calc0.div_op : v.calc1.div_op;
-    div_in.enable       = (v.calc0.op.division | v.calc1.op.division) & v.enable;
+    div_in.rdata1 = v.calc0.op.division ? v.calc0.rdata1 : v.calc1.rdata1;
+    div_in.rdata2 = v.calc0.op.division ? v.calc0.rdata2 : v.calc1.rdata2;
+    div_in.div_op = v.calc0.op.division ? v.calc0.div_op : v.calc1.div_op;
+    div_in.enable = (v.calc0.op.division | v.calc1.op.division) & v.enable;
 
-    v.calc0.ddata       = div_out.result;
-    v.calc1.ddata       = div_out.result;
-    v.calc0.dready      = div_out.ready;
-    v.calc1.dready      = div_out.ready;
+    v.calc0.ddata = div_out.result;
+    v.calc1.ddata = div_out.result;
+    v.calc0.dready = div_out.ready;
+    v.calc1.dready = div_out.ready;
 
     bit_clmul_in.rdata1 = v.calc0.op.bitc ? v.calc0.rdata1 : v.calc1.rdata1;
     bit_clmul_in.rdata2 = v.calc0.op.bitc ? v.calc0.rdata2 : v.calc1.rdata2;
-    bit_clmul_in.op     = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
+    bit_clmul_in.op = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
     bit_clmul_in.enable = (v.calc0.op.bitc | v.calc1.op.bitc) & v.enable;
 
-    v.calc0.bcdata      = bit_clmul_out.result;
-    v.calc1.bcdata      = bit_clmul_out.result;
-    v.calc0.bcready     = bit_clmul_out.ready;
-    v.calc1.bcready     = bit_clmul_out.ready;
+    v.calc0.bcdata = bit_clmul_out.result;
+    v.calc1.bcdata = bit_clmul_out.result;
+    v.calc0.bcready = bit_clmul_out.ready;
+    v.calc1.bcready = bit_clmul_out.ready;
 
     if (v.calc0.op.auipc == 1) begin
       v.calc0.wdata = v.calc0.address;
