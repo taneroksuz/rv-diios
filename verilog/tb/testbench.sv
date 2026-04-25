@@ -100,7 +100,8 @@ module testbench ();
                   testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc0.caddr);
           $fwrite(csr_file, "WDATA = %x ;\n",
                   testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc0.cwdata);
-        end else if (testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc1.op.cwren == 1) begin
+        end
+        if (testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc1.op.cwren == 1) begin
           $fwrite(csr_file, "PERIOD = %t ;\t", $time);
           $fwrite(csr_file, "PC = %x ;\t",
                   testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc1.pc);
@@ -132,7 +133,8 @@ module testbench ();
             $fwrite(mem_file, "WDATA = %x ;\n",
                     testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc0.sdata);
           end
-        end else if (testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc1.op.store == 1) begin
+        end
+        if (testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc1.op.store == 1) begin
           if (|testbench.soc_comp.cpu_comp.memory_stage_comp.d.m.calc1.byteenable == 1) begin
             $fwrite(mem_file, "PERIOD = %t ;\t", $time);
             $fwrite(mem_file, "PC = %x ;\t",
