@@ -12,8 +12,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    src_ext = args.src_txt.split(".")[1]
-    dst_ext = args.dst_txt.split(".")[1]
+    src_ext = args.src_txt.split(".")[-1]
+    dst_ext = args.dst_txt.split(".")[-1]
 
     if src_ext != dst_ext:
         exit(1)
