@@ -4,12 +4,12 @@ import wires::*;
 module uart_rx #(
     parameter CLOCK_RATE
 ) (
-    input logic reset,
-    input logic clock,
-    input mem_in_type uart_in,
+    input  logic        reset,
+    input  logic        clock,
+    input  mem_in_type  uart_in,
     output mem_out_type uart_out,
-    output logic rx_irq,
-    input rx
+    output logic        rx_irq,
+    input               rx
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -37,9 +37,9 @@ module uart_rx #(
 
   always_comb begin
 
-    v = r;
+    v          = r;
 
-    v.counter = v.counter + 1;
+    v.counter  = v.counter + 1;
 
     v.rdata_re = 0;
     v.ready_re = 0;
@@ -51,7 +51,7 @@ module uart_rx #(
       end else if (uart_in.mem_addr == 8) begin
         v.rdata_re = {8{v.ready}};
         v.ready_re = 1;
-        v.ready = 0;
+        v.ready    = 0;
       end
     end
 
@@ -72,8 +72,8 @@ module uart_rx #(
       end
       default: begin
         if (r.counter > FULL) begin
-          v.data = {rx, v.data[8:1]};
-          v.state = v.state + 4'h1;
+          v.data    = {rx, v.data[8:1]};
+          v.state   = v.state + 4'h1;
           v.counter = 0;
         end
       end
@@ -86,7 +86,7 @@ module uart_rx #(
   assign uart_out.mem_rdata = {24'b0, r.rdata_re};
   assign uart_out.mem_error = 0;
   assign uart_out.mem_ready = r.ready_re;
-  assign rx_irq = r.ready;
+  assign rx_irq             = r.ready;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin

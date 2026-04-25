@@ -145,8 +145,8 @@ package functions;
     input [31:0] rs2;
     logic [31:0] res;
     begin
-      res = rs1 << rs2[4:0];
-      res = res | (rs1 >> (32 - rs2[4:0]));
+      res     = rs1 << rs2[4:0];
+      res     = res | (rs1 >> (32 - rs2[4:0]));
       bit_rol = res;
     end
   endfunction
@@ -156,8 +156,8 @@ package functions;
     input [31:0] rs2;
     logic [31:0] res;
     begin
-      res = rs1 >> rs2[4:0];
-      res = res | (rs1 << (32 - rs2[4:0]));
+      res     = rs1 >> rs2[4:0];
+      res     = res | (rs1 << (32 - rs2[4:0]));
       bit_ror = res;
     end
   endfunction
@@ -167,9 +167,9 @@ package functions;
     input [31:0] rs2;
     logic [31:0] res;
     begin
-      res = rs1;
+      res           = rs1;
       res[rs2[4:0]] = 1'b1;
-      bit_bset = res;
+      bit_bset      = res;
     end
   endfunction
 
@@ -178,9 +178,9 @@ package functions;
     input [31:0] rs2;
     logic [31:0] res;
     begin
-      res = rs1;
+      res           = rs1;
       res[rs2[4:0]] = 1'b0;
-      bit_bclr = res;
+      bit_bclr      = res;
     end
   endfunction
 
@@ -189,9 +189,9 @@ package functions;
     input [31:0] rs2;
     logic [31:0] res;
     begin
-      res = rs1;
+      res           = rs1;
       res[rs2[4:0]] = ~(res[rs2[4:0]]);
-      bit_binv = res;
+      bit_binv      = res;
     end
   endfunction
 

@@ -3,28 +3,28 @@ import wires::*;
 import functions::*;
 
 module memory_stage (
-    input logic reset,
-    input logic clear,
-    input logic clock,
-    input lsu_out_type lsu0_out,
-    output lsu_in_type lsu0_in,
-    input lsu_out_type lsu1_out,
-    output lsu_in_type lsu1_in,
-    input mem_out_type dmem0_out,
-    input mem_out_type dmem1_out,
-    output mem_in_type dmem0_in,
-    output mem_in_type dmem1_in,
-    input csr_out_type csr_out,
+    input  logic                     reset,
+    input  logic                     clear,
+    input  logic                     clock,
+    input  lsu_out_type              lsu0_out,
+    output lsu_in_type               lsu0_in,
+    input  lsu_out_type              lsu1_out,
+    output lsu_in_type               lsu1_in,
+    input  mem_out_type              dmem0_out,
+    input  mem_out_type              dmem1_out,
+    output mem_in_type               dmem0_in,
+    output mem_in_type               dmem1_in,
+    input  csr_out_type              csr_out,
     output forwarding_memory_in_type forwarding0_min,
     output forwarding_memory_in_type forwarding1_min,
-    output register_write_in_type register0_win,
-    output register_write_in_type register1_win,
-    output csr_write_in_type csr_win,
-    output csr_exception_in_type csr_ein,
-    input memory_in_type a,
-    input memory_in_type d,
-    output memory_out_type y,
-    output memory_out_type q
+    output register_write_in_type    register0_win,
+    output register_write_in_type    register1_win,
+    output csr_write_in_type         csr_win,
+    output csr_exception_in_type     csr_ein,
+    input  memory_in_type            a,
+    input  memory_in_type            d,
+    output memory_out_type           y,
+    output memory_out_type           q
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -33,13 +33,13 @@ module memory_stage (
 
   always_comb begin
 
-    v = r;
+    v       = r;
 
     v.calc0 = d.e.calc0;
     v.calc1 = d.e.calc1;
 
     if (d.m.stall == 1) begin
-      v = r;
+      v          = r;
       v.calc0.op = r.calc0.op_b;
       v.calc1.op = r.calc1.op_b;
     end
@@ -120,44 +120,44 @@ module memory_stage (
       v.calc0.op.fence = 1;
     end
 
-    forwarding0_min.wren = v.calc0.op.wren;
+    forwarding0_min.wren  = v.calc0.op.wren;
     forwarding0_min.waddr = v.calc0.waddr;
     forwarding0_min.wdata = v.calc0.wdata;
 
-    forwarding1_min.wren = v.calc1.op.wren;
+    forwarding1_min.wren  = v.calc1.op.wren;
     forwarding1_min.waddr = v.calc1.waddr;
     forwarding1_min.wdata = v.calc1.wdata;
 
-    register0_win.wren = v.calc0.op.wren & |(v.calc0.waddr);
-    register0_win.waddr = v.calc0.waddr;
-    register0_win.wdata = v.calc0.wdata;
+    register0_win.wren    = v.calc0.op.wren & |(v.calc0.waddr);
+    register0_win.waddr   = v.calc0.waddr;
+    register0_win.wdata   = v.calc0.wdata;
 
-    register1_win.wren = v.calc1.op.wren & |(v.calc1.waddr);
-    register1_win.waddr = v.calc1.waddr;
-    register1_win.wdata = v.calc1.wdata;
+    register1_win.wren    = v.calc1.op.wren & |(v.calc1.waddr);
+    register1_win.waddr   = v.calc1.waddr;
+    register1_win.wdata   = v.calc1.wdata;
 
-    csr_win.cwren = v.calc0.op.cwren | v.calc1.op.cwren;
-    csr_win.cwaddr = v.calc0.op.cwren ? v.calc0.caddr : v.calc1.caddr;
-    csr_win.cdata = v.calc0.op.cwren ? v.calc0.cwdata : v.calc1.cwdata;
+    csr_win.cwren         = v.calc0.op.cwren | v.calc1.op.cwren;
+    csr_win.cwaddr        = v.calc0.op.cwren ? v.calc0.caddr : v.calc1.caddr;
+    csr_win.cdata         = v.calc0.op.cwren ? v.calc0.cwdata : v.calc1.cwdata;
 
-    csr_ein.valid0 = v.calc0.op.valid;
-    csr_ein.valid1 = v.calc1.op.valid;
-    csr_ein.pc = v.calc0.op.valid ? v.calc0.pc : v.calc1.pc;
-    csr_ein.mret = v.calc0.op.mret;
-    csr_ein.exception = v.calc0.op.exception | v.calc1.op.exception;
-    csr_ein.epc = v.calc0.op.exception ? v.calc0.pc : v.calc1.pc;
-    csr_ein.ecause = v.calc0.op.exception ? v.calc0.ecause : v.calc1.ecause;
-    csr_ein.etval = v.calc0.op.exception ? v.calc0.etval : v.calc1.etval;
+    csr_ein.valid0        = v.calc0.op.valid;
+    csr_ein.valid1        = v.calc1.op.valid;
+    csr_ein.pc            = v.calc0.op.valid ? v.calc0.pc : v.calc1.pc;
+    csr_ein.mret          = v.calc0.op.mret;
+    csr_ein.exception     = v.calc0.op.exception | v.calc1.op.exception;
+    csr_ein.epc           = v.calc0.op.exception ? v.calc0.pc : v.calc1.pc;
+    csr_ein.ecause        = v.calc0.op.exception ? v.calc0.ecause : v.calc1.ecause;
+    csr_ein.etval         = v.calc0.op.exception ? v.calc0.etval : v.calc1.etval;
 
-    rin = v;
+    rin                   = v;
 
-    y.calc0 = v.calc0;
-    y.calc1 = v.calc1;
-    y.stall = v.stall;
+    y.calc0               = v.calc0;
+    y.calc1               = v.calc1;
+    y.stall               = v.stall;
 
-    q.calc0 = r.calc0;
-    q.calc1 = r.calc1;
-    q.stall = r.stall;
+    q.calc0               = r.calc0;
+    q.calc1               = r.calc1;
+    q.stall               = r.stall;
 
   end
 

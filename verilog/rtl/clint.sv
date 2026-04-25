@@ -4,13 +4,13 @@ import wires::*;
 module clint #(
     parameter CLOCK_RATE
 ) (
-    input logic reset,
-    input logic clock,
-    input mem_in_type clint_in,
-    output mem_out_type clint_out,
-    output logic [63 : 0] clint_mtime,
-    output logic clint_msip,
-    output logic clint_mtip
+    input  logic                 reset,
+    input  logic                 clock,
+    input  mem_in_type           clint_in,
+    output mem_out_type          clint_out,
+    output logic        [63 : 0] clint_mtime,
+    output logic                 clint_msip,
+    output logic                 clint_mtip
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -46,7 +46,7 @@ module clint #(
     if (reset == 0) begin
       rdata_ms <= 0;
       ready_ms <= 0;
-      msip <= 0;
+      msip     <= 0;
     end else begin
       rdata_ms <= 0;
       ready_ms <= 0;
@@ -54,9 +54,9 @@ module clint #(
         if (clint_in.mem_addr < clint_msip_end) begin
           if (|clint_in.mem_wstrb == 0) begin
             rdata_ms[0] <= msip;
-            ready_ms <= 1;
+            ready_ms    <= 1;
           end else begin
-            msip <= clint_in.mem_wdata[0];
+            msip     <= clint_in.mem_wdata[0];
             ready_ms <= 1;
           end
         end
@@ -68,7 +68,7 @@ module clint #(
     if (reset == 0) begin
       rdata_mt <= 0;
       ready_mt <= 0;
-      mtime <= 0;
+      mtime    <= 0;
     end else begin
       rdata_mt <= 0;
       ready_mt <= 0;

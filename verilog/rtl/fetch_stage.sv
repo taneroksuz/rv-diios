@@ -3,22 +3,22 @@ import functions::*;
 import wires::*;
 
 module fetch_stage (
-    input logic reset,
-    input logic clear,
-    input logic clock,
-    input buffer_out_type buffer_out,
-    output buffer_in_type buffer_in,
-    input csr_out_type csr_out,
-    input btac_out_type btac_out,
-    output btac_in_type btac_in,
-    input mem_out_type imem0_out,
-    input mem_out_type imem1_out,
-    output mem_in_type imem0_in,
-    output mem_in_type imem1_in,
-    input fetch_in_type a,
-    input fetch_in_type d,
-    output fetch_out_type y,
-    output fetch_out_type q
+    input  logic           reset,
+    input  logic           clear,
+    input  logic           clock,
+    input  buffer_out_type buffer_out,
+    output buffer_in_type  buffer_in,
+    input  csr_out_type    csr_out,
+    input  btac_out_type   btac_out,
+    output btac_in_type    btac_in,
+    input  mem_out_type    imem0_out,
+    input  mem_out_type    imem1_out,
+    output mem_in_type     imem0_in,
+    output mem_in_type     imem1_in,
+    input  fetch_in_type   a,
+    input  fetch_in_type   d,
+    output fetch_out_type  y,
+    output fetch_out_type  q
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -59,8 +59,8 @@ module fetch_stage (
       v.ready = 0;
     end
 
-    v.pc0 = buffer_out.pc0;
-    v.pc1 = buffer_out.pc1;
+    v.pc0    = buffer_out.pc0;
+    v.pc1    = buffer_out.pc1;
     v.instr0 = buffer_out.instr0;
     v.instr1 = buffer_out.instr1;
     v.ready0 = buffer_out.ready0;
@@ -135,63 +135,63 @@ module fetch_stage (
       end
     endcase
 
-    buffer_in.pc0 = r.ipc0;
-    buffer_in.pc1 = r.ipc1;
-    buffer_in.rdata = v.rdata;
-    buffer_in.ready = v.ready;
-    buffer_in.clear = v.spec;
-    buffer_in.stall = a.i.halt;
+    buffer_in.pc0       = r.ipc0;
+    buffer_in.pc1       = r.ipc1;
+    buffer_in.rdata     = v.rdata;
+    buffer_in.ready     = v.ready;
+    buffer_in.clear     = v.spec;
+    buffer_in.stall     = a.i.halt;
 
-    imem0_in.mem_valid = v.valid;
-    imem0_in.mem_instr = 1;
-    imem0_in.mem_mode = 0;
-    imem0_in.mem_addr = v.ipc0;
-    imem0_in.mem_wdata = 0;
-    imem0_in.mem_wstrb = 0;
+    imem0_in.mem_valid  = v.valid;
+    imem0_in.mem_instr  = 1;
+    imem0_in.mem_mode   = 0;
+    imem0_in.mem_addr   = v.ipc0;
+    imem0_in.mem_wdata  = 0;
+    imem0_in.mem_wstrb  = 0;
 
-    imem1_in.mem_valid = v.valid;
-    imem1_in.mem_instr = 1;
-    imem1_in.mem_mode = 0;
-    imem1_in.mem_addr = v.ipc1;
-    imem1_in.mem_wdata = 0;
-    imem1_in.mem_wstrb = 0;
+    imem1_in.mem_valid  = v.valid;
+    imem1_in.mem_instr  = 1;
+    imem1_in.mem_mode   = 0;
+    imem1_in.mem_addr   = v.ipc1;
+    imem1_in.mem_wdata  = 0;
+    imem1_in.mem_wstrb  = 0;
 
-    btac_in.get_pc0 = v.pc0;
-    btac_in.get_pc1 = v.pc1;
-    btac_in.upd_pc0 = a.e.calc0.pc;
-    btac_in.upd_pc1 = a.e.calc1.pc;
-    btac_in.upd_npc0 = a.e.calc0.npc;
-    btac_in.upd_npc1 = a.e.calc1.npc;
-    btac_in.upd_addr0 = a.e.calc0.address;
-    btac_in.upd_addr1 = a.e.calc1.address;
-    btac_in.upd_jal0 = a.e.calc0.op.jal;
-    btac_in.upd_jal1 = a.e.calc1.op.jal;
-    btac_in.upd_jalr0 = a.e.calc0.op.jalr;
-    btac_in.upd_jalr1 = a.e.calc1.op.jalr;
+    btac_in.get_pc0     = v.pc0;
+    btac_in.get_pc1     = v.pc1;
+    btac_in.upd_pc0     = a.e.calc0.pc;
+    btac_in.upd_pc1     = a.e.calc1.pc;
+    btac_in.upd_npc0    = a.e.calc0.npc;
+    btac_in.upd_npc1    = a.e.calc1.npc;
+    btac_in.upd_addr0   = a.e.calc0.address;
+    btac_in.upd_addr1   = a.e.calc1.address;
+    btac_in.upd_jal0    = a.e.calc0.op.jal;
+    btac_in.upd_jal1    = a.e.calc1.op.jal;
+    btac_in.upd_jalr0   = a.e.calc0.op.jalr;
+    btac_in.upd_jalr1   = a.e.calc1.op.jalr;
     btac_in.upd_branch0 = a.e.calc0.op.branch;
     btac_in.upd_branch1 = a.e.calc1.op.branch;
-    btac_in.upd_jump0 = a.e.calc0.op.jump;
-    btac_in.upd_jump1 = a.e.calc1.op.jump;
-    btac_in.upd_pred0 = a.e.calc0.pred;
-    btac_in.upd_pred1 = a.e.calc1.pred;
-    btac_in.stall = 0;
-    btac_in.clear = clear;
+    btac_in.upd_jump0   = a.e.calc0.op.jump;
+    btac_in.upd_jump1   = a.e.calc1.op.jump;
+    btac_in.upd_pred0   = a.e.calc0.pred;
+    btac_in.upd_pred1   = a.e.calc1.pred;
+    btac_in.stall       = 0;
+    btac_in.clear       = clear;
 
-    rin = v;
+    rin                 = v;
 
-    y.pc0 = v.pc0;
-    y.pc1 = v.pc1;
-    y.instr0 = v.instr0;
-    y.instr1 = v.instr1;
-    y.ready0 = v.ready0;
-    y.ready1 = v.ready1;
+    y.pc0               = v.pc0;
+    y.pc1               = v.pc1;
+    y.instr0            = v.instr0;
+    y.instr1            = v.instr1;
+    y.ready0            = v.ready0;
+    y.ready1            = v.ready1;
 
-    q.pc0 = r.pc0;
-    q.pc1 = r.pc1;
-    q.instr0 = r.instr0;
-    q.instr1 = r.instr1;
-    q.ready0 = r.ready0;
-    q.ready1 = r.ready1;
+    q.pc0               = r.pc0;
+    q.pc1               = r.pc1;
+    q.instr0            = r.instr0;
+    q.instr1            = r.instr1;
+    q.ready0            = r.ready0;
+    q.ready1            = r.ready1;
 
   end
 

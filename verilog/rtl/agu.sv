@@ -23,21 +23,21 @@ module agu (
 
   always_comb begin
 
-    misalign = 0;
+    misalign    = 0;
 
-    exception = 0;
-    ecause = 0;
-    etval = 0;
+    exception   = 0;
+    ecause      = 0;
+    etval       = 0;
 
     imem_access = agu_in.jal | agu_in.jalr | agu_in.branch;
     dmem_access = agu_in.load | agu_in.store;
 
-    sel = agu_in.auipc | agu_in.jal | agu_in.branch;
+    sel         = agu_in.auipc | agu_in.jal | agu_in.branch;
 
-    address = multiplexer(agu_in.rdata1, agu_in.pc, sel) + agu_in.imm;
-    address[0] = address[0] & ~agu_in.jalr;
+    address     = multiplexer(agu_in.rdata1, agu_in.pc, sel) + agu_in.imm;
+    address[0]  = address[0] & ~agu_in.jalr;
 
-    byteenable = 0;
+    byteenable  = 0;
 
     if (imem_access == 1) begin
       case (address[0])
@@ -74,29 +74,29 @@ module agu (
     if (misalign == 1) begin
       if (imem_access == 1) begin
         exception = 1;
-        ecause = except_instr_addr_misalign;
-        etval = address;
+        ecause    = except_instr_addr_misalign;
+        etval     = address;
       end
       if (dmem_access == 1) begin
         if (agu_in.load == 1) begin
           exception = 1;
-          ecause = except_load_addr_misalign;
-          etval = address;
+          ecause    = except_load_addr_misalign;
+          etval     = address;
         end
         if (agu_in.store == 1) begin
           exception = 1;
-          ecause = except_store_addr_misalign;
-          etval = address;
+          ecause    = except_store_addr_misalign;
+          etval     = address;
         end
       end
     end
 
-    agu_out.address = address;
+    agu_out.address    = address;
     agu_out.byteenable = byteenable;
 
-    agu_out.exception = exception;
-    agu_out.ecause = ecause;
-    agu_out.etval = etval;
+    agu_out.exception  = exception;
+    agu_out.ecause     = ecause;
+    agu_out.etval      = etval;
 
   end
 

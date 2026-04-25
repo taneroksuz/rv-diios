@@ -148,34 +148,34 @@ module compress (
       opcode_c0: begin
         case (funct3)
           c0_addispn: begin
-            instr_str = "c.addi4sp";
-            imm = imm_w;
-            waddr = {2'b01, instr[4:2]};
-            raddr1 = 2;
-            wren = nonzero_imm_w;
-            rden1 = nonzero_imm_w;
-            alunit = 1;
+            instr_str      = "c.addi4sp";
+            imm            = imm_w;
+            waddr          = {2'b01, instr[4:2]};
+            raddr1         = 2;
+            wren           = nonzero_imm_w;
+            rden1          = nonzero_imm_w;
+            alunit         = 1;
             alu_op.alu_add = nonzero_imm_w;
-            valid = nonzero_imm_w;
+            valid          = nonzero_imm_w;
           end
           c0_lw: begin
-            instr_str = "c.lw";
-            imm = imm_lswr;
-            waddr = {2'b01, instr[4:2]};
-            raddr1 = {2'b01, instr[9:7]};
-            wren = 1;
-            rden1 = 1;
-            load = 1;
+            instr_str     = "c.lw";
+            imm           = imm_lswr;
+            waddr         = {2'b01, instr[4:2]};
+            raddr1        = {2'b01, instr[9:7]};
+            wren          = 1;
+            rden1         = 1;
+            load          = 1;
             lsu_op.lsu_lw = 1;
           end
           c0_sw: begin
-            instr_str = "c.sw";
-            imm = imm_lswr;
-            raddr1 = {2'b01, instr[9:7]};
-            raddr2 = {2'b01, instr[4:2]};
-            rden1 = 1;
-            rden2 = 1;
-            store = 1;
+            instr_str     = "c.sw";
+            imm           = imm_lswr;
+            raddr1        = {2'b01, instr[9:7]};
+            raddr2        = {2'b01, instr[4:2]};
+            rden1         = 1;
+            rden2         = 1;
+            store         = 1;
             lsu_op.lsu_sw = 1;
           end
           default: valid = 0;
@@ -184,42 +184,42 @@ module compress (
       opcode_c1: begin
         case (funct3)
           c1_addi: begin
-            instr_str = "c.addi";
-            imm = imm_i;
-            wren = nonzero_imm_i;
-            rden1 = nonzero_imm_i;
-            alunit = 1;
+            instr_str      = "c.addi";
+            imm            = imm_i;
+            wren           = nonzero_imm_i;
+            rden1          = nonzero_imm_i;
+            alunit         = 1;
             alu_op.alu_add = nonzero_imm_i;
           end
           c1_jal: begin
             instr_str = "c.jal";
-            imm = imm_j;
-            wren = 1;
-            waddr = 1;
-            jal = 1;
+            imm       = imm_j;
+            wren      = 1;
+            waddr     = 1;
+            jal       = 1;
           end
           c1_li: begin
-            instr_str = "c.li";
-            imm = imm_i;
-            wren = 1;
-            alunit = 1;
+            instr_str      = "c.li";
+            imm            = imm_i;
+            wren           = 1;
+            alunit         = 1;
             alu_op.alu_add = 1;
           end
           c1_lui: begin
             if (raddr1 == 2) begin
-              instr_str = "c.addi16sp";
-              imm = imm_p;
-              wren = nonzero_imm_p;
-              rden1 = nonzero_imm_p;
-              alunit = 1;
+              instr_str      = "c.addi16sp";
+              imm            = imm_p;
+              wren           = nonzero_imm_p;
+              rden1          = nonzero_imm_p;
+              alunit         = 1;
               alu_op.alu_add = nonzero_imm_p;
-              valid = nonzero_imm_p;
+              valid          = nonzero_imm_p;
             end else begin
               instr_str = "c.lui";
-              imm = imm_u;
-              wren = nonzero_imm_u;
-              lui = nonzero_imm_u;
-              valid = nonzero_imm_u;
+              imm       = imm_u;
+              wren      = nonzero_imm_u;
+              lui       = nonzero_imm_u;
+              valid     = nonzero_imm_u;
             end
           end
           c1_alu: begin
@@ -228,63 +228,63 @@ module compress (
             raddr2[4:3] = 2'b01;
             case (funct6)
               0: begin
-                instr_str = "c.srli";
-                imm = {27'b0, shamt};
-                wren = nonzero_shamt;
-                rden1 = nonzero_shamt;
-                alunit = 1;
+                instr_str      = "c.srli";
+                imm            = {27'b0, shamt};
+                wren           = nonzero_shamt;
+                rden1          = nonzero_shamt;
+                alunit         = 1;
                 alu_op.alu_srl = nonzero_shamt;
-                valid = nonzero_shamt;
+                valid          = nonzero_shamt;
               end
               1: begin
-                instr_str = "c.srai";
-                imm = {27'b0, shamt};
-                wren = nonzero_shamt;
-                rden1 = nonzero_shamt;
-                alunit = 1;
+                instr_str      = "c.srai";
+                imm            = {27'b0, shamt};
+                wren           = nonzero_shamt;
+                rden1          = nonzero_shamt;
+                alunit         = 1;
                 alu_op.alu_sra = nonzero_shamt;
-                valid = nonzero_shamt;
+                valid          = nonzero_shamt;
               end
               2: begin
-                instr_str = "c.andi";
-                imm = imm_i;
-                wren = 1;
-                rden1 = 1;
-                alunit = 1;
+                instr_str      = "c.andi";
+                imm            = imm_i;
+                wren           = 1;
+                rden1          = 1;
+                alunit         = 1;
                 alu_op.alu_and = 1;
               end
               3: begin
                 case (funct9)
                   0: begin
-                    instr_str = "c.sub";
-                    wren = 1;
-                    rden1 = 1;
-                    rden2 = 1;
-                    alunit = 1;
+                    instr_str      = "c.sub";
+                    wren           = 1;
+                    rden1          = 1;
+                    rden2          = 1;
+                    alunit         = 1;
                     alu_op.alu_sub = 1;
                   end
                   1: begin
-                    instr_str = "c.xor";
-                    wren = 1;
-                    rden1 = 1;
-                    rden2 = 1;
-                    alunit = 1;
+                    instr_str      = "c.xor";
+                    wren           = 1;
+                    rden1          = 1;
+                    rden2          = 1;
+                    alunit         = 1;
                     alu_op.alu_xor = 1;
                   end
                   2: begin
-                    instr_str = "c.or";
-                    wren = 1;
-                    rden1 = 1;
-                    rden2 = 1;
-                    alunit = 1;
+                    instr_str     = "c.or";
+                    wren          = 1;
+                    rden1         = 1;
+                    rden2         = 1;
+                    alunit        = 1;
                     alu_op.alu_or = 1;
                   end
                   3: begin
-                    instr_str = "c.and";
-                    wren = 1;
-                    rden1 = 1;
-                    rden2 = 1;
-                    alunit = 1;
+                    instr_str      = "c.and";
+                    wren           = 1;
+                    rden1          = 1;
+                    rden2          = 1;
+                    alunit         = 1;
                     alu_op.alu_and = 1;
                   end
                   default: valid = 0;
@@ -296,28 +296,28 @@ module compress (
           end
           c1_j: begin
             instr_str = "c.j";
-            imm = imm_j;
-            waddr = 0;
-            jal = 1;
+            imm       = imm_j;
+            waddr     = 0;
+            jal       = 1;
           end
           c1_beqz: begin
-            instr_str = "c.beqz";
-            imm = imm_b;
-            rden1 = 1;
-            rden2 = 1;
-            raddr1 = {2'b01, instr[9:7]};
-            raddr2 = 0;
-            branch = 1;
+            instr_str      = "c.beqz";
+            imm            = imm_b;
+            rden1          = 1;
+            rden2          = 1;
+            raddr1         = {2'b01, instr[9:7]};
+            raddr2         = 0;
+            branch         = 1;
             bcu_op.bcu_beq = 1;
           end
           c1_bnez: begin
-            instr_str = "c.bnez";
-            imm = imm_b;
-            rden1 = 1;
-            rden2 = 1;
-            raddr1 = {2'b01, instr[9:7]};
-            raddr2 = 0;
-            branch = 1;
+            instr_str      = "c.bnez";
+            imm            = imm_b;
+            rden1          = 1;
+            rden2          = 1;
+            raddr1         = {2'b01, instr[9:7]};
+            raddr2         = 0;
+            branch         = 1;
             bcu_op.bcu_bne = 1;
           end
           default: valid = 0;
@@ -326,21 +326,21 @@ module compress (
       opcode_c2: begin
         case (funct3)
           c2_slli: begin
-            instr_str = "c.slli";
-            imm = {27'b0, shamt};
-            wren = nonzero_shamt;
-            rden1 = nonzero_shamt;
-            alunit = 1;
+            instr_str      = "c.slli";
+            imm            = {27'b0, shamt};
+            wren           = nonzero_shamt;
+            rden1          = nonzero_shamt;
+            alunit         = 1;
             alu_op.alu_sll = nonzero_shamt;
-            valid = nonzero_shamt;
+            valid          = nonzero_shamt;
           end
           c2_lwsp: begin
-            instr_str = "c.lwsp";
-            imm = imm_lwsp;
-            wren = 1;
-            rden1 = 1;
-            raddr1 = 2;
-            load = 1;
+            instr_str     = "c.lwsp";
+            imm           = imm_lwsp;
+            wren          = 1;
+            rden1         = 1;
+            raddr1        = 2;
+            load          = 1;
             lsu_op.lsu_lw = 1;
           end
           c2_alu: begin
@@ -349,14 +349,14 @@ module compress (
                 if (|raddr1 == 1) begin
                   if (|raddr2 == 0) begin
                     instr_str = "c.jr";
-                    rden1 = 1;
-                    waddr = 0;
-                    jalr = 1;
+                    rden1     = 1;
+                    waddr     = 0;
+                    jalr      = 1;
                   end else if (|raddr2 == 1) begin
-                    instr_str = "c.mv";
-                    wren = 1;
-                    rden2 = 1;
-                    alunit = 1;
+                    instr_str      = "c.mv";
+                    wren           = 1;
+                    rden2          = 1;
+                    alunit         = 1;
                     alu_op.alu_add = 1;
                   end
                 end
@@ -365,21 +365,21 @@ module compress (
                 if (|raddr1 == 0) begin
                   if (|raddr2 == 0) begin
                     instr_str = "c.ebreak";
-                    ebreak = 1;
+                    ebreak    = 1;
                   end
                 end else if (|raddr1 == 1) begin
                   if (|raddr2 == 0) begin
                     instr_str = "c.jalr";
-                    wren = 1;
-                    rden1 = 1;
-                    waddr = 1;
-                    jalr = 1;
+                    wren      = 1;
+                    rden1     = 1;
+                    waddr     = 1;
+                    jalr      = 1;
                   end else if (|raddr2 == 1) begin
-                    instr_str = "c.add";
-                    wren = 1;
-                    rden1 = 1;
-                    rden2 = 1;
-                    alunit = 1;
+                    instr_str      = "c.add";
+                    wren           = 1;
+                    rden1          = 1;
+                    rden2          = 1;
+                    alunit         = 1;
                     alu_op.alu_add = 1;
                   end
                 end
@@ -388,12 +388,12 @@ module compress (
             endcase
           end
           c2_swsp: begin
-            instr_str = "c.swsp";
-            imm = imm_swsp;
-            rden1 = 1;
-            rden2 = 1;
-            raddr1 = 2;
-            store = 1;
+            instr_str     = "c.swsp";
+            imm           = imm_swsp;
+            rden1         = 1;
+            rden2         = 1;
+            raddr1        = 2;
+            store         = 1;
             lsu_op.lsu_sw = 1;
           end
           default: valid = 0;
@@ -403,32 +403,32 @@ module compress (
     endcase
 
     if (instr[15:0] == cnop_instr) begin
-      instr_str = "c.nop";
+      instr_str      = "c.nop";
       alu_op.alu_add = 0;
-      nop = 1;
+      nop            = 1;
     end
 
     compress_out.instr_str = instr_str;
-    compress_out.imm = imm;
-    compress_out.waddr = waddr;
-    compress_out.raddr1 = raddr1;
-    compress_out.raddr2 = raddr2;
-    compress_out.wren = wren;
-    compress_out.rden1 = rden1;
-    compress_out.rden2 = rden2;
-    compress_out.alunit = alunit;
-    compress_out.lui = lui;
-    compress_out.jal = jal;
-    compress_out.jalr = jalr;
-    compress_out.branch = branch;
-    compress_out.load = load;
-    compress_out.store = store;
-    compress_out.nop = nop;
-    compress_out.ebreak = ebreak;
-    compress_out.valid = valid;
-    compress_out.alu_op = alu_op;
-    compress_out.bcu_op = bcu_op;
-    compress_out.lsu_op = lsu_op;
+    compress_out.imm       = imm;
+    compress_out.waddr     = waddr;
+    compress_out.raddr1    = raddr1;
+    compress_out.raddr2    = raddr2;
+    compress_out.wren      = wren;
+    compress_out.rden1     = rden1;
+    compress_out.rden2     = rden2;
+    compress_out.alunit    = alunit;
+    compress_out.lui       = lui;
+    compress_out.jal       = jal;
+    compress_out.jalr      = jalr;
+    compress_out.branch    = branch;
+    compress_out.load      = load;
+    compress_out.store     = store;
+    compress_out.nop       = nop;
+    compress_out.ebreak    = ebreak;
+    compress_out.valid     = valid;
+    compress_out.alu_op    = alu_op;
+    compress_out.bcu_op    = bcu_op;
+    compress_out.lsu_op    = lsu_op;
 
   end
 

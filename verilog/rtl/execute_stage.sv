@@ -2,41 +2,41 @@ import constants::*;
 import wires::*;
 
 module execute_stage (
-    input logic reset,
-    input logic clear,
-    input logic clock,
-    input alu_out_type alu0_out,
-    output alu_in_type alu0_in,
-    input alu_out_type alu1_out,
-    output alu_in_type alu1_in,
-    input agu_out_type agu0_out,
-    output agu_in_type agu0_in,
-    input agu_out_type agu1_out,
-    output agu_in_type agu1_in,
-    input bcu_out_type bcu0_out,
-    output bcu_in_type bcu0_in,
-    input bcu_out_type bcu1_out,
-    output bcu_in_type bcu1_in,
-    input csr_alu_out_type csr_alu_out,
-    output csr_alu_in_type csr_alu_in,
-    input div_out_type div_out,
-    output div_in_type div_in,
-    input mul_out_type mul_out,
-    output mul_in_type mul_in,
-    input bit_alu_out_type bit_alu0_out,
-    output bit_alu_in_type bit_alu0_in,
-    input bit_alu_out_type bit_alu1_out,
-    output bit_alu_in_type bit_alu1_in,
-    input bit_clmul_out_type bit_clmul_out,
-    output bit_clmul_in_type bit_clmul_in,
-    input csr_out_type csr_out,
-    input btac_out_type btac_out,
+    input  logic                      reset,
+    input  logic                      clear,
+    input  logic                      clock,
+    input  alu_out_type               alu0_out,
+    output alu_in_type                alu0_in,
+    input  alu_out_type               alu1_out,
+    output alu_in_type                alu1_in,
+    input  agu_out_type               agu0_out,
+    output agu_in_type                agu0_in,
+    input  agu_out_type               agu1_out,
+    output agu_in_type                agu1_in,
+    input  bcu_out_type               bcu0_out,
+    output bcu_in_type                bcu0_in,
+    input  bcu_out_type               bcu1_out,
+    output bcu_in_type                bcu1_in,
+    input  csr_alu_out_type           csr_alu_out,
+    output csr_alu_in_type            csr_alu_in,
+    input  div_out_type               div_out,
+    output div_in_type                div_in,
+    input  mul_out_type               mul_out,
+    output mul_in_type                mul_in,
+    input  bit_alu_out_type           bit_alu0_out,
+    output bit_alu_in_type            bit_alu0_in,
+    input  bit_alu_out_type           bit_alu1_out,
+    output bit_alu_in_type            bit_alu1_in,
+    input  bit_clmul_out_type         bit_clmul_out,
+    output bit_clmul_in_type          bit_clmul_in,
+    input  csr_out_type               csr_out,
+    input  btac_out_type              btac_out,
     output forwarding_execute_in_type forwarding0_ein,
     output forwarding_execute_in_type forwarding1_ein,
-    input execute_in_type a,
-    input execute_in_type d,
-    output execute_out_type y,
-    output execute_out_type q
+    input  execute_in_type            a,
+    input  execute_in_type            d,
+    output execute_out_type           y,
+    output execute_out_type           q
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -45,15 +45,15 @@ module execute_stage (
 
   always_comb begin
 
-    v = r;
+    v       = r;
 
     v.calc0 = d.i.calc0;
     v.calc1 = d.i.calc1;
 
     if ((d.e.stall | d.m.stall) == 1) begin
-      v = r;
-      v.calc0.op = r.calc0.op_b;
-      v.calc1.op = r.calc1.op_b;
+      v            = r;
+      v.calc0.op   = r.calc0.op_b;
+      v.calc1.op   = r.calc1.op_b;
       v.calc0.pred = r.calc0.pred_b;
       v.calc1.pred = r.calc1.pred_b;
     end
@@ -122,20 +122,20 @@ module execute_stage (
 
     if (v.calc0.op.exception == 1) begin
       v.calc0.op.exception = 1;
-      v.calc0.ecause = except_illegal_instruction;
-      v.calc0.etval = v.calc0.instr;
+      v.calc0.ecause       = except_illegal_instruction;
+      v.calc0.etval        = v.calc0.instr;
     end else if (v.calc0.op.ebreak == 1) begin
       v.calc0.op.exception = 1;
-      v.calc0.ecause = except_breakpoint;
-      v.calc0.etval = v.calc0.instr;
+      v.calc0.ecause       = except_breakpoint;
+      v.calc0.etval        = v.calc0.instr;
     end else if (v.calc0.op.ecall == 1) begin
       v.calc0.op.exception = 1;
-      v.calc0.ecause = except_env_call_mach;
-      v.calc0.etval = v.calc0.instr;
+      v.calc0.ecause       = except_env_call_mach;
+      v.calc0.etval        = v.calc0.instr;
     end else begin
       v.calc0.op.exception = agu0_out.exception;
-      v.calc0.ecause = agu0_out.ecause;
-      v.calc0.etval = agu0_out.etval;
+      v.calc0.ecause       = agu0_out.ecause;
+      v.calc0.etval        = agu0_out.etval;
       if (v.calc0.op.exception == 1) begin
         if (v.calc0.op.load == 1) begin
           v.calc0.op.load = 0;
@@ -151,20 +151,20 @@ module execute_stage (
 
     if (v.calc1.op.exception == 1) begin
       v.calc1.op.exception = 1;
-      v.calc1.ecause = except_illegal_instruction;
-      v.calc1.etval = v.calc1.instr;
+      v.calc1.ecause       = except_illegal_instruction;
+      v.calc1.etval        = v.calc1.instr;
     end else if (v.calc1.op.ebreak == 1) begin
       v.calc1.op.exception = 1;
-      v.calc1.ecause = except_breakpoint;
-      v.calc1.etval = v.calc1.instr;
+      v.calc1.ecause       = except_breakpoint;
+      v.calc1.etval        = v.calc1.instr;
     end else if (v.calc1.op.ecall == 1) begin
       v.calc1.op.exception = 1;
-      v.calc1.ecause = except_env_call_mach;
-      v.calc1.etval = v.calc1.instr;
+      v.calc1.ecause       = except_env_call_mach;
+      v.calc1.etval        = v.calc1.instr;
     end else begin
       v.calc1.op.exception = agu1_out.exception;
-      v.calc1.ecause = agu1_out.ecause;
-      v.calc1.etval = agu1_out.etval;
+      v.calc1.ecause       = agu1_out.ecause;
+      v.calc1.etval        = agu1_out.etval;
       if (v.calc1.op.exception == 1) begin
         if (v.calc1.op.load == 1) begin
           v.calc1.op.load = 0;
@@ -178,51 +178,51 @@ module execute_stage (
       end
     end
 
-    v.calc0.sdata = v.calc0.rdata2;
-    v.calc1.sdata = v.calc1.rdata2;
+    v.calc0.sdata       = v.calc0.rdata2;
+    v.calc1.sdata       = v.calc1.rdata2;
 
-    mul_in.rdata1 = v.calc0.op.mult ? v.calc0.rdata1 : v.calc1.rdata1;
-    mul_in.rdata2 = v.calc0.op.mult ? v.calc0.rdata2 : v.calc1.rdata2;
-    mul_in.mul_op = v.calc0.op.mult ? v.calc0.mul_op : v.calc1.mul_op;
+    mul_in.rdata1       = v.calc0.op.mult ? v.calc0.rdata1 : v.calc1.rdata1;
+    mul_in.rdata2       = v.calc0.op.mult ? v.calc0.rdata2 : v.calc1.rdata2;
+    mul_in.mul_op       = v.calc0.op.mult ? v.calc0.mul_op : v.calc1.mul_op;
 
-    v.calc0.mdata = mul_out.result;
-    v.calc1.mdata = mul_out.result;
+    v.calc0.mdata       = mul_out.result;
+    v.calc1.mdata       = mul_out.result;
 
-    bit_alu0_in.rdata1 = v.calc0.rdata1;
-    bit_alu0_in.rdata2 = v.calc0.rdata2;
-    bit_alu0_in.imm = v.calc0.imm;
-    bit_alu0_in.sel = v.calc0.op.rden2;
-    bit_alu0_in.bit_op = v.calc0.bit_op;
+    bit_alu0_in.rdata1  = v.calc0.rdata1;
+    bit_alu0_in.rdata2  = v.calc0.rdata2;
+    bit_alu0_in.imm     = v.calc0.imm;
+    bit_alu0_in.sel     = v.calc0.op.rden2;
+    bit_alu0_in.bit_op  = v.calc0.bit_op;
 
-    v.calc0.bdata = bit_alu0_out.result;
+    v.calc0.bdata       = bit_alu0_out.result;
 
-    bit_alu1_in.rdata1 = v.calc1.rdata1;
-    bit_alu1_in.rdata2 = v.calc1.rdata2;
-    bit_alu1_in.imm = v.calc1.imm;
-    bit_alu1_in.sel = v.calc1.op.rden2;
-    bit_alu1_in.bit_op = v.calc1.bit_op;
+    bit_alu1_in.rdata1  = v.calc1.rdata1;
+    bit_alu1_in.rdata2  = v.calc1.rdata2;
+    bit_alu1_in.imm     = v.calc1.imm;
+    bit_alu1_in.sel     = v.calc1.op.rden2;
+    bit_alu1_in.bit_op  = v.calc1.bit_op;
 
-    v.calc1.bdata = bit_alu1_out.result;
+    v.calc1.bdata       = bit_alu1_out.result;
 
-    div_in.rdata1 = v.calc0.op.division ? v.calc0.rdata1 : v.calc1.rdata1;
-    div_in.rdata2 = v.calc0.op.division ? v.calc0.rdata2 : v.calc1.rdata2;
-    div_in.div_op = v.calc0.op.division ? v.calc0.div_op : v.calc1.div_op;
-    div_in.enable = (v.calc0.op.division | v.calc1.op.division) & v.enable;
+    div_in.rdata1       = v.calc0.op.division ? v.calc0.rdata1 : v.calc1.rdata1;
+    div_in.rdata2       = v.calc0.op.division ? v.calc0.rdata2 : v.calc1.rdata2;
+    div_in.div_op       = v.calc0.op.division ? v.calc0.div_op : v.calc1.div_op;
+    div_in.enable       = (v.calc0.op.division | v.calc1.op.division) & v.enable;
 
-    v.calc0.ddata = div_out.result;
-    v.calc1.ddata = div_out.result;
-    v.calc0.dready = div_out.ready;
-    v.calc1.dready = div_out.ready;
+    v.calc0.ddata       = div_out.result;
+    v.calc1.ddata       = div_out.result;
+    v.calc0.dready      = div_out.ready;
+    v.calc1.dready      = div_out.ready;
 
     bit_clmul_in.rdata1 = v.calc0.op.bitc ? v.calc0.rdata1 : v.calc1.rdata1;
     bit_clmul_in.rdata2 = v.calc0.op.bitc ? v.calc0.rdata2 : v.calc1.rdata2;
-    bit_clmul_in.op = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
+    bit_clmul_in.op     = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
     bit_clmul_in.enable = (v.calc0.op.bitc | v.calc1.op.bitc) & v.enable;
 
-    v.calc0.bcdata = bit_clmul_out.result;
-    v.calc1.bcdata = bit_clmul_out.result;
-    v.calc0.bcready = bit_clmul_out.ready;
-    v.calc1.bcready = bit_clmul_out.ready;
+    v.calc0.bcdata      = bit_clmul_out.result;
+    v.calc1.bcdata      = bit_clmul_out.result;
+    v.calc0.bcready     = bit_clmul_out.ready;
+    v.calc1.bcready     = bit_clmul_out.ready;
 
     if (v.calc0.op.auipc == 1) begin
       v.calc0.wdata = v.calc0.address;
@@ -264,14 +264,14 @@ module execute_stage (
       v.calc1.wdata = v.calc1.bcdata;
     end
 
-    csr_alu_in.cdata = v.calc0.op.csreg ? v.calc0.crdata : v.calc1.crdata;
+    csr_alu_in.cdata  = v.calc0.op.csreg ? v.calc0.crdata : v.calc1.crdata;
     csr_alu_in.rdata1 = v.calc0.op.csreg ? v.calc0.rdata1 : v.calc1.rdata1;
-    csr_alu_in.imm = v.calc0.op.csreg ? v.calc0.imm : v.calc1.imm;
-    csr_alu_in.sel = v.calc0.op.csreg ? v.calc0.op.rden1 : v.calc1.op.rden1;
+    csr_alu_in.imm    = v.calc0.op.csreg ? v.calc0.imm : v.calc1.imm;
+    csr_alu_in.sel    = v.calc0.op.csreg ? v.calc0.op.rden1 : v.calc1.op.rden1;
     csr_alu_in.csr_op = v.calc0.op.csreg ? v.calc0.csr_op : v.calc1.csr_op;
 
-    v.calc0.cwdata = csr_alu_out.cdata;
-    v.calc1.cwdata = csr_alu_out.cdata;
+    v.calc0.cwdata    = csr_alu_out.cdata;
+    v.calc1.cwdata    = csr_alu_out.cdata;
 
     if (v.calc0.op.division == 1) begin
       if (v.calc0.dready == 0) begin
@@ -322,23 +322,23 @@ module execute_stage (
       v.calc1 = init_calculation;
     end
 
-    forwarding0_ein.wren = v.calc0.op.wren;
+    forwarding0_ein.wren  = v.calc0.op.wren;
     forwarding0_ein.waddr = v.calc0.waddr;
     forwarding0_ein.wdata = v.calc0.wdata;
 
-    forwarding1_ein.wren = v.calc1.op.wren;
+    forwarding1_ein.wren  = v.calc1.op.wren;
     forwarding1_ein.waddr = v.calc1.waddr;
     forwarding1_ein.wdata = v.calc1.wdata;
 
-    rin = v;
+    rin                   = v;
 
-    y.calc0 = v.calc0;
-    y.calc1 = v.calc1;
-    y.stall = v.stall;
+    y.calc0               = v.calc0;
+    y.calc1               = v.calc1;
+    y.stall               = v.stall;
 
-    q.calc0 = r.calc0;
-    q.calc1 = r.calc1;
-    q.stall = r.stall;
+    q.calc0               = r.calc0;
+    q.calc1               = r.calc1;
+    q.stall               = r.stall;
 
   end
 

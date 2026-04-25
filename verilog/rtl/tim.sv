@@ -35,8 +35,8 @@ import wires::*;
 import tim_wires::*;
 
 module tim_ram (
-    input logic clock,
-    input tim_ram_in_type tim_ram_in,
+    input  logic            clock,
+    input  tim_ram_in_type  tim_ram_in,
     output tim_ram_out_type tim_ram_out
 );
   timeunit 1ns; timeprecision 1ps;
@@ -68,14 +68,14 @@ module tim_ram (
 endmodule
 
 module tim_ctrl (
-    input logic reset,
-    input logic clock,
-    input tim_vec_out_type dvec_out,
-    output tim_vec_in_type dvec_in,
-    input mem_in_type tim0_in,
-    input mem_in_type tim1_in,
-    output mem_out_type tim0_out,
-    output mem_out_type tim1_out
+    input  logic            reset,
+    input  logic            clock,
+    input  tim_vec_out_type dvec_out,
+    output tim_vec_in_type  dvec_in,
+    input  mem_in_type      tim0_in,
+    input  mem_in_type      tim1_in,
+    output mem_out_type     tim0_out,
+    output mem_out_type     tim1_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -121,12 +121,12 @@ module tim_ctrl (
 
   always_comb begin
 
-    v_f = r_f;
+    v_f        = r_f;
 
     v_f.valid0 = 0;
     v_f.valid1 = 0;
-    v_f.strb0 = 0;
-    v_f.strb1 = 0;
+    v_f.strb0  = 0;
+    v_f.strb1  = 0;
 
     if (tim0_in.mem_valid == 1) begin
       v_f.valid0 = tim0_in.mem_valid;
@@ -144,10 +144,10 @@ module tim_ctrl (
       v_f.wid1   = tim1_in.mem_addr[(WIDTH+1):2];
     end
 
-    dvec_in = init_tim_vec_in;
+    dvec_in                 = init_tim_vec_in;
 
-    dvec_in[v_f.wid0].en0 = v_f.valid0;
-    dvec_in[v_f.wid1].en1 = v_f.valid1;
+    dvec_in[v_f.wid0].en0   = v_f.valid0;
+    dvec_in[v_f.wid1].en1   = v_f.valid1;
     dvec_in[v_f.wid0].strb0 = v_f.strb0;
     dvec_in[v_f.wid1].strb1 = v_f.strb1;
     dvec_in[v_f.wid0].addr0 = v_f.did0;
@@ -155,27 +155,27 @@ module tim_ctrl (
     dvec_in[v_f.wid0].data0 = v_f.data0;
     dvec_in[v_f.wid1].data1 = v_f.data1;
 
-    rin_f = v_f;
+    rin_f                   = v_f;
 
   end
 
   always_comb begin
 
-    v_b = r_b;
+    v_b                = r_b;
 
-    v_b.valid0 = r_f.valid0;
-    v_b.valid1 = r_f.valid1;
-    v_b.data0 = r_f.data0;
-    v_b.data1 = r_f.data1;
-    v_b.strb0 = r_f.strb0;
-    v_b.strb1 = r_f.strb1;
-    v_b.wid0 = r_f.wid0;
-    v_b.wid1 = r_f.wid1;
-    v_b.did0 = r_f.did0;
-    v_b.did1 = r_f.did1;
+    v_b.valid0         = r_f.valid0;
+    v_b.valid1         = r_f.valid1;
+    v_b.data0          = r_f.data0;
+    v_b.data1          = r_f.data1;
+    v_b.strb0          = r_f.strb0;
+    v_b.strb1          = r_f.strb1;
+    v_b.wid0           = r_f.wid0;
+    v_b.wid1           = r_f.wid1;
+    v_b.did0           = r_f.did0;
+    v_b.did1           = r_f.did1;
 
-    v_b.rdata0 = dvec_out[v_b.wid0].data0;
-    v_b.rdata1 = dvec_out[v_b.wid1].data1;
+    v_b.rdata0         = dvec_out[v_b.wid0].data0;
+    v_b.rdata1         = dvec_out[v_b.wid1].data1;
 
     tim0_out.mem_rdata = v_b.rdata0;
     tim0_out.mem_error = 0;
@@ -185,7 +185,7 @@ module tim_ctrl (
     tim1_out.mem_error = 0;
     tim1_out.mem_ready = v_b.valid1;
 
-    rin_b = v_b;
+    rin_b              = v_b;
 
   end
 
@@ -202,10 +202,10 @@ module tim_ctrl (
 endmodule
 
 module tim (
-    input logic reset,
-    input logic clock,
-    input mem_in_type tim0_in,
-    input mem_in_type tim1_in,
+    input  logic        reset,
+    input  logic        clock,
+    input  mem_in_type  tim0_in,
+    input  mem_in_type  tim1_in,
     output mem_out_type tim0_out,
     output mem_out_type tim1_out
 );
@@ -220,8 +220,8 @@ module tim (
 
     for (i = 0; i < TIM_WIDTH; i = i + 1) begin : tim_ram
       tim_ram tim_ram_comp (
-          .clock(clock),
-          .tim_ram_in(dvec_in[i]),
+          .clock      (clock),
+          .tim_ram_in (dvec_in[i]),
           .tim_ram_out(dvec_out[i])
       );
     end
@@ -229,12 +229,12 @@ module tim (
   endgenerate
 
   tim_ctrl tim_ctrl_comp (
-      .reset(reset),
-      .clock(clock),
+      .reset   (reset),
+      .clock   (clock),
       .dvec_out(dvec_out),
-      .dvec_in(dvec_in),
-      .tim0_in(tim0_in),
-      .tim1_in(tim1_in),
+      .dvec_in (dvec_in),
+      .tim0_in (tim0_in),
+      .tim1_in (tim1_in),
       .tim0_out(tim0_out),
       .tim1_out(tim1_out)
   );

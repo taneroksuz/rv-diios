@@ -4,14 +4,14 @@ import wires::*;
 module spi #(
     parameter CLOCK_RATE
 ) (
-    input logic reset,
-    input logic clock,
-    input mem_in_type spi_in,
+    input  logic        reset,
+    input  logic        clock,
+    input  mem_in_type  spi_in,
     output mem_out_type spi_out,
-    output sclk,
-    output mosi,
-    input miso,
-    output ss
+    output              sclk,
+    output              mosi,
+    input               miso,
+    output              ss
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -36,15 +36,15 @@ module spi #(
 
   always_comb begin
 
-    v = r;
+    v         = r;
 
     v.counter = v.counter + 1;
-    v.ready = 0;
-    v.ss = 1;
+    v.ready   = 0;
+    v.ss      = 1;
 
     if (v.counter > FULL) begin
       v.counter = 0;
-      v.sclk = ~v.sclk;
+      v.sclk    = ~v.sclk;
     end
 
     if (v.sclk == 0 && (v.write == 1 || v.read == 1)) begin
@@ -72,7 +72,7 @@ module spi #(
     if (v.write == 1) begin
       v.ss = 0;
     end else if (v.read == 1) begin
-      v.ss = 0;
+      v.ss      = 0;
       v.data[0] = miso;
     end
 
@@ -84,9 +84,9 @@ module spi #(
   assign spi_out.mem_error = 0;
   assign spi_out.mem_ready = r.ready;
 
-  assign sclk = r.sclk;
-  assign ss = r.ss;
-  assign mosi = r.write == 1 ? r.data[7] : 0;
+  assign sclk              = r.sclk;
+  assign ss                = r.ss;
+  assign mosi              = r.write == 1 ? r.data[7] : 0;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin

@@ -2,11 +2,11 @@ import constants::*;
 import wires::*;
 
 module writeback_stage (
-    input logic reset,
-    input logic clear,
-    input logic clock,
-    input writeback_in_type a,
-    input writeback_in_type d,
+    input  logic              reset,
+    input  logic              clear,
+    input  logic              clock,
+    input  writeback_in_type  a,
+    input  writeback_in_type  d,
     output writeback_out_type y,
     output writeback_out_type q
 );
@@ -17,12 +17,12 @@ module writeback_stage (
 
   always_comb begin
 
-    v = r;
+    v       = r;
 
     v.calc0 = d.m.calc0;
     v.calc1 = d.m.calc1;
 
-    rin = v;
+    rin     = v;
 
     y.stall = v.stall;
 

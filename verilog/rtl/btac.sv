@@ -39,8 +39,8 @@ import wires::*;
 import btac_wires::*;
 
 module btb (
-    input logic clock,
-    input btb_in_type btb_in,
+    input  logic        clock,
+    input  btb_in_type  btb_in,
     output btb_out_type btb_out
 );
   timeunit 1ns; timeprecision 1ps;
@@ -64,8 +64,8 @@ import wires::*;
 import btac_wires::*;
 
 module bht (
-    input logic clock,
-    input bht_in_type bht_in,
+    input  logic        clock,
+    input  bht_in_type  bht_in,
     output bht_out_type bht_out
 );
   timeunit 1ns; timeprecision 1ps;
@@ -85,14 +85,14 @@ module bht (
 endmodule
 
 module btac_ctrl (
-    input logic reset,
-    input logic clock,
-    input btac_in_type btac_in,
+    input  logic         reset,
+    input  logic         clock,
+    input  btac_in_type  btac_in,
     output btac_out_type btac_out,
-    input btb_out_type btb_out,
-    output btb_in_type btb_in,
-    input bht_out_type bht_out,
-    output bht_in_type bht_in
+    input  btb_out_type  btb_out,
+    output btb_in_type   btb_in,
+    input  bht_out_type  bht_out,
+    output bht_in_type   bht_in
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -174,8 +174,8 @@ module btac_ctrl (
     v_bht = r_bht;
 
     if (btac_in.clear == 0) begin
-      v_btb.pc0 = btac_in.get_pc0;
-      v_btb.pc1 = btac_in.get_pc1;
+      v_btb.pc0    = btac_in.get_pc0;
+      v_btb.pc1    = btac_in.get_pc1;
       v_btb.raddr0 = btac_in.get_pc0[B_DEPTH:1];
       v_btb.raddr1 = btac_in.get_pc1[B_DEPTH:1];
     end
@@ -273,18 +273,18 @@ module btac_ctrl (
       v_bht.wdata = (v_btb.hit0 | v_btb.miss0) ? v_bht.sat0 : v_bht.sat1;
     end
 
-    btb_in.wen = v_btb.wen;
-    btb_in.waddr = v_btb.waddr;
-    btb_in.wdata = v_btb.wdata;
-    bht_in.wen = v_bht.wen;
-    bht_in.waddr = v_bht.waddr;
-    bht_in.wdata = v_bht.wdata;
+    btb_in.wen           = v_btb.wen;
+    btb_in.waddr         = v_btb.waddr;
+    btb_in.wdata         = v_btb.wdata;
+    bht_in.wen           = v_bht.wen;
+    bht_in.waddr         = v_bht.waddr;
+    bht_in.wdata         = v_bht.wdata;
 
-    rin_btb = v_btb;
-    rin_bht = v_bht;
+    rin_btb              = v_btb;
+    rin_bht              = v_bht;
 
-    btac_out.pred_maddr = r_btb.miss0 ? r_btb.maddr0 : r_btb.maddr1;
-    btac_out.pred_miss = r_btb.miss0 | r_btb.miss1;
+    btac_out.pred_maddr  = r_btb.miss0 ? r_btb.maddr0 : r_btb.maddr1;
+    btac_out.pred_miss   = r_btb.miss0 | r_btb.miss1;
     btac_out.pred_hazard = v_btb.miss0;
 
   end
@@ -302,9 +302,9 @@ module btac_ctrl (
 endmodule
 
 module btac (
-    input logic reset,
-    input logic clock,
-    input btac_in_type btac_in,
+    input  logic         reset,
+    input  logic         clock,
+    input  btac_in_type  btac_in,
     output btac_out_type btac_out
 );
   timeunit 1ns; timeprecision 1ps;
@@ -331,14 +331,14 @@ module btac (
       );
 
       btac_ctrl btac_ctrl_comp (
-          .reset(reset),
-          .clock(clock),
-          .btac_in(btac_in),
+          .reset   (reset),
+          .clock   (clock),
+          .btac_in (btac_in),
           .btac_out(btac_out),
-          .btb_in(btb_in),
-          .btb_out(btb_out),
-          .bht_in(bht_in),
-          .bht_out(bht_out)
+          .btb_in  (btb_in),
+          .btb_out (btb_out),
+          .bht_in  (bht_in),
+          .bht_out (bht_out)
       );
 
     end else begin
@@ -355,22 +355,22 @@ module btac (
 
       always_comb begin
 
-        v = r;
+        v                    = r;
 
-        v.maddr = btac_in.upd_jump0 ? btac_in.upd_addr0 : btac_in.upd_addr1;
-        v.miss0 = btac_in.upd_jump0;
-        v.miss1 = btac_in.upd_jump1;
+        v.maddr              = btac_in.upd_jump0 ? btac_in.upd_addr0 : btac_in.upd_addr1;
+        v.miss0              = btac_in.upd_jump0;
+        v.miss1              = btac_in.upd_jump1;
 
-        rin = v;
+        rin                  = v;
 
         btac_out.pred0.taken = 0;
         btac_out.pred1.taken = 0;
         btac_out.pred0.taddr = 0;
         btac_out.pred1.taddr = 0;
-        btac_out.pred0.tsat = 0;
-        btac_out.pred1.tsat = 0;
-        btac_out.pred_maddr = r.maddr;
-        btac_out.pred_miss = r.miss0 | r.miss1;
+        btac_out.pred0.tsat  = 0;
+        btac_out.pred1.tsat  = 0;
+        btac_out.pred_maddr  = r.maddr;
+        btac_out.pred_miss   = r.miss0 | r.miss1;
         btac_out.pred_hazard = v.miss0;
 
       end

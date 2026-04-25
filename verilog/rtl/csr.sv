@@ -2,16 +2,16 @@ import constants::*;
 import wires::*;
 
 module csr (
-    input logic reset,
-    input logic clock,
-    input csr_read_in_type csr_rin,
-    input csr_write_in_type csr_win,
-    input csr_exception_in_type csr_ein,
-    output csr_out_type csr_out,
-    input logic [0:0] meip,
-    input logic [0:0] msip,
-    input logic [0:0] mtip,
-    input logic [63:0] mtime
+    input  logic                        reset,
+    input  logic                        clock,
+    input  csr_read_in_type             csr_rin,
+    input  csr_write_in_type            csr_win,
+    input  csr_exception_in_type        csr_ein,
+    output csr_out_type                 csr_out,
+    input  logic                 [ 0:0] meip,
+    input  logic                 [ 0:0] msip,
+    input  logic                 [ 0:0] mtip,
+    input  logic                 [63:0] mtime
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -132,10 +132,10 @@ module csr (
 
     if (reset == 0) begin
       csr_machine_reg <= init_csr_machine_reg;
-      exception <= 0;
-      interrupt <= 0;
-      cause <= 0;
-      mret <= 0;
+      exception       <= 0;
+      interrupt       <= 0;
+      cause           <= 0;
+      mret            <= 0;
     end else begin
       if (csr_win.cwren == 1) begin
         case (csr_win.cwaddr)
@@ -197,21 +197,21 @@ module csr (
 
       if (meip == 1) begin
         csr_machine_reg.mip.meip <= 1;
-        cause <= interrupt_mach_extern;
+        cause                    <= interrupt_mach_extern;
       end else begin
         csr_machine_reg.mip.meip <= 0;
       end
 
       if (mtip == 1) begin
         csr_machine_reg.mip.mtip <= 1;
-        cause <= interrupt_mach_timer;
+        cause                    <= interrupt_mach_timer;
       end else begin
         csr_machine_reg.mip.mtip <= 0;
       end
 
       if (msip == 1) begin
         csr_machine_reg.mip.msip <= 1;
-        cause <= interrupt_mach_soft;
+        cause                    <= interrupt_mach_soft;
       end else begin
         csr_machine_reg.mip.msip <= 0;
       end
@@ -221,49 +221,49 @@ module csr (
 
       if (csr_ein.exception == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
-        csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_ein.epc;
-        csr_machine_reg.mtval <= csr_ein.etval;
-        csr_machine_reg.mcause <= {24'b0, csr_ein.ecause};
-        exception <= 1;
+        csr_machine_reg.mstatus.mie  <= 0;
+        csr_machine_reg.mepc         <= csr_ein.epc;
+        csr_machine_reg.mtval        <= csr_ein.etval;
+        csr_machine_reg.mcause       <= {24'b0, csr_ein.ecause};
+        exception                    <= 1;
       end else if (csr_machine_reg.mstatus.mie == 1 &&
                    csr_machine_reg.mie.meie == 1 &&
                    csr_machine_reg.mip.meip == 1 &&
                    valid == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
-        csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_ein.pc;
-        csr_machine_reg.mtval <= 0;
-        csr_machine_reg.mcause <= {1'b1, 23'b0, cause};
-        interrupt <= 1;
+        csr_machine_reg.mstatus.mie  <= 0;
+        csr_machine_reg.mepc         <= csr_ein.pc;
+        csr_machine_reg.mtval        <= 0;
+        csr_machine_reg.mcause       <= {1'b1, 23'b0, cause};
+        interrupt                    <= 1;
       end else if (csr_machine_reg.mstatus.mie == 1 &&
                    csr_machine_reg.mie.mtie == 1 &&
                    csr_machine_reg.mip.mtip == 1 &&
                    valid == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
-        csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_ein.pc;
-        csr_machine_reg.mtval <= 0;
-        csr_machine_reg.mcause <= {1'b1, 23'b0, cause};
-        interrupt <= 1;
+        csr_machine_reg.mstatus.mie  <= 0;
+        csr_machine_reg.mepc         <= csr_ein.pc;
+        csr_machine_reg.mtval        <= 0;
+        csr_machine_reg.mcause       <= {1'b1, 23'b0, cause};
+        interrupt                    <= 1;
       end else if (csr_machine_reg.mstatus.mie == 1 &&
                    csr_machine_reg.mie.msie == 1 &&
                    csr_machine_reg.mip.msip == 1 &&
                    valid == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
-        csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_ein.pc;
-        csr_machine_reg.mtval <= 0;
-        csr_machine_reg.mcause <= {1'b1, 23'b0, cause};
-        interrupt <= 1;
+        csr_machine_reg.mstatus.mie  <= 0;
+        csr_machine_reg.mepc         <= csr_ein.pc;
+        csr_machine_reg.mtval        <= 0;
+        csr_machine_reg.mcause       <= {1'b1, 23'b0, cause};
+        interrupt                    <= 1;
       end
 
       mret <= 0;
 
       if (csr_ein.mret == 1) begin
-        csr_machine_reg.mstatus.mie <= csr_machine_reg.mstatus.mpie;
+        csr_machine_reg.mstatus.mie  <= csr_machine_reg.mstatus.mpie;
         csr_machine_reg.mstatus.mpie <= 0;
-        mret <= 1;
+        mret                         <= 1;
       end
 
     end

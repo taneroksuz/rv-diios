@@ -2,18 +2,18 @@ import wires::*;
 import constants::*;
 
 module arbiter (
-    input logic reset,
-    input logic clock,
-    input mem_in_type imem0_in,
-    input mem_in_type imem1_in,
+    input  logic        reset,
+    input  logic        clock,
+    input  mem_in_type  imem0_in,
+    input  mem_in_type  imem1_in,
     output mem_out_type imem0_out,
     output mem_out_type imem1_out,
-    input mem_in_type dmem0_in,
-    input mem_in_type dmem1_in,
+    input  mem_in_type  dmem0_in,
+    input  mem_in_type  dmem1_in,
     output mem_out_type dmem0_out,
     output mem_out_type dmem1_out,
-    output mem_in_type mem_in,
-    input mem_out_type mem_out
+    output mem_in_type  mem_in,
+    input  mem_out_type mem_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -64,20 +64,20 @@ module arbiter (
     if (v.access_type == no_access) begin
       if (v.dmem0_in.mem_valid == 1) begin
         v.access_type = data0_access;
-        v.mem_in = v.dmem0_in;
-        v.dmem0_in = init_mem_in;
+        v.mem_in      = v.dmem0_in;
+        v.dmem0_in    = init_mem_in;
       end else if (v.dmem1_in.mem_valid == 1) begin
         v.access_type = data1_access;
-        v.mem_in = v.dmem1_in;
-        v.dmem1_in = init_mem_in;
+        v.mem_in      = v.dmem1_in;
+        v.dmem1_in    = init_mem_in;
       end else if (v.imem0_in.mem_valid == 1) begin
         v.access_type = instr0_access;
-        v.mem_in = v.imem0_in;
-        v.imem0_in = init_mem_in;
+        v.mem_in      = v.imem0_in;
+        v.imem0_in    = init_mem_in;
       end else if (v.imem1_in.mem_valid == 1) begin
         v.access_type = instr1_access;
-        v.mem_in = v.imem1_in;
-        v.imem1_in = init_mem_in;
+        v.mem_in      = v.imem1_in;
+        v.imem1_in    = init_mem_in;
       end
     end
 

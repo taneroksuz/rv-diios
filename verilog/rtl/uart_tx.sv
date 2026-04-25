@@ -4,12 +4,12 @@ import wires::*;
 module uart_tx #(
     parameter CLOCK_RATE
 ) (
-    input logic reset,
-    input logic clock,
-    input mem_in_type uart_in,
+    input  logic        reset,
+    input  logic        clock,
+    input  mem_in_type  uart_in,
     output mem_out_type uart_out,
-    output logic tx_irq,
-    output tx
+    output logic        tx_irq,
+    output              tx
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -58,14 +58,14 @@ module uart_tx #(
 
       always_comb begin
 
-        v = r;
+        v          = r;
 
-        v.counter = v.counter + 1;
+        v.counter  = v.counter + 1;
 
         v.rdata_re = 0;
         v.ready_re = 0;
 
-        v.ready = 0;
+        v.ready    = 0;
 
         if (uart_in.mem_valid == 1) begin
           if (|uart_in.mem_wstrb == 1 && uart_in.mem_addr == 0 && v.state == 0) begin
@@ -90,8 +90,8 @@ module uart_tx #(
           end
           default: begin
             if (r.counter > FULL) begin
-              v.data = {1'b1, v.data[9:1]};
-              v.state = v.state + 4'h1;
+              v.data    = {1'b1, v.data[9:1]};
+              v.state   = v.state + 4'h1;
               v.counter = 0;
             end
           end
@@ -104,8 +104,8 @@ module uart_tx #(
       assign uart_out.mem_rdata = 0;
       assign uart_out.mem_error = 0;
       assign uart_out.mem_ready = r.ready;
-      assign tx_irq = 0;
-      assign tx = r.data[0];
+      assign tx_irq             = 0;
+      assign tx                 = r.data[0];
 
       always_ff @(posedge clock) begin
         if (reset == 0) begin

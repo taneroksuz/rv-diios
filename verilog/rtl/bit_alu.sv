@@ -40,12 +40,12 @@ module bit_alu (
 
   always_comb begin
 
-    rdata1 = bit_alu_in.rdata1;
-    rdata2 = multiplexer(bit_alu_in.imm, bit_alu_in.rdata2, bit_alu_in.sel);
-    result = 0;
+    rdata1  = bit_alu_in.rdata1;
+    rdata2  = multiplexer(bit_alu_in.imm, bit_alu_in.rdata2, bit_alu_in.sel);
+    result  = 0;
 
-    index = 0;
-    op = 0;
+    index   = 0;
+    op      = 0;
 
     bit_zba = bit_alu_in.bit_op.bit_zba;
     bit_zbb = bit_alu_in.bit_op.bit_zbb;
@@ -69,25 +69,25 @@ module bit_alu (
       op = 3;
     end
 
-    res_shadd = bit_shadd(rdata1, rdata2, index);
-    res_andn = bit_andn(rdata1, rdata2);
-    res_orn = bit_orn(rdata1, rdata2);
-    res_xnor = bit_xnor(rdata1, rdata2);
-    res_clz = bit_clz(rdata1);
-    res_cpop = bit_cpop(rdata1);
-    res_ctz = bit_ctz(rdata1);
+    res_shadd  = bit_shadd(rdata1, rdata2, index);
+    res_andn   = bit_andn(rdata1, rdata2);
+    res_orn    = bit_orn(rdata1, rdata2);
+    res_xnor   = bit_xnor(rdata1, rdata2);
+    res_clz    = bit_clz(rdata1);
+    res_cpop   = bit_cpop(rdata1);
+    res_ctz    = bit_ctz(rdata1);
     res_minmax = bit_minmax(rdata1, rdata2, op);
-    res_orcb = bit_orcb(rdata1);
-    res_rev8 = bit_rev8(rdata1);
-    res_rol = bit_rol(rdata1, rdata2);
-    res_ror = bit_ror(rdata1, rdata2);
-    res_sextb = bit_sextb(rdata1);
-    res_sexth = bit_sexth(rdata1);
-    res_zexth = bit_zexth(rdata1);
-    res_bclr = bit_bclr(rdata1, rdata2);
-    res_bext = bit_bext(rdata1, rdata2);
-    res_binv = bit_binv(rdata1, rdata2);
-    res_bset = bit_bset(rdata1, rdata2);
+    res_orcb   = bit_orcb(rdata1);
+    res_rev8   = bit_rev8(rdata1);
+    res_rol    = bit_rol(rdata1, rdata2);
+    res_ror    = bit_ror(rdata1, rdata2);
+    res_sextb  = bit_sextb(rdata1);
+    res_sexth  = bit_sexth(rdata1);
+    res_zexth  = bit_zexth(rdata1);
+    res_bclr   = bit_bclr(rdata1, rdata2);
+    res_bext   = bit_bext(rdata1, rdata2);
+    res_binv   = bit_binv(rdata1, rdata2);
+    res_bset   = bit_bset(rdata1, rdata2);
 
     if ((bit_zba.bit_sh1add | bit_zba.bit_sh2add | bit_zba.bit_sh3add) == 1) begin
       result = res_shadd;

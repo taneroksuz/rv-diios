@@ -2,9 +2,9 @@ import wires::*;
 import functions::*;
 
 module bit_clmul (
-    input logic reset,
-    input logic clock,
-    input bit_clmul_in_type bit_clmul_in,
+    input  logic              reset,
+    input  logic              clock,
+    input  bit_clmul_in_type  bit_clmul_in,
     output bit_clmul_out_type bit_clmul_out
 );
   timeunit 1ns; timeprecision 1ps;
@@ -40,9 +40,9 @@ module bit_clmul (
 
     case (r.state)
       0: begin
-        v.rdata1 = bit_clmul_in.rdata1;
-        v.rdata2 = bit_clmul_in.rdata2;
-        v.op = bit_clmul_in.op;
+        v.rdata1  = bit_clmul_in.rdata1;
+        v.rdata2  = bit_clmul_in.rdata2;
+        v.op      = bit_clmul_in.op;
         v.counter = 0;
         if (v.op.bit_clmulh == 1) begin
           v.index = 32;
@@ -67,9 +67,9 @@ module bit_clmul (
     endcase
 
     bit_clmul_out.result = v.result;
-    bit_clmul_out.ready = v.ready;
+    bit_clmul_out.ready  = v.ready;
 
-    rin = v;
+    rin                  = v;
 
   end
 

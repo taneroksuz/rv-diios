@@ -3,26 +3,26 @@ import wires::*;
 import functions::*;
 
 module issue_stage (
-    input logic reset,
-    input logic clear,
-    input logic clock,
-    input hazard_out_type hazard_out,
-    output hazard_in_type hazard_in,
-    output register_read_in_type register0_rin,
-    output register_read_in_type register1_rin,
-    input register_out_type register0_out,
-    input register_out_type register1_out,
-    input forwarding_out_type forwarding0_out,
-    input forwarding_out_type forwarding1_out,
+    input  logic                       reset,
+    input  logic                       clear,
+    input  logic                       clock,
+    input  hazard_out_type             hazard_out,
+    output hazard_in_type              hazard_in,
+    output register_read_in_type       register0_rin,
+    output register_read_in_type       register1_rin,
+    input  register_out_type           register0_out,
+    input  register_out_type           register1_out,
+    input  forwarding_out_type         forwarding0_out,
+    input  forwarding_out_type         forwarding1_out,
     output forwarding_register_in_type forwarding0_rin,
     output forwarding_register_in_type forwarding1_rin,
-    input csr_out_type csr_out,
-    output csr_read_in_type csr_rin,
-    input btac_out_type btac_out,
-    input issue_in_type a,
-    input issue_in_type d,
-    output issue_out_type y,
-    output issue_out_type q
+    input  csr_out_type                csr_out,
+    output csr_read_in_type            csr_rin,
+    input  btac_out_type               btac_out,
+    input  issue_in_type               a,
+    input  issue_in_type               d,
+    output issue_out_type              y,
+    output issue_out_type              q
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -52,51 +52,51 @@ module issue_stage (
     v.calc1 = hazard_out.calc1;
 
     if ((d.i.stall | d.e.stall | d.m.stall) == 1) begin
-      v = r;
-      v.calc0.op = r.calc0.op_b;
-      v.calc1.op = r.calc1.op_b;
+      v            = r;
+      v.calc0.op   = r.calc0.op_b;
+      v.calc1.op   = r.calc1.op_b;
       v.calc0.pred = r.calc0.pred_b;
       v.calc1.pred = r.calc1.pred_b;
     end
 
-    v.halt = hazard_out.stall;
-    v.stall = 0;
+    v.halt                 = hazard_out.stall;
+    v.stall                = 0;
 
-    register0_rin.rden1 = v.calc0.op.rden1;
-    register0_rin.rden2 = v.calc0.op.rden2;
-    register0_rin.raddr1 = v.calc0.raddr1;
-    register0_rin.raddr2 = v.calc0.raddr2;
+    register0_rin.rden1    = v.calc0.op.rden1;
+    register0_rin.rden2    = v.calc0.op.rden2;
+    register0_rin.raddr1   = v.calc0.raddr1;
+    register0_rin.raddr2   = v.calc0.raddr2;
 
-    register1_rin.rden1 = v.calc1.op.rden1;
-    register1_rin.rden2 = v.calc1.op.rden2;
-    register1_rin.raddr1 = v.calc1.raddr1;
-    register1_rin.raddr2 = v.calc1.raddr2;
+    register1_rin.rden1    = v.calc1.op.rden1;
+    register1_rin.rden2    = v.calc1.op.rden2;
+    register1_rin.raddr1   = v.calc1.raddr1;
+    register1_rin.raddr2   = v.calc1.raddr2;
 
-    csr_rin.crden = v.calc0.op.crden | v.calc1.op.crden;
-    csr_rin.craddr = v.calc0.op.crden ? v.calc0.caddr : v.calc1.caddr;
+    csr_rin.crden          = v.calc0.op.crden | v.calc1.op.crden;
+    csr_rin.craddr         = v.calc0.op.crden ? v.calc0.caddr : v.calc1.caddr;
 
-    v.calc0.crdata = csr_out.cdata;
-    v.calc1.crdata = csr_out.cdata;
+    v.calc0.crdata         = csr_out.cdata;
+    v.calc1.crdata         = csr_out.cdata;
 
-    forwarding0_rin.rden1 = v.calc0.op.rden1;
-    forwarding0_rin.rden2 = v.calc0.op.rden2;
+    forwarding0_rin.rden1  = v.calc0.op.rden1;
+    forwarding0_rin.rden2  = v.calc0.op.rden2;
     forwarding0_rin.raddr1 = v.calc0.raddr1;
     forwarding0_rin.raddr2 = v.calc0.raddr2;
     forwarding0_rin.rdata1 = register0_out.rdata1;
     forwarding0_rin.rdata2 = register0_out.rdata2;
 
-    v.calc0.rdata1 = forwarding0_out.data1;
-    v.calc0.rdata2 = forwarding0_out.data2;
+    v.calc0.rdata1         = forwarding0_out.data1;
+    v.calc0.rdata2         = forwarding0_out.data2;
 
-    forwarding1_rin.rden1 = v.calc1.op.rden1;
-    forwarding1_rin.rden2 = v.calc1.op.rden2;
+    forwarding1_rin.rden1  = v.calc1.op.rden1;
+    forwarding1_rin.rden2  = v.calc1.op.rden2;
     forwarding1_rin.raddr1 = v.calc1.raddr1;
     forwarding1_rin.raddr2 = v.calc1.raddr2;
     forwarding1_rin.rdata1 = register1_out.rdata1;
     forwarding1_rin.rdata2 = register1_out.rdata2;
 
-    v.calc1.rdata1 = forwarding1_out.data1;
-    v.calc1.rdata2 = forwarding1_out.data2;
+    v.calc1.rdata1         = forwarding1_out.data1;
+    v.calc1.rdata2         = forwarding1_out.data2;
 
     if (a.e.calc0.op.cwren == 1 || a.m.calc0.op.cwren == 1 || a.e.calc1.op.cwren == 1 || a.m.calc1.op.cwren == 1) begin
       v.stall = 1;
@@ -134,16 +134,16 @@ module issue_stage (
       v.calc1 = init_calculation;
     end
 
-    rin = v;
+    rin     = v;
 
     y.calc0 = v.calc0;
     y.calc1 = v.calc1;
-    y.halt = v.halt;
+    y.halt  = v.halt;
     y.stall = v.stall;
 
     q.calc0 = r.calc0;
     q.calc1 = r.calc1;
-    q.halt = r.halt;
+    q.halt  = r.halt;
     q.stall = r.stall;
 
   end
