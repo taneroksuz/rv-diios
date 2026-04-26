@@ -44,23 +44,40 @@ module tim_ram (
   localparam DEPTH = $clog2(TIM_DEPTH);
   localparam WIDTH = $clog2(TIM_WIDTH);
 
-  logic [31 : 0] tim_ram[0:TIM_DEPTH-1] = '{default: '0};
+  logic we_a, we_b;
+  logic [3:0] be_a, be_b;
+  logic [DEPTH-1:0] addr_a, addr_b;
+  logic [31:0] d_a, d_b;
+  logic [31:0] q_a, q_b;
+
+  assign we_a              = tim_ram_in.en0 && (|tim_ram_in.strb0);
+  assign we_b              = tim_ram_in.en1 && (|tim_ram_in.strb1);
+  assign be_a              = tim_ram_in.strb0;
+  assign be_b              = tim_ram_in.strb1;
+  assign addr_a            = tim_ram_in.addr0;
+  assign addr_b            = tim_ram_in.addr1;
+  assign d_a               = tim_ram_in.data0;
+  assign d_b               = tim_ram_in.data1;
+
+  assign tim_ram_out.data0 = q_a;
+  assign tim_ram_out.data1 = q_b;
+
+  (* ram_style = "block" *) logic [31:0] mem[0:TIM_DEPTH-1];
 
   always_ff @(posedge clock) begin
-    if (tim_ram_in.en0 == 1) begin
-      if (tim_ram_in.strb0[0]) tim_ram[tim_ram_in.addr0][7:0] <= tim_ram_in.data0[7:0];
-      if (tim_ram_in.strb0[1]) tim_ram[tim_ram_in.addr0][15:8] <= tim_ram_in.data0[15:8];
-      if (tim_ram_in.strb0[2]) tim_ram[tim_ram_in.addr0][23:16] <= tim_ram_in.data0[23:16];
-      if (tim_ram_in.strb0[3]) tim_ram[tim_ram_in.addr0][31:24] <= tim_ram_in.data0[31:24];
-      tim_ram_out.data0 <= tim_ram[tim_ram_in.addr0];
-    end
-    if (tim_ram_in.en1 == 1) begin
-      if (tim_ram_in.strb1[0]) tim_ram[tim_ram_in.addr1][7:0] <= tim_ram_in.data1[7:0];
-      if (tim_ram_in.strb1[1]) tim_ram[tim_ram_in.addr1][15:8] <= tim_ram_in.data1[15:8];
-      if (tim_ram_in.strb1[2]) tim_ram[tim_ram_in.addr1][23:16] <= tim_ram_in.data1[23:16];
-      if (tim_ram_in.strb1[3]) tim_ram[tim_ram_in.addr1][31:24] <= tim_ram_in.data1[31:24];
-      tim_ram_out.data1 <= tim_ram[tim_ram_in.addr1];
-    end
+    if (we_a && be_a[0]) mem[addr_a][7:0] <= d_a[7:0];
+    if (we_a && be_a[1]) mem[addr_a][15:8] <= d_a[15:8];
+    if (we_a && be_a[2]) mem[addr_a][23:16] <= d_a[23:16];
+    if (we_a && be_a[3]) mem[addr_a][31:24] <= d_a[31:24];
+    q_a <= mem[addr_a];
+  end
+
+  always_ff @(posedge clock) begin
+    if (we_b && be_b[0]) mem[addr_b][7:0] <= d_b[7:0];
+    if (we_b && be_b[1]) mem[addr_b][15:8] <= d_b[15:8];
+    if (we_b && be_b[2]) mem[addr_b][23:16] <= d_b[23:16];
+    if (we_b && be_b[3]) mem[addr_b][31:24] <= d_b[31:24];
+    q_b <= mem[addr_b];
   end
 
 endmodule

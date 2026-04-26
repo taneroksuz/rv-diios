@@ -1,6 +1,5 @@
 import constants::*;
 import wires::*;
-import functions::*;
 
 module memory_stage (
   input  logic                     reset,

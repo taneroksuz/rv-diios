@@ -21,7 +21,7 @@ start=`date +%s`
 
 $VLIB .
 
-$VLOG -quiet -sv -svinputport=relaxed \
+$VLOG -quiet -sv -svinputport=relaxed +acc=npr \
                     $BASEDIR/verilog/conf/configure.sv \
                     $BASEDIR/verilog/rtl/constants.sv \
                     $BASEDIR/verilog/rtl/functions.sv \
