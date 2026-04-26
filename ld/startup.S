@@ -2,16 +2,6 @@
 
 #include "encoding.h"
 
-#ifdef __riscv64
-# define LREG ld
-# define SREG sd
-# define REGBYTES 8
-#else
-# define LREG lw
-# define SREG sw
-# define REGBYTES 4
-#endif
-
   .section ".text.init"
   .global _start
 _start:
@@ -28,10 +18,12 @@ _start:
   la t3, __tim0_end
 
 copy_text:
-  LREG t4,0(t0)
-  SREG t4,0(t2)
-  addi t0,t0,REGBYTES
-  addi t2,t2,REGBYTES
+  lw t4,0(t0)
+  lw t5,4(t0)
+  sw t4,0(t2)
+  sw t5,4(t2)
+  addi t0,t0,8
+  addi t2,t2,8
   blt t0,t1,copy_text
 
   # copy data section
@@ -43,10 +35,12 @@ copy_text:
   la t3, __tim1_end
 
 copy_data:
-  LREG t4,0(t0)
-  SREG t4,0(t2)
-  addi t0,t0,REGBYTES
-  addi t2,t2,REGBYTES
+  lw t4,0(t0)
+  lw t5,4(t0)
+  sw t4,0(t2)
+  sw t5,4(t2)
+  addi t0,t0,8
+  addi t2,t2,8
   blt t0,t1,copy_data
 
   call main
