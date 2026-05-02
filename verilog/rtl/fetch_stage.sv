@@ -34,7 +34,8 @@ module fetch_stage (
 
     v.spec = clear | csr_out.trap
                    | csr_out.mret
-                   | btac_out.pred_miss
+                   | btac_out.pred_miss0
+                   | btac_out.pred_miss1
                    | d.m.calc0.op.fence
                    | btac_out.pred0.taken
                    | btac_out.pred1.taken;
@@ -88,8 +89,10 @@ module fetch_stage (
       v.ipc0 = csr_out.mtvec;
     end else if (csr_out.mret == 1) begin
       v.ipc0 = csr_out.mepc;
-    end else if (btac_out.pred_miss == 1) begin
-      v.ipc0 = btac_out.pred_maddr;
+    end else if (btac_out.pred_miss0 == 1) begin
+      v.ipc0 = btac_out.pred_maddr0;
+    end else if (btac_out.pred_miss1 == 1) begin
+      v.ipc0 = btac_out.pred_maddr1;
     end else if (d.m.calc0.op.fence == 1) begin
       v.ipc0 = d.m.calc0.npc;
     end else if (btac_out.pred0.taken == 1) begin
@@ -164,18 +167,12 @@ module fetch_stage (
     btac_in.upd_npc1    = a.e.calc1.npc;
     btac_in.upd_addr0   = a.e.calc0.address;
     btac_in.upd_addr1   = a.e.calc1.address;
-    btac_in.upd_jal0    = a.e.calc0.op.jal;
-    btac_in.upd_jal1    = a.e.calc1.op.jal;
-    btac_in.upd_jalr0   = a.e.calc0.op.jalr;
-    btac_in.upd_jalr1   = a.e.calc1.op.jalr;
     btac_in.upd_branch0 = a.e.calc0.op.branch;
     btac_in.upd_branch1 = a.e.calc1.op.branch;
     btac_in.upd_jump0   = a.e.calc0.op.jump;
     btac_in.upd_jump1   = a.e.calc1.op.jump;
     btac_in.upd_pred0   = a.e.calc0.pred;
     btac_in.upd_pred1   = a.e.calc1.pred;
-    btac_in.stall       = 0;
-    btac_in.clear       = clear;
 
     rin                 = v;
 

@@ -61,7 +61,7 @@ module execute_stage (
 
     v.stall = 0;
 
-    v.enable = ~(d.e.stall | a.m.stall | d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | btac_out.pred_miss | clear);
+    v.enable = ~(d.e.stall | a.m.stall | d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear);
 
     alu0_in.rdata1 = v.calc0.rdata1;
     alu0_in.rdata2 = v.calc0.rdata2;
@@ -309,7 +309,7 @@ module execute_stage (
       v.calc1 = init_calculation;
     end
 
-    if (btac_out.pred_hazard == 1) begin
+    if (btac_out.pred_miss0 == 1) begin
       v.calc1 = init_calculation;
     end
 
@@ -320,7 +320,7 @@ module execute_stage (
       v.calc1.pred = init_prediction;
     end
 
-    if ((d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | btac_out.pred_miss | clear) == 1) begin
+    if ((d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | clear) == 1) begin
       v.calc0 = init_calculation;
       v.calc1 = init_calculation;
     end

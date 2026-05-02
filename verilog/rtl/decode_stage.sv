@@ -197,7 +197,7 @@ module decode_stage (
       v.instr1 = init_instruction;
     end
 
-    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss | clear) == 1) begin
+    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear) == 1) begin
       v.instr0 = init_instruction;
       v.instr1 = init_instruction;
     end

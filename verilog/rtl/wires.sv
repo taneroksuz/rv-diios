@@ -367,26 +367,21 @@ package wires;
     logic [31 : 0]  upd_npc1;
     logic [31 : 0]  upd_addr0;
     logic [31 : 0]  upd_addr1;
-    logic [0 : 0]   upd_jal0;
-    logic [0 : 0]   upd_jal1;
-    logic [0 : 0]   upd_jalr0;
-    logic [0 : 0]   upd_jalr1;
     logic [0 : 0]   upd_branch0;
     logic [0 : 0]   upd_branch1;
     logic [0 : 0]   upd_jump0;
     logic [0 : 0]   upd_jump1;
     prediction_type upd_pred0;
     prediction_type upd_pred1;
-    logic [0 : 0]   stall;
-    logic [0 : 0]   clear;
   } btac_in_type;
 
   typedef struct packed {
     prediction_type pred0;
     prediction_type pred1;
-    logic [31 : 0]  pred_maddr;
-    logic [0 : 0]   pred_miss;
-    logic [0 : 0]   pred_hazard;
+    logic [31 : 0]  pred_maddr0;
+    logic [31 : 0]  pred_maddr1;
+    logic [0 : 0]   pred_miss0;
+    logic [0 : 0]   pred_miss1;
   } btac_out_type;
 
   typedef struct packed {

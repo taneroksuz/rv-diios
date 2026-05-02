@@ -45,7 +45,7 @@ module issue_stage (
 
     hazard_in.instr0 = v.instr0;
     hazard_in.instr1 = v.instr1;
-    hazard_in.clear = a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss | clear;
+    hazard_in.clear = a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear;
     hazard_in.stall = d.i.stall | d.e.stall | d.m.stall;
 
     v.calc0 = hazard_out.calc0;
@@ -129,7 +129,7 @@ module issue_stage (
       v.calc0 = init_calculation;
     end
 
-    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss | clear) == 1) begin
+    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear) == 1) begin
       v.calc0 = init_calculation;
       v.calc1 = init_calculation;
     end
