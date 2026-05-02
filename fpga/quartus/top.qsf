@@ -20,7 +20,7 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/csr_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/mul.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/div.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/compress.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/decoder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/base.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/register.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/csr.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/buffer.sv

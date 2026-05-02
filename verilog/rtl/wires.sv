@@ -617,7 +617,7 @@ package wires;
     logic [0 : 0] stall;
   } hazard_out_type;
 
-  typedef struct packed {logic [31 : 0] instr;} decoder_in_type;
+  typedef struct packed {logic [31 : 0] instr;} base_in_type;
 
   typedef struct packed {
     logic [79 : 0] instr_str;
@@ -654,7 +654,7 @@ package wires;
     div_op_type div_op;
     mul_op_type mul_op;
     bit_op_type bit_op;
-  } decoder_out_type;
+  } base_out_type;
 
   typedef struct packed {logic [31 : 0] instr;} compress_in_type;
 

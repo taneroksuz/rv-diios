@@ -54,10 +54,10 @@ module cpu (
   btac_out_type btac_out;
   hazard_in_type hazard_in;
   hazard_out_type hazard_out;
-  decoder_in_type decoder0_in;
-  decoder_out_type decoder0_out;
-  decoder_in_type decoder1_in;
-  decoder_out_type decoder1_out;
+  base_in_type base0_in;
+  base_out_type base0_out;
+  base_in_type base1_in;
+  base_out_type base1_out;
   compress_in_type compress0_in;
   compress_out_type compress0_out;
   compress_in_type compress1_in;
@@ -287,14 +287,14 @@ module cpu (
     .hazard_out(hazard_out)
   );
 
-  decoder decoder0_comp (
-    .decoder_in (decoder0_in),
-    .decoder_out(decoder0_out)
+  base base0_comp (
+    .base_in (base0_in),
+    .base_out(base0_out)
   );
 
-  decoder decoder1_comp (
-    .decoder_in (decoder1_in),
-    .decoder_out(decoder1_out)
+  base base1_comp (
+    .base_in (base1_in),
+    .base_out(base1_out)
   );
 
   compress compress0_comp (
@@ -354,10 +354,10 @@ module cpu (
     .reset        (reset),
     .clear        (clear),
     .clock        (clock),
-    .decoder0_out (decoder0_out),
-    .decoder0_in  (decoder0_in),
-    .decoder1_out (decoder1_out),
-    .decoder1_in  (decoder1_in),
+    .base0_out    (base0_out),
+    .base0_in     (base0_in),
+    .base1_out    (base1_out),
+    .base1_in     (base1_in),
     .compress0_out(compress0_out),
     .compress0_in (compress0_in),
     .compress1_out(compress1_out),

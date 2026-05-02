@@ -1,9 +1,9 @@
 import constants::*;
 import wires::*;
 
-module decoder (
-  input  decoder_in_type  decoder_in,
-  output decoder_out_type decoder_out
+module base (
+  input  base_in_type  base_in,
+  output base_out_type base_out
 );
   timeunit 1ns; timeprecision 1ps;
 
@@ -79,7 +79,7 @@ module decoder (
 
   always_comb begin
 
-    instr = decoder_in.instr;
+    instr = base_in.instr;
 
     instr_str = "";
 
@@ -671,40 +671,40 @@ module decoder (
       imm = {27'h0, shamt};
     end
 
-    decoder_out.instr_str = instr_str;
-    decoder_out.imm       = imm;
-    decoder_out.wren      = wren;
-    decoder_out.rden1     = rden1;
-    decoder_out.rden2     = rden2;
-    decoder_out.cwren     = cwren;
-    decoder_out.crden     = crden;
-    decoder_out.alunit    = alunit;
-    decoder_out.auipc     = auipc;
-    decoder_out.lui       = lui;
-    decoder_out.jal       = jal;
-    decoder_out.jalr      = jalr;
-    decoder_out.branch    = branch;
-    decoder_out.load      = load;
-    decoder_out.store     = store;
-    decoder_out.nop       = nop;
-    decoder_out.csreg     = csreg;
-    decoder_out.division  = division;
-    decoder_out.mult      = mult;
-    decoder_out.bitm      = bitm;
-    decoder_out.bitc      = bitc;
-    decoder_out.fence     = fence;
-    decoder_out.ecall     = ecall;
-    decoder_out.ebreak    = ebreak;
-    decoder_out.mret      = mret;
-    decoder_out.wfi       = wfi;
-    decoder_out.valid     = valid;
-    decoder_out.alu_op    = alu_op;
-    decoder_out.bcu_op    = bcu_op;
-    decoder_out.lsu_op    = lsu_op;
-    decoder_out.csr_op    = csr_op;
-    decoder_out.div_op    = div_op;
-    decoder_out.mul_op    = mul_op;
-    decoder_out.bit_op    = bit_op;
+    base_out.instr_str = instr_str;
+    base_out.imm       = imm;
+    base_out.wren      = wren;
+    base_out.rden1     = rden1;
+    base_out.rden2     = rden2;
+    base_out.cwren     = cwren;
+    base_out.crden     = crden;
+    base_out.alunit    = alunit;
+    base_out.auipc     = auipc;
+    base_out.lui       = lui;
+    base_out.jal       = jal;
+    base_out.jalr      = jalr;
+    base_out.branch    = branch;
+    base_out.load      = load;
+    base_out.store     = store;
+    base_out.nop       = nop;
+    base_out.csreg     = csreg;
+    base_out.division  = division;
+    base_out.mult      = mult;
+    base_out.bitm      = bitm;
+    base_out.bitc      = bitc;
+    base_out.fence     = fence;
+    base_out.ecall     = ecall;
+    base_out.ebreak    = ebreak;
+    base_out.mret      = mret;
+    base_out.wfi       = wfi;
+    base_out.valid     = valid;
+    base_out.alu_op    = alu_op;
+    base_out.bcu_op    = bcu_op;
+    base_out.lsu_op    = lsu_op;
+    base_out.csr_op    = csr_op;
+    base_out.div_op    = div_op;
+    base_out.mul_op    = mul_op;
+    base_out.bit_op    = bit_op;
 
   end
 
