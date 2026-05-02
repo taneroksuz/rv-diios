@@ -11,12 +11,12 @@ package btac_wires;
     logic [B_DEPTH-1 : 0] waddr;
     logic [B_DEPTH-1 : 0] raddr0;
     logic [B_DEPTH-1 : 0] raddr1;
-    logic [62-B_DEPTH : 0] wdata;
+    logic [64-B_DEPTH : 0] wdata;
   } btb_in_type;
 
   typedef struct packed {
-    logic [62-B_DEPTH : 0] rdata0;
-    logic [62-B_DEPTH : 0] rdata1;
+    logic [64-B_DEPTH : 0] rdata0;
+    logic [64-B_DEPTH : 0] rdata1;
   } btb_out_type;
 
   typedef struct packed {
@@ -47,7 +47,7 @@ module btb (
 
   localparam B_DEPTH = $clog2(BTB_DEPTH);
 
-  logic [62-B_DEPTH:0] btb_array[0:BTB_DEPTH-1] = '{default: '0};
+  logic [64-B_DEPTH:0] btb_array[0:BTB_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (btb_in.wen == 1) begin
@@ -113,7 +113,7 @@ module btac_ctrl (
     logic [B_DEPTH-1 : 0] waddr;
     logic [B_DEPTH-1 : 0] raddr0;
     logic [B_DEPTH-1 : 0] raddr1;
-    logic [62-B_DEPTH : 0] wdata;
+    logic [64-B_DEPTH : 0] wdata;
     logic [0 : 0] wen;
     logic [31 : 0] pc0;
     logic [31 : 0] pc1;
@@ -123,6 +123,12 @@ module btac_ctrl (
     logic [0 : 0] miss1;
     logic [0 : 0] hit0;
     logic [0 : 0] hit1;
+    logic [0 : 0] valid0;
+    logic [0 : 0] valid1;
+    logic [0 : 0] branch0;
+    logic [0 : 0] branch1;
+    logic [0 : 0] match0;
+    logic [0 : 0] match1;
   } btb_reg_type;
 
   parameter btb_reg_type init_btb_reg = '{
@@ -138,7 +144,13 @@ module btac_ctrl (
       miss0 : 0,
       miss1 : 0,
       hit0 : 0,
-      hit1 : 0
+      hit1 : 0,
+      valid0 : 0,
+      valid1 : 0,
+      branch0 : 0,
+      branch1 : 0,
+      match0 : 0,
+      match1 : 0
   };
 
   typedef struct packed {
@@ -185,8 +197,15 @@ module btac_ctrl (
     btac_out.pred0.taddr = btb_out.rdata0[31:0];
     btac_out.pred1.taddr = btb_out.rdata1[31:0];
 
-    btac_out.pred0.taken = bht_out.rdata0[1] & (~(|(btb_out.rdata0[62-B_DEPTH:32] ^ r_btb.pc0[31:B_DEPTH+1])));
-    btac_out.pred1.taken = bht_out.rdata1[1] & (~(|(btb_out.rdata1[62-B_DEPTH:32] ^ r_btb.pc1[31:B_DEPTH+1])));
+    v_btb.match0 = (btb_out.rdata0[62-B_DEPTH:32] == r_btb.pc0[31:B_DEPTH+1]);
+    v_btb.match1 = (btb_out.rdata1[62-B_DEPTH:32] == r_btb.pc1[31:B_DEPTH+1]);
+    v_btb.branch0 = btb_out.rdata0[63-B_DEPTH];
+    v_btb.branch1 = btb_out.rdata1[63-B_DEPTH];
+    v_btb.valid0 = btb_out.rdata0[64-B_DEPTH];
+    v_btb.valid1 = btb_out.rdata1[64-B_DEPTH];
+
+    btac_out.pred0.taken = v_btb.branch0 ? bht_out.rdata0[1] & v_btb.match0 & v_btb.valid0 : v_btb.match0 & v_btb.valid0;
+    btac_out.pred1.taken = v_btb.branch1 ? bht_out.rdata1[1] & v_btb.match1 & v_btb.valid1 : v_btb.match1 & v_btb.valid1;
     btac_out.pred0.tsat = bht_out.rdata0;
     btac_out.pred1.tsat = bht_out.rdata1;
 
@@ -226,9 +245,9 @@ module btac_ctrl (
 
     v_btb.wen = (v_btb.hit0 | v_btb.miss0) | (v_btb.hit1 | v_btb.miss1);
     v_btb.waddr = (v_btb.hit0 | v_btb.miss0) ? btac_in.upd_pc0[B_DEPTH:1] : btac_in.upd_pc1[B_DEPTH:1];
-    v_btb.wdata = (v_btb.hit0 | v_btb.miss0) ? {btac_in.upd_pc0[31:B_DEPTH+1],v_btb.maddr0} : {btac_in.upd_pc1[31:B_DEPTH+1],v_btb.maddr1};
+    v_btb.wdata = (v_btb.hit0 | v_btb.miss0) ? {1'b1,btac_in.upd_branch0,btac_in.upd_pc0[31:B_DEPTH+1],v_btb.maddr0} : {1'b1,btac_in.upd_branch1,btac_in.upd_pc1[31:B_DEPTH+1],v_btb.maddr1};
 
-    v_bht.wen = (v_btb.hit0 | v_btb.miss0) | (v_btb.hit1 | v_btb.miss1);
+    v_bht.wen = ((v_btb.hit0 | v_btb.miss0) & btac_in.upd_branch0) | ((v_btb.hit1 | v_btb.miss1) & btac_in.upd_branch1);
     v_bht.waddr = (v_btb.hit0 | v_btb.miss0) ? btac_in.upd_pc0[T_DEPTH:1] : btac_in.upd_pc1[T_DEPTH:1];
     v_bht.sat0 = saturation(btac_in.upd_pred0.tsat, btac_in.upd_jump0);
     v_bht.sat1 = saturation(btac_in.upd_pred1.tsat, btac_in.upd_jump1);
