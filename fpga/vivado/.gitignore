@@ -5,6 +5,7 @@
 !*.sh
 !*.tcl
 !*.xdc
+!*.bat
 !ip/
 !ip/mig/
 ip/mig/*
