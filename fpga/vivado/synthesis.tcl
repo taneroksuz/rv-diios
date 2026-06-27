@@ -56,6 +56,7 @@ generate_target all [get_ips mig]
 
 synth_design -top top
 
+set_param pwropt.maxFaninFanoutToNetRatio 0
 opt_design
 place_design
 route_design
