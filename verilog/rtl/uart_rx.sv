@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module uart_rx #(
-    parameter CLOCK_RATE
+  parameter CLOCK_RATE
 ) (
   input  logic        reset,
   input  logic        clock,
@@ -37,9 +37,9 @@ module uart_rx #(
 
   always_comb begin
 
-    v          = r;
+    v = r;
 
-    v.counter  = v.counter + 1;
+    v.counter = v.counter + 1;
 
     v.rdata_re = 0;
     v.ready_re = 0;

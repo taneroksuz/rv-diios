@@ -60,20 +60,20 @@ module bus (
 
   always_comb begin
 
-    itim0_in    = init_mem_in;
-    itim1_in    = init_mem_in;
-    dtim0_in    = init_mem_in;
-    dtim1_in    = init_mem_in;
+    itim0_in = init_mem_in;
+    itim1_in = init_mem_in;
+    dtim0_in = init_mem_in;
+    dtim1_in = init_mem_in;
 
     ibridge0_in = init_mem_in;
     ibridge1_in = init_mem_in;
     dbridge0_in = init_mem_in;
     dbridge1_in = init_mem_in;
 
-    itim0_rev   = itim0_rev_reg;
-    itim1_rev   = itim1_rev_reg;
-    dtim0_rev   = dtim0_rev_reg;
-    dtim1_rev   = dtim1_rev_reg;
+    itim0_rev = itim0_rev_reg;
+    itim1_rev = itim1_rev_reg;
+    dtim0_rev = dtim0_rev_reg;
+    dtim1_rev = dtim1_rev_reg;
 
     if (imem0_in.mem_valid & ~|(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK))) begin
       itim0_in          = imem0_in;
@@ -115,16 +115,20 @@ module bus (
       dtim1_rev         = 0;
     end
 
-    if (imem0_in.mem_valid & |(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (imem0_in.mem_addr & DTIM_MASK))) begin
+    if (imem0_in.mem_valid & |(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK)) & |(
+        DTIM_BASE ^ (imem0_in.mem_addr & DTIM_MASK))) begin
       ibridge0_in = imem0_in;
     end
-    if (imem1_in.mem_valid & |(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (imem1_in.mem_addr & DTIM_MASK))) begin
+    if (imem1_in.mem_valid & |(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK)) & |(
+        DTIM_BASE ^ (imem1_in.mem_addr & DTIM_MASK))) begin
       ibridge1_in = imem1_in;
     end
-    if (dmem0_in.mem_valid & |(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
+    if (dmem0_in.mem_valid & |(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK)) & |(
+        DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
       dbridge0_in = dmem0_in;
     end
-    if (dmem1_in.mem_valid & |(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
+    if (dmem1_in.mem_valid & |(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK)) & |(
+        DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
       dbridge1_in = dmem1_in;
     end
 

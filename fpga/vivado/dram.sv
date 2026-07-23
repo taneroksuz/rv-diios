@@ -25,15 +25,15 @@ module dram (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  mem_in_type        mem_in;
-  mem_out_type       mem_out;
+  mem_in_type  mem_in;
+  mem_out_type mem_out;
 
-  logic        [1:0] reset_sync;
-  logic              reset_ddr;
+  logic [1:0] reset_sync;
+  logic       reset_ddr;
 
-  logic              app_ui_clk;
-  logic              app_ui_rst;
-  logic              calib_complete;
+  logic app_ui_clk;
+  logic app_ui_rst;
+  logic calib_complete;
 
   typedef enum logic [2:0] {
     stIdle,
@@ -181,7 +181,7 @@ module dram (
       endcase
     end
 
-    rin_in            = v_in;
+    rin_in = v_in;
 
     mem_out.mem_rdata = 0;
     mem_out.mem_ready = 0;
@@ -220,7 +220,7 @@ module dram (
     if (reset_cpu == 0) reset_sync <= 2'b00;
     else reset_sync <= {reset_sync[0], 1'b1};
 
-  assign reset_ddr     = reset_sync[1];
+  assign reset_ddr = reset_sync[1];
 
   assign ddr2_complete = calib_complete;
 

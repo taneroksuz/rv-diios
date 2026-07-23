@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module spi #(
-    parameter CLOCK_RATE
+  parameter CLOCK_RATE
 ) (
   input  logic        reset,
   input  logic        clock,
@@ -36,7 +36,7 @@ module spi #(
 
   always_comb begin
 
-    v         = r;
+    v = r;
 
     v.counter = v.counter + 1;
     v.ready   = 0;
@@ -84,9 +84,9 @@ module spi #(
   assign spi_out.mem_error = 0;
   assign spi_out.mem_ready = r.ready;
 
-  assign sclk              = r.sclk;
-  assign ss                = r.ss;
-  assign mosi              = r.write == 1 ? r.data[7] : 0;
+  assign sclk = r.sclk;
+  assign ss   = r.ss;
+  assign mosi = r.write == 1 ? r.data[7] : 0;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin

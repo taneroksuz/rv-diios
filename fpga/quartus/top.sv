@@ -18,9 +18,9 @@ module top (
 
   timeunit 1ns; timeprecision 1ps;
 
-  logic CLOCK_CPU;
-  logic LOCKED;
-  logic RESET;
+  logic       CLOCK_CPU;
+  logic       LOCKED;
+  logic       RESET;
   logic [1:0] CLEAR;
 
   logic SCLK;
@@ -28,7 +28,7 @@ module top (
   logic MISO;
   logic SS;
 
-  mem_in_type ram_in;
+  mem_in_type  ram_in;
   mem_out_type ram_out;
 
   initial begin

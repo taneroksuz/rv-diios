@@ -21,7 +21,7 @@ module bridge (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  mem_in_type error_in;
+  mem_in_type  error_in;
   mem_out_type error_out;
 
   logic [31:0] mem_addr;
@@ -29,15 +29,15 @@ module bridge (
 
   always_comb begin
 
-    rom_in             = init_mem_in;
-    ram_in             = init_mem_in;
-    spi_in             = init_mem_in;
-    clint_in           = init_mem_in;
-    uart_rx_in         = init_mem_in;
-    uart_tx_in         = init_mem_in;
-    error_in           = init_mem_in;
+    rom_in     = init_mem_in;
+    ram_in     = init_mem_in;
+    spi_in     = init_mem_in;
+    clint_in   = init_mem_in;
+    uart_rx_in = init_mem_in;
+    uart_tx_in = init_mem_in;
+    error_in   = init_mem_in;
 
-    base_addr          = 0;
+    base_addr = 0;
 
     error_in.mem_valid = bridge_in.mem_valid;
 
@@ -77,7 +77,7 @@ module bridge (
       error_in.mem_valid = 0;
     end
 
-    mem_addr            = bridge_in.mem_addr - base_addr;
+    mem_addr = bridge_in.mem_addr - base_addr;
 
     rom_in.mem_addr     = mem_addr;
     ram_in.mem_addr     = mem_addr;
@@ -86,7 +86,7 @@ module bridge (
     uart_rx_in.mem_addr = mem_addr;
     uart_tx_in.mem_addr = mem_addr;
 
-    bridge_out          = init_mem_out;
+    bridge_out = init_mem_out;
 
     if (rom_out.mem_ready == 1) bridge_out = rom_out;
     if (ram_out.mem_ready == 1) bridge_out = ram_out;

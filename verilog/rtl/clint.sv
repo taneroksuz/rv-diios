@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module clint #(
-    parameter CLOCK_RATE
+  parameter CLOCK_RATE
 ) (
   input  logic                 reset,
   input  logic                 clock,
@@ -29,18 +29,18 @@ module clint #(
   logic [63 : 0] mtimecmp = 0;
   logic [63 : 0] mtime = 0;
 
-  logic [ 0 : 0] mtip = 0;
-  logic [ 0 : 0] msip = 0;
+  logic [0 : 0] mtip = 0;
+  logic [0 : 0] msip = 0;
 
-  logic [ 0 : 0] enable = 0;
+  logic [0 : 0] enable = 0;
 
   logic [31 : 0] rdata_ms = 0;
   logic [31 : 0] rdata_mt = 0;
   logic [31 : 0] rdata_mtc = 0;
 
-  logic [ 0 : 0] ready_ms = 0;
-  logic [ 0 : 0] ready_mt = 0;
-  logic [ 0 : 0] ready_mtc = 0;
+  logic [0 : 0] ready_ms = 0;
+  logic [0 : 0] ready_mt = 0;
+  logic [0 : 0] ready_mtc = 0;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin
@@ -106,7 +106,8 @@ module clint #(
       rdata_mtc <= 0;
       ready_mtc <= 0;
       if (clint_in.mem_valid == 1) begin
-        if (clint_in.mem_addr >= clint_mtimecmp_start && clint_in.mem_addr < clint_mtimecmp_end) begin
+        if (clint_in.mem_addr >= clint_mtimecmp_start &&
+            clint_in.mem_addr < clint_mtimecmp_end) begin
           if (|clint_in.mem_wstrb == 0) begin
             if (clint_in.mem_addr[2] == 0) begin
               rdata_mtc <= mtimecmp[31:0];
@@ -154,14 +155,13 @@ module clint #(
     end
   end
 
-  assign clint_out.mem_rdata = (ready_ms == 1) ? rdata_ms :
-                               (ready_mt == 1) ? rdata_mt :
-                               (ready_mtc == 1) ? rdata_mtc : 0;
+  assign clint_out.mem_rdata = (ready_ms == 1) ?
+      rdata_ms : (ready_mt == 1) ? rdata_mt : (ready_mtc == 1) ? rdata_mtc : 0;
   assign clint_out.mem_error = 0;
   assign clint_out.mem_ready = ready_ms | ready_mt | ready_mtc;
 
-  assign clint_msip = msip;
-  assign clint_mtip = mtip;
+  assign clint_msip  = msip;
+  assign clint_mtip  = mtip;
   assign clint_mtime = mtime;
 
 endmodule

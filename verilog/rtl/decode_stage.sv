@@ -28,31 +28,31 @@ module decode_stage (
 
   always_comb begin
 
-    v                    = r;
+    v = r;
 
-    v.instr0.pc          = a.f.ready0 ? a.f.pc0 : 32'hFFFFFFFF;
-    v.instr1.pc          = a.f.ready1 ? a.f.pc1 : 32'hFFFFFFFF;
-    v.instr0.instr       = a.f.ready0 ? a.f.instr0 : 0;
-    v.instr1.instr       = a.f.ready1 ? a.f.instr1 : 0;
+    v.instr0.pc    = a.f.ready0 ? a.f.pc0 : 32'hFFFFFFFF;
+    v.instr1.pc    = a.f.ready1 ? a.f.pc1 : 32'hFFFFFFFF;
+    v.instr0.instr = a.f.ready0 ? a.f.instr0 : 0;
+    v.instr1.instr = a.f.ready1 ? a.f.instr1 : 0;
 
-    v.instr0.npc         = v.instr0.pc + ((&v.instr0.instr[1:0]) ? 4 : 2);
-    v.instr1.npc         = v.instr1.pc + ((&v.instr1.instr[1:0]) ? 4 : 2);
+    v.instr0.npc = v.instr0.pc + ((&v.instr0.instr[1:0]) ? 4 : 2);
+    v.instr1.npc = v.instr1.pc + ((&v.instr1.instr[1:0]) ? 4 : 2);
 
-    v.stall              = 0;
+    v.stall = 0;
 
-    v.instr0.waddr       = v.instr0.instr[11:7];
-    v.instr0.raddr1      = v.instr0.instr[19:15];
-    v.instr0.raddr2      = v.instr0.instr[24:20];
-    v.instr0.raddr3      = v.instr0.instr[31:27];
-    v.instr0.caddr       = v.instr0.instr[31:20];
+    v.instr0.waddr  = v.instr0.instr[11:7];
+    v.instr0.raddr1 = v.instr0.instr[19:15];
+    v.instr0.raddr2 = v.instr0.instr[24:20];
+    v.instr0.raddr3 = v.instr0.instr[31:27];
+    v.instr0.caddr  = v.instr0.instr[31:20];
 
-    v.instr1.waddr       = v.instr1.instr[11:7];
-    v.instr1.raddr1      = v.instr1.instr[19:15];
-    v.instr1.raddr2      = v.instr1.instr[24:20];
-    v.instr1.raddr3      = v.instr1.instr[31:27];
-    v.instr1.caddr       = v.instr1.instr[31:20];
+    v.instr1.waddr  = v.instr1.instr[11:7];
+    v.instr1.raddr1 = v.instr1.instr[19:15];
+    v.instr1.raddr2 = v.instr1.instr[24:20];
+    v.instr1.raddr3 = v.instr1.instr[31:27];
+    v.instr1.caddr  = v.instr1.instr[31:20];
 
-    base0_in.instr       = v.instr0.instr;
+    base0_in.instr = v.instr0.instr;
 
     v.instr0.instr_str   = base0_out.instr_str;
     v.instr0.imm         = base0_out.imm;
@@ -89,7 +89,7 @@ module decode_stage (
     v.instr0.mul_op      = base0_out.mul_op;
     v.instr0.bit_op      = base0_out.bit_op;
 
-    base1_in.instr       = v.instr1.instr;
+    base1_in.instr = v.instr1.instr;
 
     v.instr1.instr_str   = base1_out.instr_str;
     v.instr1.imm         = base1_out.imm;
@@ -126,7 +126,7 @@ module decode_stage (
     v.instr1.mul_op      = base1_out.mul_op;
     v.instr1.bit_op      = base1_out.bit_op;
 
-    compress0_in.instr   = v.instr0.instr;
+    compress0_in.instr = v.instr0.instr;
 
     if (compress0_out.valid == 1) begin
       v.instr0.instr_str = compress0_out.instr_str;
@@ -197,12 +197,13 @@ module decode_stage (
       v.instr1 = init_instruction;
     end
 
-    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear) == 1) begin
+    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 |
+         btac_out.pred_miss1 | clear) == 1) begin
       v.instr0 = init_instruction;
       v.instr1 = init_instruction;
     end
 
-    rin      = v;
+    rin = v;
 
     y.instr0 = v.instr0;
     y.instr1 = v.instr1;

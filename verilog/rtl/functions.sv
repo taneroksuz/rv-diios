@@ -34,8 +34,8 @@ package functions;
 
   function [31:0] bit_clz;
     input [31:0] rs1;
-    logic [5:0] res;
-    integer i;
+    logic   [5:0] res;
+    integer       i;
     begin
       res = 0;
       for (i = 31; i >= 0; i = i - 1) begin
@@ -50,8 +50,8 @@ package functions;
 
   function [31:0] bit_cpop;
     input [31:0] rs1;
-    logic [5:0] res;
-    integer i;
+    logic   [5:0] res;
+    integer       i;
     begin
       res = 0;
       for (i = 0; i < 32; i = i + 1) begin
@@ -65,8 +65,8 @@ package functions;
 
   function [31:0] bit_ctz;
     input [31:0] rs1;
-    logic [5:0] res;
-    integer i;
+    logic   [5:0] res;
+    integer       i;
     begin
       res = 0;
       for (i = 0; i < 32; i = i + 1) begin
@@ -106,8 +106,8 @@ package functions;
 
   function [31:0] bit_orcb;
     input [31:0] rs1;
-    logic [31:0] res;
-    integer i;
+    logic   [31:0] res;
+    integer        i;
     begin
       res = 0;
       for (i = 0; i < 32; i = i + 8) begin
@@ -129,8 +129,8 @@ package functions;
 
   function [31:0] bit_rev8;
     input [31:0] rs1;
-    logic [31:0] res;
-    integer i;
+    logic   [31:0] res;
+    integer        i;
     begin
       res = 0;
       for (i = 0; i < 32; i = i + 8) begin

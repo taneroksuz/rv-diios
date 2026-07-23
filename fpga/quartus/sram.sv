@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module sram #(
-    parameter CLOCK_RATE
+  parameter CLOCK_RATE
 ) (
   input  logic               reset,
   input  logic               clock,
@@ -43,7 +43,7 @@ module sram #(
 
   always_comb begin
 
-    v         = r;
+    v = r;
 
     v.counter = v.counter + 1;
     v.ready   = 0;
@@ -129,13 +129,13 @@ module sram #(
   assign sram_out.mem_error = 0;
   assign sram_out.mem_ready = r.ready;
 
-  assign sram_ce_n          = r.ce_n;
-  assign sram_we_n          = r.we_n;
-  assign sram_oe_n          = r.oe_n;
-  assign sram_ub_n          = r.ub_n;
-  assign sram_lb_n          = r.lb_n;
-  assign sram_addr          = r.addr;
-  assign sram_dq            = r.we_n == 0 ? r.dq : 16'bz;
+  assign sram_ce_n = r.ce_n;
+  assign sram_we_n = r.we_n;
+  assign sram_oe_n = r.oe_n;
+  assign sram_ub_n = r.ub_n;
+  assign sram_lb_n = r.lb_n;
+  assign sram_addr = r.addr;
+  assign sram_dq   = r.we_n == 0 ? r.dq : 16'bz;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin

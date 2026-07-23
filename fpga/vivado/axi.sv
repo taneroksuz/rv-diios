@@ -173,12 +173,12 @@ module axi (
   assign m_axi_awqos   = 4'b0000;
   assign m_axi_awvalid = awvalid_reg;
 
-  assign m_axi_wdata   = wdata_reg;
-  assign m_axi_wstrb   = wstrb_reg;
-  assign m_axi_wlast   = wlast_reg;
-  assign m_axi_wvalid  = wvalid_reg;
+  assign m_axi_wdata  = wdata_reg;
+  assign m_axi_wstrb  = wstrb_reg;
+  assign m_axi_wlast  = wlast_reg;
+  assign m_axi_wvalid = wvalid_reg;
 
-  assign m_axi_bready  = bready_reg;
+  assign m_axi_bready = bready_reg;
 
   assign m_axi_araddr  = addr_reg;
   assign m_axi_arlen   = 8'b00000000;
@@ -190,10 +190,10 @@ module axi (
   assign m_axi_arqos   = 4'b0000;
   assign m_axi_arvalid = arvalid_reg;
 
-  assign m_axi_rready  = rready_reg;
+  assign m_axi_rready = rready_reg;
 
-  assign axi_rdata     = rdata_reg;
-  assign axi_ready     = ready_reg;
+  assign axi_rdata = rdata_reg;
+  assign axi_ready = ready_reg;
 
   always_ff @(posedge clock) begin
 

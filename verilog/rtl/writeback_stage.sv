@@ -17,12 +17,12 @@ module writeback_stage (
 
   always_comb begin
 
-    v       = r;
+    v = r;
 
     v.calc0 = d.m.calc0;
     v.calc1 = d.m.calc1;
 
-    rin     = v;
+    rin = v;
 
     y.stall = v.stall;
 

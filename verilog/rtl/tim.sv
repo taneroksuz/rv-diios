@@ -7,14 +7,14 @@ package tim_wires;
   localparam WIDTH = $clog2(TIM_WIDTH);
 
   typedef struct packed {
-    logic [0 : 0] en0;
-    logic [0 : 0] en1;
+    logic [0 : 0]       en0;
+    logic [0 : 0]       en1;
     logic [DEPTH-1 : 0] addr0;
     logic [DEPTH-1 : 0] addr1;
-    logic [3 : 0] strb0;
-    logic [3 : 0] strb1;
-    logic [31 : 0] data0;
-    logic [31 : 0] data1;
+    logic [3 : 0]       strb0;
+    logic [3 : 0]       strb1;
+    logic [31 : 0]      data0;
+    logic [31 : 0]      data1;
   } tim_ram_in_type;
 
   typedef struct packed {
@@ -85,12 +85,12 @@ module tim_ctrl (
     logic [WIDTH-1:0] wid1;
     logic [DEPTH-1:0] did0;
     logic [DEPTH-1:0] did1;
-    logic [31:0] data0;
-    logic [31:0] data1;
-    logic [3:0] strb0;
-    logic [3:0] strb1;
-    logic [0:0] valid0;
-    logic [0:0] valid1;
+    logic [31:0]      data0;
+    logic [31:0]      data1;
+    logic [3:0]       strb0;
+    logic [3:0]       strb1;
+    logic [0:0]       valid0;
+    logic [0:0]       valid1;
   } front_type;
 
   typedef struct packed {
@@ -98,14 +98,14 @@ module tim_ctrl (
     logic [WIDTH-1:0] wid1;
     logic [DEPTH-1:0] did0;
     logic [DEPTH-1:0] did1;
-    logic [31:0] rdata0;
-    logic [31:0] rdata1;
-    logic [31:0] data0;
-    logic [31:0] data1;
-    logic [3:0] strb0;
-    logic [3:0] strb1;
-    logic [0:0] valid0;
-    logic [0:0] valid1;
+    logic [31:0]      rdata0;
+    logic [31:0]      rdata1;
+    logic [31:0]      data0;
+    logic [31:0]      data1;
+    logic [3:0]       strb0;
+    logic [3:0]       strb1;
+    logic [0:0]       valid0;
+    logic [0:0]       valid1;
   } back_type;
 
   parameter front_type init_front = 0;
@@ -119,7 +119,7 @@ module tim_ctrl (
 
   always_comb begin
 
-    v_f        = r_f;
+    v_f = r_f;
 
     v_f.valid0 = 0;
     v_f.valid1 = 0;
@@ -142,7 +142,7 @@ module tim_ctrl (
       v_f.wid1   = tim1_in.mem_addr[(WIDTH+1):2];
     end
 
-    dvec_in                 = init_tim_vec_in;
+    dvec_in = init_tim_vec_in;
 
     dvec_in[v_f.wid0].en0   = v_f.valid0;
     dvec_in[v_f.wid1].en1   = v_f.valid1;
@@ -153,27 +153,27 @@ module tim_ctrl (
     dvec_in[v_f.wid0].data0 = v_f.data0;
     dvec_in[v_f.wid1].data1 = v_f.data1;
 
-    rin_f                   = v_f;
+    rin_f = v_f;
 
   end
 
   always_comb begin
 
-    v_b                = r_b;
+    v_b = r_b;
 
-    v_b.valid0         = r_f.valid0;
-    v_b.valid1         = r_f.valid1;
-    v_b.data0          = r_f.data0;
-    v_b.data1          = r_f.data1;
-    v_b.strb0          = r_f.strb0;
-    v_b.strb1          = r_f.strb1;
-    v_b.wid0           = r_f.wid0;
-    v_b.wid1           = r_f.wid1;
-    v_b.did0           = r_f.did0;
-    v_b.did1           = r_f.did1;
+    v_b.valid0 = r_f.valid0;
+    v_b.valid1 = r_f.valid1;
+    v_b.data0  = r_f.data0;
+    v_b.data1  = r_f.data1;
+    v_b.strb0  = r_f.strb0;
+    v_b.strb1  = r_f.strb1;
+    v_b.wid0   = r_f.wid0;
+    v_b.wid1   = r_f.wid1;
+    v_b.did0   = r_f.did0;
+    v_b.did1   = r_f.did1;
 
-    v_b.rdata0         = dvec_out[v_b.wid0].data0;
-    v_b.rdata1         = dvec_out[v_b.wid1].data1;
+    v_b.rdata0 = dvec_out[v_b.wid0].data0;
+    v_b.rdata1 = dvec_out[v_b.wid1].data1;
 
     tim0_out.mem_rdata = v_b.rdata0;
     tim0_out.mem_error = 0;
@@ -183,7 +183,7 @@ module tim_ctrl (
     tim1_out.mem_error = 0;
     tim1_out.mem_ready = v_b.valid1;
 
-    rin_b              = v_b;
+    rin_b = v_b;
 
   end
 

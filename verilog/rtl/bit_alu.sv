@@ -40,12 +40,12 @@ module bit_alu (
 
   always_comb begin
 
-    rdata1  = bit_alu_in.rdata1;
-    rdata2  = multiplexer(bit_alu_in.imm, bit_alu_in.rdata2, bit_alu_in.sel);
-    result  = 0;
+    rdata1 = bit_alu_in.rdata1;
+    rdata2 = multiplexer(bit_alu_in.imm, bit_alu_in.rdata2, bit_alu_in.sel);
+    result = 0;
 
-    index   = 0;
-    op      = 0;
+    index = 0;
+    op    = 0;
 
     bit_zba = bit_alu_in.bit_op.bit_zba;
     bit_zbb = bit_alu_in.bit_op.bit_zbb;
@@ -103,7 +103,8 @@ module bit_alu (
       result = res_cpop;
     end else if (bit_zbb.bit_ctz == 1) begin
       result = res_ctz;
-    end else if ((bit_zbb.bit_max | bit_zbb.bit_maxu | bit_zbb.bit_min | bit_zbb.bit_minu) == 1) begin
+    end else
+        if ((bit_zbb.bit_max | bit_zbb.bit_maxu | bit_zbb.bit_min | bit_zbb.bit_minu) == 1) begin
       result = res_minmax;
     end else if (bit_zbb.bit_orcb == 1) begin
       result = res_orcb;

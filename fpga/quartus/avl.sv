@@ -115,8 +115,8 @@ module avl (
   assign m_avl_write      = write_reg;
   assign m_avl_burstcount = 3'b001;
 
-  assign avl_rdata        = rdata_reg;
-  assign avl_ready        = ready_reg;
+  assign avl_rdata = rdata_reg;
+  assign avl_ready = ready_reg;
 
   always_ff @(posedge clock) begin
 

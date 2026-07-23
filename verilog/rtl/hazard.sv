@@ -7,14 +7,14 @@ package hazard_wires;
   localparam DEPTH = $clog2(HAZARD_DEPTH);
 
   typedef struct packed {
-    logic [0 : 0] wen0;
-    logic [0 : 0] wen1;
+    logic [0 : 0]       wen0;
+    logic [0 : 0]       wen1;
     logic [DEPTH-1 : 0] waddr0;
     logic [DEPTH-1 : 0] waddr1;
     logic [DEPTH-1 : 0] raddr0;
     logic [DEPTH-1 : 0] raddr1;
-    instruction_type wdata0;
-    instruction_type wdata1;
+    instruction_type    wdata0;
+    instruction_type    wdata1;
   } hazard_reg_in_type;
 
   typedef struct packed {
@@ -74,19 +74,19 @@ module hazard_ctrl (
   localparam [DEPTH-1:0] one = 1;
 
   typedef struct packed {
-    instruction_type wdata0;
-    instruction_type wdata1;
-    instruction_type instr0;
-    instruction_type instr1;
-    calculation_type calc0;
-    calculation_type calc1;
+    instruction_type    wdata0;
+    instruction_type    wdata1;
+    instruction_type    instr0;
+    instruction_type    instr1;
+    calculation_type    calc0;
+    calculation_type    calc1;
     logic [DEPTH-1 : 0] wid;
-    logic [DEPTH : 0] rid;
-    logic [DEPTH : 0] diff;
-    logic [DEPTH : 0] count;
-    logic [0 : 0] wen;
-    logic [0 : 0] single;
-    logic [0 : 0] stall;
+    logic [DEPTH : 0]   rid;
+    logic [DEPTH : 0]   diff;
+    logic [DEPTH : 0]   count;
+    logic [0 : 0]       wen;
+    logic [0 : 0]       single;
+    logic [0 : 0]       stall;
   } reg_type;
 
   parameter reg_type init_reg = '{
@@ -117,12 +117,13 @@ module hazard_ctrl (
       v.count = 0;
     end
 
-    v.wen = (~hazard_in.clear) & (~r.stall) & (hazard_in.instr0.op.valid | hazard_in.instr1.op.valid);
+    v.wen = (~hazard_in.clear) & (~r.stall) &
+        (hazard_in.instr0.op.valid | hazard_in.instr1.op.valid);
     v.wdata0 = hazard_in.instr0;
     v.wdata1 = hazard_in.instr1;
 
-    hazard_reg_in.wen0 = v.wen;
-    hazard_reg_in.wen1 = v.wen;
+    hazard_reg_in.wen0   = v.wen;
+    hazard_reg_in.wen1   = v.wen;
     hazard_reg_in.waddr0 = v.wid;
     hazard_reg_in.waddr1 = v.wid;
     hazard_reg_in.wdata0 = v.wdata0;
@@ -161,18 +162,18 @@ module hazard_ctrl (
     v.calc0 = init_calculation;
     v.calc1 = init_calculation;
 
-    v.calc0.pc = v.instr0.pc;
-    v.calc0.npc = v.instr0.npc;
-    v.calc0.instr = v.instr0.instr;
-    v.calc0.imm = v.instr0.imm;
-    v.calc0.waddr = v.instr0.waddr;
+    v.calc0.pc     = v.instr0.pc;
+    v.calc0.npc    = v.instr0.npc;
+    v.calc0.instr  = v.instr0.instr;
+    v.calc0.imm    = v.instr0.imm;
+    v.calc0.waddr  = v.instr0.waddr;
     v.calc0.raddr1 = v.instr0.raddr1;
     v.calc0.raddr2 = v.instr0.raddr2;
     v.calc0.raddr3 = v.instr0.raddr3;
-    v.calc0.caddr = v.instr0.caddr;
-    v.calc0.fmt = v.instr0.fmt;
-    v.calc0.rm = v.instr0.rm;
-    v.calc0.op = v.instr0.op;
+    v.calc0.caddr  = v.instr0.caddr;
+    v.calc0.fmt    = v.instr0.fmt;
+    v.calc0.rm     = v.instr0.rm;
+    v.calc0.op     = v.instr0.op;
     v.calc0.alu_op = v.instr0.alu_op;
     v.calc0.bcu_op = v.instr0.bcu_op;
     v.calc0.lsu_op = v.instr0.lsu_op;
@@ -180,20 +181,20 @@ module hazard_ctrl (
     v.calc0.div_op = v.instr0.div_op;
     v.calc0.mul_op = v.instr0.mul_op;
     v.calc0.bit_op = v.instr0.bit_op;
-    v.calc0.pred = v.instr0.pred;
+    v.calc0.pred   = v.instr0.pred;
 
-    v.calc1.pc = v.instr1.pc;
-    v.calc1.npc = v.instr1.npc;
-    v.calc1.instr = v.instr1.instr;
-    v.calc1.imm = v.instr1.imm;
-    v.calc1.waddr = v.instr1.waddr;
+    v.calc1.pc     = v.instr1.pc;
+    v.calc1.npc    = v.instr1.npc;
+    v.calc1.instr  = v.instr1.instr;
+    v.calc1.imm    = v.instr1.imm;
+    v.calc1.waddr  = v.instr1.waddr;
     v.calc1.raddr1 = v.instr1.raddr1;
     v.calc1.raddr2 = v.instr1.raddr2;
     v.calc1.raddr3 = v.instr1.raddr3;
-    v.calc1.caddr = v.instr1.caddr;
-    v.calc1.fmt = v.instr1.fmt;
-    v.calc1.rm = v.instr1.rm;
-    v.calc1.op = v.instr1.op;
+    v.calc1.caddr  = v.instr1.caddr;
+    v.calc1.fmt    = v.instr1.fmt;
+    v.calc1.rm     = v.instr1.rm;
+    v.calc1.op     = v.instr1.op;
     v.calc1.alu_op = v.instr1.alu_op;
     v.calc1.bcu_op = v.instr1.bcu_op;
     v.calc1.lsu_op = v.instr1.lsu_op;
@@ -201,9 +202,10 @@ module hazard_ctrl (
     v.calc1.div_op = v.instr1.div_op;
     v.calc1.mul_op = v.instr1.mul_op;
     v.calc1.bit_op = v.instr1.bit_op;
-    v.calc1.pred = v.instr1.pred;
+    v.calc1.pred   = v.instr1.pred;
 
-    v.single = v.calc0.op.fence | v.calc0.op.mret | v.calc0.op.wfi | v.calc1.op.fence | v.calc1.op.mret | v.calc1.op.wfi;
+    v.single = v.calc0.op.fence | v.calc0.op.mret | v.calc0.op.wfi | v.calc1.op.fence |
+        v.calc1.op.mret | v.calc1.op.wfi;
     v.single = v.single | (v.calc0.op.store & v.calc1.op.load);
     v.single = v.single | (v.calc0.op.load & v.calc1.op.store);
     v.single = v.single | (v.calc0.op.division & v.calc1.op.division);
@@ -248,7 +250,7 @@ module hazard_ctrl (
     hazard_out.calc1 = v.diff > 1 ? v.calc1 : init_calculation;
     hazard_out.stall = v.stall;
 
-    rin              = v;
+    rin = v;
 
   end
 

@@ -40,12 +40,13 @@ module issue_stage (
     v.instr1.pred.taken = btac_out.pred1.taken;
     v.instr0.pred.taddr = btac_out.pred0.taddr;
     v.instr1.pred.taddr = btac_out.pred1.taddr;
-    v.instr0.pred.tsat = btac_out.pred0.tsat;
-    v.instr1.pred.tsat = btac_out.pred1.tsat;
+    v.instr0.pred.tsat  = btac_out.pred0.tsat;
+    v.instr1.pred.tsat  = btac_out.pred1.tsat;
 
     hazard_in.instr0 = v.instr0;
     hazard_in.instr1 = v.instr1;
-    hazard_in.clear = a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear;
+    hazard_in.clear = a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 |
+        btac_out.pred_miss1 | clear;
     hazard_in.stall = d.i.stall | d.e.stall | d.m.stall;
 
     v.calc0 = hazard_out.calc0;
@@ -59,24 +60,24 @@ module issue_stage (
       v.calc1.pred = r.calc1.pred_b;
     end
 
-    v.halt                 = hazard_out.stall;
-    v.stall                = 0;
+    v.halt  = hazard_out.stall;
+    v.stall = 0;
 
-    register0_rin.rden1    = v.calc0.op.rden1;
-    register0_rin.rden2    = v.calc0.op.rden2;
-    register0_rin.raddr1   = v.calc0.raddr1;
-    register0_rin.raddr2   = v.calc0.raddr2;
+    register0_rin.rden1  = v.calc0.op.rden1;
+    register0_rin.rden2  = v.calc0.op.rden2;
+    register0_rin.raddr1 = v.calc0.raddr1;
+    register0_rin.raddr2 = v.calc0.raddr2;
 
-    register1_rin.rden1    = v.calc1.op.rden1;
-    register1_rin.rden2    = v.calc1.op.rden2;
-    register1_rin.raddr1   = v.calc1.raddr1;
-    register1_rin.raddr2   = v.calc1.raddr2;
+    register1_rin.rden1  = v.calc1.op.rden1;
+    register1_rin.rden2  = v.calc1.op.rden2;
+    register1_rin.raddr1 = v.calc1.raddr1;
+    register1_rin.raddr2 = v.calc1.raddr2;
 
-    csr_rin.crden          = v.calc0.op.crden | v.calc1.op.crden;
-    csr_rin.craddr         = v.calc0.op.crden ? v.calc0.caddr : v.calc1.caddr;
+    csr_rin.crden  = v.calc0.op.crden | v.calc1.op.crden;
+    csr_rin.craddr = v.calc0.op.crden ? v.calc0.caddr : v.calc1.caddr;
 
-    v.calc0.crdata         = csr_out.cdata;
-    v.calc1.crdata         = csr_out.cdata;
+    v.calc0.crdata = csr_out.cdata;
+    v.calc1.crdata = csr_out.cdata;
 
     forwarding0_rin.rden1  = v.calc0.op.rden1;
     forwarding0_rin.rden2  = v.calc0.op.rden2;
@@ -85,8 +86,8 @@ module issue_stage (
     forwarding0_rin.rdata1 = register0_out.rdata1;
     forwarding0_rin.rdata2 = register0_out.rdata2;
 
-    v.calc0.rdata1         = forwarding0_out.data1;
-    v.calc0.rdata2         = forwarding0_out.data2;
+    v.calc0.rdata1 = forwarding0_out.data1;
+    v.calc0.rdata2 = forwarding0_out.data2;
 
     forwarding1_rin.rden1  = v.calc1.op.rden1;
     forwarding1_rin.rden2  = v.calc1.op.rden2;
@@ -95,18 +96,27 @@ module issue_stage (
     forwarding1_rin.rdata1 = register1_out.rdata1;
     forwarding1_rin.rdata2 = register1_out.rdata2;
 
-    v.calc1.rdata1         = forwarding1_out.data1;
-    v.calc1.rdata2         = forwarding1_out.data2;
+    v.calc1.rdata1 = forwarding1_out.data1;
+    v.calc1.rdata2 = forwarding1_out.data2;
 
-    if (a.e.calc0.op.cwren == 1 || a.m.calc0.op.cwren == 1 || a.e.calc1.op.cwren == 1 || a.m.calc1.op.cwren == 1) begin
+    if (a.e.calc0.op.cwren == 1 || a.m.calc0.op.cwren == 1 || a.e.calc1.op.cwren == 1 ||
+        a.m.calc1.op.cwren == 1) begin
       v.stall = 1;
-    end else if (a.e.calc0.op.load == 1 && ((v.calc0.op.rden1 == 1 && a.e.calc0.waddr == v.calc0.raddr1) || (v.calc0.op.rden2 == 1 && a.e.calc0.waddr == v.calc0.raddr2))) begin
+    end else if (a.e.calc0.op.load == 1 &&
+                 ((v.calc0.op.rden1 == 1 && a.e.calc0.waddr == v.calc0.raddr1) ||
+                  (v.calc0.op.rden2 == 1 && a.e.calc0.waddr == v.calc0.raddr2))) begin
       v.stall = 1;
-    end else if (a.e.calc1.op.load == 1 && ((v.calc0.op.rden1 == 1 && a.e.calc1.waddr == v.calc0.raddr1) || (v.calc0.op.rden2 == 1 && a.e.calc1.waddr == v.calc0.raddr2))) begin
+    end else if (a.e.calc1.op.load == 1 &&
+                 ((v.calc0.op.rden1 == 1 && a.e.calc1.waddr == v.calc0.raddr1) ||
+                  (v.calc0.op.rden2 == 1 && a.e.calc1.waddr == v.calc0.raddr2))) begin
       v.stall = 1;
-    end else if (a.e.calc0.op.load == 1 && ((v.calc1.op.rden1 == 1 && a.e.calc0.waddr == v.calc1.raddr1) || (v.calc1.op.rden2 == 1 && a.e.calc0.waddr == v.calc1.raddr2))) begin
+    end else if (a.e.calc0.op.load == 1 &&
+                 ((v.calc1.op.rden1 == 1 && a.e.calc0.waddr == v.calc1.raddr1) ||
+                  (v.calc1.op.rden2 == 1 && a.e.calc0.waddr == v.calc1.raddr2))) begin
       v.stall = 1;
-    end else if (a.e.calc1.op.load == 1 && ((v.calc1.op.rden1 == 1 && a.e.calc1.waddr == v.calc1.raddr1) || (v.calc1.op.rden2 == 1 && a.e.calc1.waddr == v.calc1.raddr2))) begin
+    end else if (a.e.calc1.op.load == 1 &&
+                 ((v.calc1.op.rden1 == 1 && a.e.calc1.waddr == v.calc1.raddr1) ||
+                  (v.calc1.op.rden2 == 1 && a.e.calc1.waddr == v.calc1.raddr2))) begin
       v.stall = 1;
     end
 
@@ -129,12 +139,13 @@ module issue_stage (
       v.calc0 = init_calculation;
     end
 
-    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear) == 1) begin
+    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 |
+         btac_out.pred_miss1 | clear) == 1) begin
       v.calc0 = init_calculation;
       v.calc1 = init_calculation;
     end
 
-    rin     = v;
+    rin = v;
 
     y.calc0 = v.calc0;
     y.calc1 = v.calc1;

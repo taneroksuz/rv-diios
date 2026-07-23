@@ -26,8 +26,8 @@ module base (
   logic [4 : 0] funct5;
   logic [6 : 0] funct7;
 
-  logic [4 : 0] waddr;
-  logic [4 : 0] raddr1;
+  logic [ 4 : 0] waddr;
+  logic [ 4 : 0] raddr1;
   logic [11 : 0] caddr;
 
   logic [0 : 0] wren;
@@ -99,37 +99,37 @@ module base (
     funct5 = instr[24:20];
     funct7 = instr[31:25];
 
-    waddr = instr[11:7];
+    waddr  = instr[11:7];
     raddr1 = instr[19:15];
-    caddr = instr[31:20];
+    caddr  = instr[31:20];
 
-    wren = 0;
+    wren  = 0;
     rden1 = 0;
     rden2 = 0;
 
     cwren = 0;
     crden = 0;
 
-    alunit = 0;
-    auipc = 0;
-    lui = 0;
-    jal = 0;
-    jalr = 0;
-    branch = 0;
-    load = 0;
-    store = 0;
-    nop = 0;
-    csreg = 0;
+    alunit   = 0;
+    auipc    = 0;
+    lui      = 0;
+    jal      = 0;
+    jalr     = 0;
+    branch   = 0;
+    load     = 0;
+    store    = 0;
+    nop      = 0;
+    csreg    = 0;
     division = 0;
-    mult = 0;
-    bitm = 0;
-    bitc = 0;
-    fence = 0;
-    ecall = 0;
-    ebreak = 0;
-    mret = 0;
-    wfi = 0;
-    valid = 1;
+    mult     = 0;
+    bitm     = 0;
+    bitc     = 0;
+    fence    = 0;
+    ecall    = 0;
+    ebreak   = 0;
+    mret     = 0;
+    wfi      = 0;
+    valid    = 1;
 
     alu_op = init_alu_op;
     bcu_op = init_bcu_op;
@@ -140,7 +140,7 @@ module base (
     mul_op = init_mul_op;
     bit_op = init_bit_op;
 
-    nonzero_waddr = |waddr;
+    nonzero_waddr  = |waddr;
     nonzero_raddr1 = |raddr1;
 
     nonzero_imm_c = |imm_c;

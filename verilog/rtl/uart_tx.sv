@@ -2,7 +2,7 @@ import configure::*;
 import wires::*;
 
 module uart_tx #(
-    parameter CLOCK_RATE
+  parameter CLOCK_RATE
 ) (
   input  logic        reset,
   input  logic        clock,
@@ -58,14 +58,14 @@ module uart_tx #(
 
       always_comb begin
 
-        v          = r;
+        v = r;
 
-        v.counter  = v.counter + 1;
+        v.counter = v.counter + 1;
 
         v.rdata_re = 0;
         v.ready_re = 0;
 
-        v.ready    = 0;
+        v.ready = 0;
 
         if (uart_in.mem_valid == 1) begin
           if (|uart_in.mem_wstrb == 1 && uart_in.mem_addr == 0 && v.state == 0) begin

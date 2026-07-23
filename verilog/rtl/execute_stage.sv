@@ -46,7 +46,7 @@ module execute_stage (
 
   always_comb begin
 
-    v       = r;
+    v = r;
 
     v.calc0 = d.i.calc0;
     v.calc1 = d.i.calc1;
@@ -61,20 +61,21 @@ module execute_stage (
 
     v.stall = 0;
 
-    v.enable = ~(d.e.stall | a.m.stall | d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear);
+    v.enable = ~(d.e.stall | a.m.stall | d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap |
+                 csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear);
 
     alu0_in.rdata1 = v.calc0.rdata1;
     alu0_in.rdata2 = v.calc0.rdata2;
-    alu0_in.imm = v.calc0.imm;
-    alu0_in.sel = v.calc0.op.rden2;
+    alu0_in.imm    = v.calc0.imm;
+    alu0_in.sel    = v.calc0.op.rden2;
     alu0_in.alu_op = v.calc0.alu_op;
 
     v.calc0.wdata = alu0_out.result;
 
     alu1_in.rdata1 = v.calc1.rdata1;
     alu1_in.rdata2 = v.calc1.rdata2;
-    alu1_in.imm = v.calc1.imm;
-    alu1_in.sel = v.calc1.op.rden2;
+    alu1_in.imm    = v.calc1.imm;
+    alu1_in.sel    = v.calc1.op.rden2;
     alu1_in.alu_op = v.calc1.alu_op;
 
     v.calc1.wdata = alu1_out.result;
@@ -94,31 +95,31 @@ module execute_stage (
     v.calc1.op.jump = v.calc1.op.jal | v.calc1.op.jalr | (v.calc1.op.branch & bcu1_out.branch);
 
     agu0_in.rdata1 = v.calc0.rdata1;
-    agu0_in.imm = v.calc0.imm;
-    agu0_in.pc = v.calc0.pc;
-    agu0_in.auipc = v.calc0.op.auipc;
-    agu0_in.jal = v.calc0.op.jal;
-    agu0_in.jalr = v.calc0.op.jalr;
+    agu0_in.imm    = v.calc0.imm;
+    agu0_in.pc     = v.calc0.pc;
+    agu0_in.auipc  = v.calc0.op.auipc;
+    agu0_in.jal    = v.calc0.op.jal;
+    agu0_in.jalr   = v.calc0.op.jalr;
     agu0_in.branch = v.calc0.op.branch;
-    agu0_in.load = v.calc0.op.load;
-    agu0_in.store = v.calc0.op.store;
+    agu0_in.load   = v.calc0.op.load;
+    agu0_in.store  = v.calc0.op.store;
     agu0_in.lsu_op = v.calc0.lsu_op;
 
-    v.calc0.address = agu0_out.address;
+    v.calc0.address    = agu0_out.address;
     v.calc0.byteenable = agu0_out.byteenable;
 
     agu1_in.rdata1 = v.calc1.rdata1;
-    agu1_in.imm = v.calc1.imm;
-    agu1_in.pc = v.calc1.pc;
-    agu1_in.auipc = v.calc1.op.auipc;
-    agu1_in.jal = v.calc1.op.jal;
-    agu1_in.jalr = v.calc1.op.jalr;
+    agu1_in.imm    = v.calc1.imm;
+    agu1_in.pc     = v.calc1.pc;
+    agu1_in.auipc  = v.calc1.op.auipc;
+    agu1_in.jal    = v.calc1.op.jal;
+    agu1_in.jalr   = v.calc1.op.jalr;
     agu1_in.branch = v.calc1.op.branch;
-    agu1_in.load = v.calc1.op.load;
-    agu1_in.store = v.calc1.op.store;
+    agu1_in.load   = v.calc1.op.load;
+    agu1_in.store  = v.calc1.op.store;
     agu1_in.lsu_op = v.calc1.lsu_op;
 
-    v.calc1.address = agu1_out.address;
+    v.calc1.address    = agu1_out.address;
     v.calc1.byteenable = agu1_out.byteenable;
 
     if (v.calc0.op.exception == 1) begin
@@ -193,16 +194,16 @@ module execute_stage (
 
     bit_alu0_in.rdata1 = v.calc0.rdata1;
     bit_alu0_in.rdata2 = v.calc0.rdata2;
-    bit_alu0_in.imm = v.calc0.imm;
-    bit_alu0_in.sel = v.calc0.op.rden2;
+    bit_alu0_in.imm    = v.calc0.imm;
+    bit_alu0_in.sel    = v.calc0.op.rden2;
     bit_alu0_in.bit_op = v.calc0.bit_op;
 
     v.calc0.bdata = bit_alu0_out.result;
 
     bit_alu1_in.rdata1 = v.calc1.rdata1;
     bit_alu1_in.rdata2 = v.calc1.rdata2;
-    bit_alu1_in.imm = v.calc1.imm;
-    bit_alu1_in.sel = v.calc1.op.rden2;
+    bit_alu1_in.imm    = v.calc1.imm;
+    bit_alu1_in.sel    = v.calc1.op.rden2;
     bit_alu1_in.bit_op = v.calc1.bit_op;
 
     v.calc1.bdata = bit_alu1_out.result;
@@ -212,18 +213,18 @@ module execute_stage (
     div_in.div_op = v.calc0.op.division ? v.calc0.div_op : v.calc1.div_op;
     div_in.enable = (v.calc0.op.division | v.calc1.op.division) & v.enable;
 
-    v.calc0.ddata = div_out.result;
-    v.calc1.ddata = div_out.result;
+    v.calc0.ddata  = div_out.result;
+    v.calc1.ddata  = div_out.result;
     v.calc0.dready = div_out.ready;
     v.calc1.dready = div_out.ready;
 
     bit_clmul_in.rdata1 = v.calc0.op.bitc ? v.calc0.rdata1 : v.calc1.rdata1;
     bit_clmul_in.rdata2 = v.calc0.op.bitc ? v.calc0.rdata2 : v.calc1.rdata2;
-    bit_clmul_in.op = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
+    bit_clmul_in.op     = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
     bit_clmul_in.enable = (v.calc0.op.bitc | v.calc1.op.bitc) & v.enable;
 
-    v.calc0.bcdata = bit_clmul_out.result;
-    v.calc1.bcdata = bit_clmul_out.result;
+    v.calc0.bcdata  = bit_clmul_out.result;
+    v.calc1.bcdata  = bit_clmul_out.result;
     v.calc0.bcready = bit_clmul_out.ready;
     v.calc1.bcready = bit_clmul_out.ready;
 
@@ -273,8 +274,8 @@ module execute_stage (
     csr_alu_in.sel    = v.calc0.op.csreg ? v.calc0.op.rden1 : v.calc1.op.rden1;
     csr_alu_in.csr_op = v.calc0.op.csreg ? v.calc0.csr_op : v.calc1.csr_op;
 
-    v.calc0.cwdata    = csr_alu_out.cdata;
-    v.calc1.cwdata    = csr_alu_out.cdata;
+    v.calc0.cwdata = csr_alu_out.cdata;
+    v.calc1.cwdata = csr_alu_out.cdata;
 
     if (v.calc0.op.division == 1) begin
       if (v.calc0.dready == 0) begin
@@ -320,7 +321,8 @@ module execute_stage (
       v.calc1.pred = init_prediction;
     end
 
-    if ((d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | clear) == 1) begin
+    if ((d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | clear) ==
+        1) begin
       v.calc0 = init_calculation;
       v.calc1 = init_calculation;
     end
@@ -333,15 +335,15 @@ module execute_stage (
     forwarding1_ein.waddr = v.calc1.waddr;
     forwarding1_ein.wdata = v.calc1.wdata;
 
-    rin                   = v;
+    rin = v;
 
-    y.calc0               = v.calc0;
-    y.calc1               = v.calc1;
-    y.stall               = v.stall;
+    y.calc0 = v.calc0;
+    y.calc1 = v.calc1;
+    y.stall = v.stall;
 
-    q.calc0               = r.calc0;
-    q.calc1               = r.calc1;
-    q.stall               = r.stall;
+    q.calc0 = r.calc0;
+    q.calc1 = r.calc1;
+    q.stall = r.stall;
 
   end
 

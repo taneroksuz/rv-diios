@@ -112,24 +112,24 @@ module compress (
     funct8 = instr[6:5];
     funct9 = {instr[12], instr[6:5]};
 
-    waddr = instr[11:7];
+    waddr  = instr[11:7];
     raddr1 = instr[11:7];
     raddr2 = instr[6:2];
 
-    wren = 0;
+    wren  = 0;
     rden1 = 0;
     rden2 = 0;
 
     alunit = 0;
-    lui = 0;
-    jal = 0;
-    jalr = 0;
+    lui    = 0;
+    jal    = 0;
+    jalr   = 0;
     branch = 0;
-    load = 0;
-    store = 0;
-    nop = 0;
+    load   = 0;
+    store  = 0;
+    nop    = 0;
     ebreak = 0;
-    valid = 1;
+    valid  = 1;
 
     alu_op = init_alu_op;
     bcu_op = init_bcu_op;

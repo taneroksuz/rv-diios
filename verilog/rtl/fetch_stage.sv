@@ -32,13 +32,8 @@ module fetch_stage (
     v.valid = 0;
     v.stall = buffer_out.stall;
 
-    v.spec = clear | csr_out.trap
-                   | csr_out.mret
-                   | btac_out.pred_miss0
-                   | btac_out.pred_miss1
-                   | d.m.calc0.op.fence
-                   | btac_out.pred0.taken
-                   | btac_out.pred1.taken;
+    v.spec = clear | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 |
+        d.m.calc0.op.fence | btac_out.pred0.taken | btac_out.pred1.taken;
 
     if (imem0_out.mem_ready == 1) begin
       v.irdata0 = imem0_out.mem_rdata;
@@ -138,26 +133,26 @@ module fetch_stage (
       end
     endcase
 
-    buffer_in.pc0       = r.ipc0;
-    buffer_in.pc1       = r.ipc1;
-    buffer_in.rdata     = v.rdata;
-    buffer_in.ready     = v.ready;
-    buffer_in.clear     = v.spec;
-    buffer_in.stall     = a.i.halt;
+    buffer_in.pc0   = r.ipc0;
+    buffer_in.pc1   = r.ipc1;
+    buffer_in.rdata = v.rdata;
+    buffer_in.ready = v.ready;
+    buffer_in.clear = v.spec;
+    buffer_in.stall = a.i.halt;
 
-    imem0_in.mem_valid  = v.valid;
-    imem0_in.mem_instr  = 1;
-    imem0_in.mem_mode   = 0;
-    imem0_in.mem_addr   = v.ipc0;
-    imem0_in.mem_wdata  = 0;
-    imem0_in.mem_wstrb  = 0;
+    imem0_in.mem_valid = v.valid;
+    imem0_in.mem_instr = 1;
+    imem0_in.mem_mode  = 0;
+    imem0_in.mem_addr  = v.ipc0;
+    imem0_in.mem_wdata = 0;
+    imem0_in.mem_wstrb = 0;
 
-    imem1_in.mem_valid  = v.valid;
-    imem1_in.mem_instr  = 1;
-    imem1_in.mem_mode   = 0;
-    imem1_in.mem_addr   = v.ipc1;
-    imem1_in.mem_wdata  = 0;
-    imem1_in.mem_wstrb  = 0;
+    imem1_in.mem_valid = v.valid;
+    imem1_in.mem_instr = 1;
+    imem1_in.mem_mode  = 0;
+    imem1_in.mem_addr  = v.ipc1;
+    imem1_in.mem_wdata = 0;
+    imem1_in.mem_wstrb = 0;
 
     btac_in.get_pc0     = v.pc0;
     btac_in.get_pc1     = v.pc1;
@@ -174,21 +169,21 @@ module fetch_stage (
     btac_in.upd_pred0   = a.e.calc0.pred;
     btac_in.upd_pred1   = a.e.calc1.pred;
 
-    rin                 = v;
+    rin = v;
 
-    y.pc0               = v.pc0;
-    y.pc1               = v.pc1;
-    y.instr0            = v.instr0;
-    y.instr1            = v.instr1;
-    y.ready0            = v.ready0;
-    y.ready1            = v.ready1;
+    y.pc0    = v.pc0;
+    y.pc1    = v.pc1;
+    y.instr0 = v.instr0;
+    y.instr1 = v.instr1;
+    y.ready0 = v.ready0;
+    y.ready1 = v.ready1;
 
-    q.pc0               = r.pc0;
-    q.pc1               = r.pc1;
-    q.instr0            = r.instr0;
-    q.instr1            = r.instr1;
-    q.ready0            = r.ready0;
-    q.ready1            = r.ready1;
+    q.pc0    = r.pc0;
+    q.pc1    = r.pc1;
+    q.instr0 = r.instr0;
+    q.instr1 = r.instr1;
+    q.ready0 = r.ready0;
+    q.ready1 = r.ready1;
 
   end
 

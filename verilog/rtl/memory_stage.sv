@@ -32,7 +32,7 @@ module memory_stage (
 
   always_comb begin
 
-    v       = r;
+    v = r;
 
     v.calc0 = d.e.calc0;
     v.calc1 = d.e.calc1;
@@ -43,7 +43,7 @@ module memory_stage (
       v.calc1.op = r.calc1.op_b;
     end
 
-    v.stall            = 0;
+    v.stall = 0;
 
     dmem0_in.mem_valid = a.e.calc0.op.load | a.e.calc0.op.store;
     dmem0_in.mem_instr = 0;
@@ -63,13 +63,13 @@ module memory_stage (
     lsu0_in.byteenable = v.calc0.byteenable;
     lsu0_in.lsu_op     = v.calc0.lsu_op;
 
-    v.calc0.ldata      = lsu0_out.result;
+    v.calc0.ldata = lsu0_out.result;
 
     lsu1_in.ldata      = dmem1_out.mem_rdata;
     lsu1_in.byteenable = v.calc1.byteenable;
     lsu1_in.lsu_op     = v.calc1.lsu_op;
 
-    v.calc1.ldata      = lsu1_out.result;
+    v.calc1.ldata = lsu1_out.result;
 
     if (dmem0_out.mem_ready == 1) begin
       if (v.calc0.op.load == 1) begin
@@ -125,36 +125,36 @@ module memory_stage (
     forwarding1_min.waddr = v.calc1.waddr;
     forwarding1_min.wdata = v.calc1.wdata;
 
-    register0_win.wren    = v.calc0.op.wren & |(v.calc0.waddr);
-    register0_win.waddr   = v.calc0.waddr;
-    register0_win.wdata   = v.calc0.wdata;
+    register0_win.wren  = v.calc0.op.wren & |(v.calc0.waddr);
+    register0_win.waddr = v.calc0.waddr;
+    register0_win.wdata = v.calc0.wdata;
 
-    register1_win.wren    = v.calc1.op.wren & |(v.calc1.waddr);
-    register1_win.waddr   = v.calc1.waddr;
-    register1_win.wdata   = v.calc1.wdata;
+    register1_win.wren  = v.calc1.op.wren & |(v.calc1.waddr);
+    register1_win.waddr = v.calc1.waddr;
+    register1_win.wdata = v.calc1.wdata;
 
-    csr_win.cwren         = v.calc0.op.cwren | v.calc1.op.cwren;
-    csr_win.cwaddr        = v.calc0.op.cwren ? v.calc0.caddr : v.calc1.caddr;
-    csr_win.cdata         = v.calc0.op.cwren ? v.calc0.cwdata : v.calc1.cwdata;
+    csr_win.cwren  = v.calc0.op.cwren | v.calc1.op.cwren;
+    csr_win.cwaddr = v.calc0.op.cwren ? v.calc0.caddr : v.calc1.caddr;
+    csr_win.cdata  = v.calc0.op.cwren ? v.calc0.cwdata : v.calc1.cwdata;
 
-    csr_ein.valid0        = v.calc0.op.valid;
-    csr_ein.valid1        = v.calc1.op.valid;
-    csr_ein.pc            = v.calc0.op.valid ? v.calc0.pc : v.calc1.pc;
-    csr_ein.mret          = v.calc0.op.mret;
-    csr_ein.exception     = v.calc0.op.exception | v.calc1.op.exception;
-    csr_ein.epc           = v.calc0.op.exception ? v.calc0.pc : v.calc1.pc;
-    csr_ein.ecause        = v.calc0.op.exception ? v.calc0.ecause : v.calc1.ecause;
-    csr_ein.etval         = v.calc0.op.exception ? v.calc0.etval : v.calc1.etval;
+    csr_ein.valid0    = v.calc0.op.valid;
+    csr_ein.valid1    = v.calc1.op.valid;
+    csr_ein.pc        = v.calc0.op.valid ? v.calc0.pc : v.calc1.pc;
+    csr_ein.mret      = v.calc0.op.mret;
+    csr_ein.exception = v.calc0.op.exception | v.calc1.op.exception;
+    csr_ein.epc       = v.calc0.op.exception ? v.calc0.pc : v.calc1.pc;
+    csr_ein.ecause    = v.calc0.op.exception ? v.calc0.ecause : v.calc1.ecause;
+    csr_ein.etval     = v.calc0.op.exception ? v.calc0.etval : v.calc1.etval;
 
-    rin                   = v;
+    rin = v;
 
-    y.calc0               = v.calc0;
-    y.calc1               = v.calc1;
-    y.stall               = v.stall;
+    y.calc0 = v.calc0;
+    y.calc1 = v.calc1;
+    y.stall = v.stall;
 
-    q.calc0               = r.calc0;
-    q.calc1               = r.calc1;
-    q.stall               = r.stall;
+    q.calc0 = r.calc0;
+    q.calc1 = r.calc1;
+    q.stall = r.stall;
 
   end
 
