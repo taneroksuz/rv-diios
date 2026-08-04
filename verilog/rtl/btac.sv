@@ -47,14 +47,27 @@ module btb (
 
   localparam B_DEPTH = $clog2(BTB_DEPTH);
 
-  logic [64-B_DEPTH:0] btb_array[0:BTB_DEPTH-1] = '{default: '0};
+  logic [64-B_DEPTH:0] btb_array0[0:BTB_DEPTH-1] = '{default: '0};
+  logic [64-B_DEPTH:0] btb_array1[0:BTB_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (btb_in.wen == 1) begin
-      btb_array[btb_in.waddr] <= btb_in.wdata;
+      btb_array0[btb_in.waddr] <= btb_in.wdata;
     end
-    btb_out.rdata0 <= btb_array[btb_in.raddr0];
-    btb_out.rdata1 <= btb_array[btb_in.raddr1];
+  end
+
+  always_ff @(posedge clock) begin
+    if (btb_in.wen == 1) begin
+      btb_array1[btb_in.waddr] <= btb_in.wdata;
+    end
+  end
+
+  always_ff @(posedge clock) begin
+    btb_out.rdata0 <= btb_array0[btb_in.raddr0];
+  end
+
+  always_ff @(posedge clock) begin
+    btb_out.rdata1 <= btb_array1[btb_in.raddr1];
   end
 
 endmodule
@@ -72,14 +85,27 @@ module bht (
 
   localparam T_DEPTH = $clog2(BHT_DEPTH);
 
-  logic [1:0] bht_array[0:BHT_DEPTH-1] = '{default: '0};
+  logic [1:0] bht_array0[0:BHT_DEPTH-1] = '{default: '0};
+  logic [1:0] bht_array1[0:BHT_DEPTH-1] = '{default: '0};
 
   always_ff @(posedge clock) begin
     if (bht_in.wen == 1) begin
-      bht_array[bht_in.waddr] <= bht_in.wdata;
+      bht_array0[bht_in.waddr] <= bht_in.wdata;
     end
-    bht_out.rdata0 <= bht_array[bht_in.raddr0];
-    bht_out.rdata1 <= bht_array[bht_in.raddr1];
+  end
+
+  always_ff @(posedge clock) begin
+    if (bht_in.wen == 1) begin
+      bht_array1[bht_in.waddr] <= bht_in.wdata;
+    end
+  end
+
+  always_ff @(posedge clock) begin
+    bht_out.rdata0 <= bht_array0[bht_in.raddr0];
+  end
+
+  always_ff @(posedge clock) begin
+    bht_out.rdata1 <= bht_array1[bht_in.raddr1];
   end
 
 endmodule
