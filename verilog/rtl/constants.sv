@@ -219,6 +219,7 @@ package constants;
   parameter [11 : 0] csr_tdata1 = 12'h7A1;
   parameter [11 : 0] csr_tdata2 = 12'h7A2;
   parameter [11 : 0] csr_tdata3 = 12'h7A3;
+  parameter [11 : 0] csr_tcontrol = 12'h7A5;
 
   parameter [11 : 0] csr_dcsr = 12'h7B0;
   parameter [11 : 0] csr_dpc = 12'h7B1;

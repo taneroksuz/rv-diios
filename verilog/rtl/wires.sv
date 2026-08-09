@@ -950,6 +950,8 @@ package wires;
     logic [31 : 0]       mtval;
     csr_mip_reg_type     mip;
     csr_mie_reg_type     mie;
+    logic [3 : 0][31:0]  pmpcfg;
+    logic [15 : 0][31:0] pmpaddr;
   } csr_machine_reg_type;
 
   parameter csr_machine_reg_type init_csr_machine_reg = '{
@@ -962,7 +964,9 @@ package wires;
       mcycle : 0,
       minstret : 0,
       mip : init_csr_mip_reg,
-      mie : init_csr_mie_reg
+      mie : init_csr_mie_reg,
+      pmpcfg : '{default: 0},
+      pmpaddr : '{default: 0}
   };
 
   typedef struct packed {
