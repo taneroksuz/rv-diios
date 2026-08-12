@@ -46,8 +46,6 @@ module cpu (
   bit_alu_out_type            bit_alu0_out;
   bit_alu_in_type             bit_alu1_in;
   bit_alu_out_type            bit_alu1_out;
-  bit_clmul_in_type           bit_clmul_in;
-  bit_clmul_out_type          bit_clmul_out;
   buffer_in_type              buffer_in;
   buffer_out_type             buffer_out;
   btac_in_type                btac_in;
@@ -248,13 +246,6 @@ module cpu (
     .bit_alu_out(bit_alu1_out)
   );
 
-  bit_clmul bit_clmul_comp (
-    .reset        (reset),
-    .clock        (clock),
-    .bit_clmul_in (bit_clmul_in),
-    .bit_clmul_out(bit_clmul_out)
-  );
-
   forwarding forwarding_comp (
     .forwarding0_rin(forwarding0_rin),
     .forwarding1_rin(forwarding1_rin),
@@ -419,8 +410,6 @@ module cpu (
     .bit_alu0_in    (bit_alu0_in),
     .bit_alu1_out   (bit_alu1_out),
     .bit_alu1_in    (bit_alu1_in),
-    .bit_clmul_out  (bit_clmul_out),
-    .bit_clmul_in   (bit_clmul_in),
     .csr_out        (csr_out),
     .btac_out       (btac_out),
     .forwarding0_ein(forwarding0_ein),

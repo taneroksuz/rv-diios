@@ -41,10 +41,6 @@ package constants;
   parameter [2 : 0] funct_binv = 3'b001;
   parameter [2 : 0] funct_bset = 3'b001;
 
-  parameter [2 : 0] funct_clmul = 3'b001;
-  parameter [2 : 0] funct_clmulr = 3'b010;
-  parameter [2 : 0] funct_clmulh = 3'b011;
-
   parameter [2 : 0] funct_min = 3'b100;
   parameter [2 : 0] funct_minu = 3'b101;
   parameter [2 : 0] funct_max = 3'b110;

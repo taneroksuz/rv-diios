@@ -74,7 +74,6 @@ module decode_stage (
     v.instr0.op.division = base0_out.division;
     v.instr0.op.mult     = base0_out.mult;
     v.instr0.op.bitm     = base0_out.bitm;
-    v.instr0.op.bitc     = base0_out.bitc;
     v.instr0.op.fence    = base0_out.fence;
     v.instr0.op.ecall    = base0_out.ecall;
     v.instr0.op.ebreak   = base0_out.ebreak;
@@ -111,7 +110,6 @@ module decode_stage (
     v.instr1.op.division = base1_out.division;
     v.instr1.op.mult     = base1_out.mult;
     v.instr1.op.bitm     = base1_out.bitm;
-    v.instr1.op.bitc     = base1_out.bitc;
     v.instr1.op.fence    = base1_out.fence;
     v.instr1.op.ecall    = base1_out.ecall;
     v.instr1.op.ebreak   = base1_out.ebreak;

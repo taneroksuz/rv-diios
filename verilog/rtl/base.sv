@@ -50,7 +50,6 @@ module base (
   logic [0 : 0] division;
   logic [0 : 0] mult;
   logic [0 : 0] bitm;
-  logic [0 : 0] bitc;
   logic [0 : 0] fence;
   logic [0 : 0] ecall;
   logic [0 : 0] ebreak;
@@ -123,7 +122,6 @@ module base (
     division = 0;
     mult     = 0;
     bitm     = 0;
-    bitc     = 0;
     fence    = 0;
     ecall    = 0;
     ebreak   = 0;
@@ -436,21 +434,6 @@ module base (
           ;
         end else if (funct7 == 7'b0000101) begin
           case (funct3)
-            funct_clmul: begin
-              instr_str                 = "clmul";
-              bitc                      = 1;
-              bit_op.bit_zbc.bit_clmul_ = 1;
-            end
-            funct_clmulr: begin
-              instr_str                 = "clmulr";
-              bitc                      = 1;
-              bit_op.bit_zbc.bit_clmulr = 1;
-            end
-            funct_clmulh: begin
-              instr_str                 = "clmulh";
-              bitc                      = 1;
-              bit_op.bit_zbc.bit_clmulh = 1;
-            end
             funct_min: begin
               instr_str              = "min";
               bitm                   = 1;
@@ -691,7 +674,6 @@ module base (
     base_out.division  = division;
     base_out.mult      = mult;
     base_out.bitm      = bitm;
-    base_out.bitc      = bitc;
     base_out.fence     = fence;
     base_out.ecall     = ecall;
     base_out.ebreak    = ebreak;

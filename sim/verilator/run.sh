@@ -25,7 +25,6 @@ $VERILATOR --binary -j 0 --build-jobs 0 --trace-fst --trace-structs --top-module
             $BASEDIR/verilog/rtl/functions.sv \
             $BASEDIR/verilog/rtl/wires.sv \
             $BASEDIR/verilog/rtl/bit_alu.sv \
-            $BASEDIR/verilog/rtl/bit_clmul.sv \
             $BASEDIR/verilog/rtl/btac.sv \
             $BASEDIR/verilog/rtl/alu.sv \
             $BASEDIR/verilog/rtl/agu.sv \

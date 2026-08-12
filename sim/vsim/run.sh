@@ -27,7 +27,6 @@ $VLOG -quiet -sv -svinputport=relaxed +acc=npr \
                     $BASEDIR/verilog/rtl/functions.sv \
                     $BASEDIR/verilog/rtl/wires.sv \
                     $BASEDIR/verilog/rtl/bit_alu.sv \
-                    $BASEDIR/verilog/rtl/bit_clmul.sv \
                     $BASEDIR/verilog/rtl/btac.sv \
                     $BASEDIR/verilog/rtl/alu.sv \
                     $BASEDIR/verilog/rtl/agu.sv \

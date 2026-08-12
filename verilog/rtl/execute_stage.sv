@@ -28,8 +28,6 @@ module execute_stage (
   output bit_alu_in_type            bit_alu0_in,
   input  bit_alu_out_type           bit_alu1_out,
   output bit_alu_in_type            bit_alu1_in,
-  input  bit_clmul_out_type         bit_clmul_out,
-  output bit_clmul_in_type          bit_clmul_in,
   input  csr_out_type               csr_out,
   input  btac_out_type              btac_out,
   output forwarding_execute_in_type forwarding0_ein,
@@ -218,16 +216,6 @@ module execute_stage (
     v.calc0.dready = div_out.ready;
     v.calc1.dready = div_out.ready;
 
-    bit_clmul_in.rdata1 = v.calc0.op.bitc ? v.calc0.rdata1 : v.calc1.rdata1;
-    bit_clmul_in.rdata2 = v.calc0.op.bitc ? v.calc0.rdata2 : v.calc1.rdata2;
-    bit_clmul_in.op     = v.calc0.op.bitc ? v.calc0.bit_op.bit_zbc : v.calc1.bit_op.bit_zbc;
-    bit_clmul_in.enable = (v.calc0.op.bitc | v.calc1.op.bitc) & v.enable;
-
-    v.calc0.bcdata  = bit_clmul_out.result;
-    v.calc1.bcdata  = bit_clmul_out.result;
-    v.calc0.bcready = bit_clmul_out.ready;
-    v.calc1.bcready = bit_clmul_out.ready;
-
     if (v.calc0.op.auipc == 1) begin
       v.calc0.wdata = v.calc0.address;
     end else if (v.calc0.op.lui == 1) begin
@@ -244,8 +232,6 @@ module execute_stage (
       v.calc0.wdata = v.calc0.mdata;
     end else if (v.calc0.op.bitm == 1) begin
       v.calc0.wdata = v.calc0.bdata;
-    end else if (v.calc0.op.bitc == 1) begin
-      v.calc0.wdata = v.calc0.bcdata;
     end
 
     if (v.calc1.op.auipc == 1) begin
@@ -264,8 +250,6 @@ module execute_stage (
       v.calc1.wdata = v.calc1.mdata;
     end else if (v.calc1.op.bitm == 1) begin
       v.calc1.wdata = v.calc1.bdata;
-    end else if (v.calc1.op.bitc == 1) begin
-      v.calc1.wdata = v.calc1.bcdata;
     end
 
     csr_alu_in.cdata  = v.calc0.op.csreg ? v.calc0.crdata : v.calc1.crdata;
@@ -281,18 +265,10 @@ module execute_stage (
       if (v.calc0.dready == 0) begin
         v.stall = ~(a.m.stall);
       end
-    end else if (v.calc0.op.bitc == 1) begin
-      if (v.calc0.bcready == 0) begin
-        v.stall = ~(a.m.stall);
-      end
     end
 
     if (v.calc1.op.division == 1) begin
       if (v.calc1.dready == 0) begin
-        v.stall = ~(a.m.stall);
-      end
-    end else if (v.calc1.op.bitc == 1) begin
-      if (v.calc1.bcready == 0) begin
         v.stall = ~(a.m.stall);
       end
     end

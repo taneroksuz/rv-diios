@@ -10,7 +10,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/constants.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/functions.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/wires.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/bit_alu.sv
-set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/bit_clmul.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/btac.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../../verilog/rtl/agu.sv

@@ -50,14 +50,6 @@ package wires;
   };
 
   typedef struct packed {
-    logic [0:0] bit_clmul_;
-    logic [0:0] bit_clmulh;
-    logic [0:0] bit_clmulr;
-  } zbc_op_type;
-
-  parameter zbc_op_type init_zbc_op = '{bit_clmul_ : 0, bit_clmulh : 0, bit_clmulr : 0};
-
-  typedef struct packed {
     logic [0:0] bit_bclr;
     logic [0:0] bit_bext;
     logic [0:0] bit_binv;
@@ -69,20 +61,16 @@ package wires;
   typedef struct packed {
     logic [0:0] bit_imm;
     logic [0:0] bit_alu_;
-    logic [0:0] bit_clmul_;
     zba_op_type bit_zba;
     zbb_op_type bit_zbb;
-    zbc_op_type bit_zbc;
     zbs_op_type bit_zbs;
   } bit_op_type;
 
   parameter bit_op_type init_bit_op = '{
       bit_imm    : 0,
       bit_alu_   : 0,
-      bit_clmul_ : 0,
       bit_zba    : init_zba_op,
       bit_zbb    : init_zbb_op,
-      bit_zbc    : init_zbc_op,
       bit_zbs    : init_zbs_op
   };
 
@@ -95,42 +83,6 @@ package wires;
   } bit_alu_in_type;
 
   typedef struct packed {logic [31:0] result;} bit_alu_out_type;
-
-  typedef struct packed {
-    logic [31:0] rdata1;
-    logic [31:0] rdata2;
-    logic [0:0]  enable;
-    zbc_op_type  op;
-  } bit_clmul_in_type;
-
-  typedef struct packed {
-    logic [31:0] result;
-    logic [0:0]  ready;
-  } bit_clmul_out_type;
-
-  typedef struct packed {
-    logic [1:0]  state;
-    logic [4:0]  counter;
-    logic [5:0]  index;
-    logic [31:0] rdata1;
-    logic [31:0] rdata2;
-    logic [31:0] swap;
-    logic [31:0] result;
-    logic [0:0]  ready;
-    zbc_op_type  op;
-  } bit_clmul_reg_type;
-
-  parameter bit_clmul_reg_type init_bit_clmul_reg = '{
-      state   : 0,
-      counter : 0,
-      index   : 0,
-      rdata1  : 0,
-      rdata2  : 0,
-      swap    : 0,
-      result  : 0,
-      ready   : 0,
-      op      : init_zbc_op
-  };
 
   typedef struct packed {
     logic [0 : 0] alu_add;
@@ -403,7 +355,6 @@ package wires;
     logic [0 : 0] division;
     logic [0 : 0] mult;
     logic [0 : 0] bitm;
-    logic [0 : 0] bitc;
     logic [0 : 0] fence;
     logic [0 : 0] ecall;
     logic [0 : 0] ebreak;
@@ -433,7 +384,6 @@ package wires;
       division : 0,
       mult : 0,
       bitm : 0,
-      bitc : 0,
       fence : 0,
       ecall : 0,
       ebreak : 0,
@@ -514,10 +464,8 @@ package wires;
     logic [31 : 0]  ldata;
     logic [31 : 0]  sdata;
     logic [31 : 0]  ddata;
-    logic [31 : 0]  bcdata;
     logic [0 : 0]   fready;
     logic [0 : 0]   dready;
-    logic [0 : 0]   bcready;
     logic [31 : 0]  address;
     logic [3 : 0]   byteenable;
     logic [7 : 0]   ecause;
@@ -558,10 +506,8 @@ package wires;
       sdata : 0,
       ldata : 0,
       ddata : 0,
-      bcdata : 0,
       fready : 0,
       dready : 0,
-      bcready : 0,
       address : 0,
       byteenable : 0,
       ecause : 0,
@@ -635,7 +581,6 @@ package wires;
     logic [0 : 0]  division;
     logic [0 : 0]  mult;
     logic [0 : 0]  bitm;
-    logic [0 : 0]  bitc;
     logic [0 : 0]  fence;
     logic [0 : 0]  ecall;
     logic [0 : 0]  ebreak;

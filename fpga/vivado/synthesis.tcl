@@ -4,7 +4,6 @@ read_verilog -sv ../../verilog/rtl/constants.sv
 read_verilog -sv ../../verilog/rtl/functions.sv
 read_verilog -sv ../../verilog/rtl/wires.sv
 read_verilog -sv ../../verilog/rtl/bit_alu.sv
-read_verilog -sv ../../verilog/rtl/bit_clmul.sv
 read_verilog -sv ../../verilog/rtl/btac.sv
 read_verilog -sv ../../verilog/rtl/alu.sv
 read_verilog -sv ../../verilog/rtl/agu.sv
