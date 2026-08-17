@@ -14,14 +14,16 @@ module uart_rx #(
   timeunit 1ns; timeprecision 1ps;
 
   localparam FULL = CLOCK_RATE - 1;
+  localparam HALF = CLOCK_RATE + (CLOCK_RATE / 2) - 1;
 
   typedef struct packed {
-    logic [31 : 0] counter;
-    logic [7 : 0]  rdata_re;
-    logic [0 : 0]  ready_re;
-    logic [3 : 0]  state;
-    logic [8 : 0]  data;
-    logic [0 : 0]  ready;
+    logic [31:0] counter;
+    logic [7:0]  rdata_re;
+    logic [0:0]  ready_re;
+    logic [3:0]  state;
+    logic [8:0]  data;
+    logic [0:0]  ready;
+    logic [1:0]  rx_sync;
   } register_type;
 
   register_type init_register = '{
@@ -30,7 +32,8 @@ module uart_rx #(
       ready_re : 0,
       state : 0,
       data : 0,
-      ready : 0
+      ready : 0,
+      rx_sync : 2'b11
   };
 
   register_type r, rin, v;
@@ -38,6 +41,8 @@ module uart_rx #(
   always_comb begin
 
     v = r;
+
+    v.rx_sync = {v.rx_sync[0], rx};
 
     v.counter = v.counter + 1;
 
@@ -57,10 +62,17 @@ module uart_rx #(
 
     case (r.state)
       0: begin
-        if (rx == 0) begin
+        if (r.rx_sync[1] == 0) begin
           v.state = 1;
         end
         v.counter = 0;
+      end
+      1: begin
+        if (r.counter > HALF) begin
+          v.data    = {r.rx_sync[1], v.data[8:1]};
+          v.state   = v.state + 4'h1;
+          v.counter = 0;
+        end
       end
       9: begin
         if (r.counter > FULL) begin
@@ -72,7 +84,7 @@ module uart_rx #(
       end
       default: begin
         if (r.counter > FULL) begin
-          v.data    = {rx, v.data[8:1]};
+          v.data    = {r.rx_sync[1], v.data[8:1]};
           v.state   = v.state + 4'h1;
           v.counter = 0;
         end

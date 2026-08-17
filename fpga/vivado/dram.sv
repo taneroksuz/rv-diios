@@ -93,9 +93,20 @@ module dram (
 
     v_in = r_in;
 
+    if (r_in.state == stIdle) begin
+      if (mem_in.mem_valid) begin
+        v_in.mem_valid = mem_in.mem_valid;
+        v_in.mem_instr = mem_in.mem_instr;
+        v_in.mem_mode  = mem_in.mem_mode;
+        v_in.mem_addr  = mem_in.mem_addr;
+        v_in.mem_wdata = mem_in.mem_wdata;
+        v_in.mem_wstrb = mem_in.mem_wstrb;
+      end
+    end
+
     unique case (r_in.state)
       stIdle: begin
-        if (mem_in.mem_valid && calib_complete) begin
+        if (v_in.mem_valid && calib_complete) begin
           v_in.state = stPreset;
         end
       end
@@ -113,7 +124,8 @@ module dram (
       end
       stSetCmdWr: begin
         if (r_out.app_rdy) begin
-          v_in.state = stIdle;
+          v_in.mem_valid = 1'b0;
+          v_in.state     = stIdle;
         end
       end
       stSetCmdRd: begin
@@ -123,11 +135,13 @@ module dram (
       end
       stRecvData: begin
         if (r_out.app_rd_data_valid) begin
-          v_in.state = stIdle;
+          v_in.mem_valid = 1'b0;
+          v_in.state     = stIdle;
         end
       end
       default: begin
-        v_in.state = stIdle;
+        v_in.mem_valid = 1'b0;
+        v_in.state     = stIdle;
       end
     endcase
 
@@ -156,17 +170,6 @@ module dram (
         v_in.app_cmd = 3'b000;
       end
     endcase
-
-    if (r_in.state == stIdle) begin
-      if (mem_in.mem_valid) begin
-        v_in.mem_valid = mem_in.mem_valid;
-        v_in.mem_instr = mem_in.mem_instr;
-        v_in.mem_mode  = mem_in.mem_mode;
-        v_in.mem_addr  = mem_in.mem_addr;
-        v_in.mem_wdata = mem_in.mem_wdata;
-        v_in.mem_wstrb = mem_in.mem_wstrb;
-      end
-    end
 
     if (r_in.state == stPreset) begin
       v_in.app_wdf_data = {v_in.mem_wdata, v_in.mem_wdata, v_in.mem_wdata, v_in.mem_wdata};
