@@ -69,15 +69,17 @@ loop:
 
 trap_entry:
 
-  la t5, UART_RX_IRQ
-  lw t6, 0(t5)
-  la t5, 0x000000FF
+  la t5,   UART_RX_IRQ
+  lw t6,   0(t5)
+  sw zero, 0(t5)
+  la t5,   0x000000FF
 
   beq t5, t6, copy_firmware
 
-  la t5, UART_TX_IRQ
-  lw t6, 0(t5)
-  la t5, 0x000000FF
+  la t5,   UART_TX_IRQ
+  lw t6,   0(t5)
+  sw zero, 0(t5)
+  la t5,   0x000000FF
 
   mret
 

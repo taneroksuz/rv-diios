@@ -44,12 +44,12 @@ module uart_tx #(
       localparam FULL = CLOCK_RATE - 1;
 
       typedef struct packed {
-        logic [31 : 0] counter;
-        logic [7 : 0]  rdata_re;
-        logic [0 : 0]  ready_re;
-        logic [3 : 0]  state;
-        logic [9 : 0]  data;
-        logic [0 : 0]  ready;
+        logic [31:0] counter;
+        logic [7:0]  rdata;
+        logic [0:0]  ready;
+        logic [3:0]  state;
+        logic [9:0]  data;
+        logic [0:0]  irq;
       } register_type;
 
       register_type init_register = '{data : 10'h3FF, default: 0};
@@ -62,18 +62,25 @@ module uart_tx #(
 
         v.counter = v.counter + 1;
 
-        v.rdata_re = 0;
-        v.ready_re = 0;
-
+        v.rdata = 0;
         v.ready = 0;
 
+        v.irq = 0;
+
         if (uart_in.mem_valid == 1) begin
-          if (|uart_in.mem_wstrb == 1 && uart_in.mem_addr == 0 && v.state == 0) begin
-            v.data  = {1'b1, uart_in.mem_wdata[7:0], 1'b0};
-            v.state = 1;
-          end else if (|uart_in.mem_wstrb == 0 && uart_in.mem_addr == 8) begin
-            v.rdata_re = {8{v.ready}};
-            v.ready_re = 1;
+          if (|uart_in.mem_wstrb == 1) begin
+            if (uart_in.mem_addr == 0 && v.state == 0) begin
+              v.data  = {1'b1, uart_in.mem_wdata[7:0], 1'b0};
+              v.state = 1;
+            end else if (uart_in.mem_addr == 8) begin
+              v.ready = 1;
+              v.irq   = 0;
+            end
+          end else begin
+            if (uart_in.mem_addr == 8) begin
+              v.rdata = {8{v.irq}};
+              v.ready = 1;
+            end
           end
         end
 
@@ -86,6 +93,7 @@ module uart_tx #(
               v.counter = 0;
               v.state   = 0;
               v.ready   = 1;
+              // v.irq     = 1;
             end
           end
           default: begin
@@ -101,10 +109,10 @@ module uart_tx #(
 
       end
 
-      assign uart_out.mem_rdata = 0;
+      assign uart_out.mem_rdata = {24'b0, r.rdata};
       assign uart_out.mem_error = 0;
       assign uart_out.mem_ready = r.ready;
-      assign tx_irq             = 0;
+      assign tx_irq             = r.irq;
       assign tx                 = r.data[0];
 
       always_ff @(posedge clock) begin

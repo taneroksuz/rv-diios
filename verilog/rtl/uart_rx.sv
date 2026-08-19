@@ -18,21 +18,21 @@ module uart_rx #(
 
   typedef struct packed {
     logic [31:0] counter;
-    logic [7:0]  rdata_re;
-    logic [0:0]  ready_re;
+    logic [7:0]  rdata;
+    logic [0:0]  ready;
     logic [3:0]  state;
     logic [8:0]  data;
-    logic [0:0]  ready;
+    logic [0:0]  irq;
     logic [1:0]  rx_sync;
   } register_type;
 
   register_type init_register = '{
       counter : 0,
-      rdata_re : 0,
-      ready_re : 0,
+      rdata : 0,
+      ready : 0,
       state : 0,
       data : 0,
-      ready : 0,
+      irq : 0,
       rx_sync : 2'b11
   };
 
@@ -46,17 +46,23 @@ module uart_rx #(
 
     v.counter = v.counter + 1;
 
-    v.rdata_re = 0;
-    v.ready_re = 0;
+    v.rdata = 0;
+    v.ready = 0;
 
-    if (uart_in.mem_valid == 1 && |uart_in.mem_wstrb == 0) begin
-      if (uart_in.mem_addr == 0) begin
-        v.rdata_re = v.data[8:1];
-        v.ready_re = 1;
-      end else if (uart_in.mem_addr == 8) begin
-        v.rdata_re = {8{v.ready}};
-        v.ready_re = 1;
-        v.ready    = 0;
+    if (uart_in.mem_valid == 1) begin
+      if (|uart_in.mem_wstrb == 0) begin
+        if (uart_in.mem_addr == 0) begin
+          v.rdata = v.data[8:1];
+          v.ready = 1;
+        end else if (uart_in.mem_addr == 8) begin
+          v.rdata = {8{v.irq}};
+          v.ready = 1;
+        end
+      end else begin
+        if (uart_in.mem_addr == 8) begin
+          v.ready = 1;
+          v.irq   = 0;
+        end
       end
     end
 
@@ -76,10 +82,10 @@ module uart_rx #(
       end
       9: begin
         if (r.counter > FULL) begin
-          v.rdata_re = v.data[8:1];
-          v.counter  = 0;
-          v.state    = 0;
-          v.ready    = 1;
+          v.rdata   = v.data[8:1];
+          v.counter = 0;
+          v.state   = 0;
+          v.irq     = 1;
         end
       end
       default: begin
@@ -95,10 +101,10 @@ module uart_rx #(
 
   end
 
-  assign uart_out.mem_rdata = {24'b0, r.rdata_re};
+  assign uart_out.mem_rdata = {24'b0, r.rdata};
   assign uart_out.mem_error = 0;
-  assign uart_out.mem_ready = r.ready_re;
-  assign rx_irq             = r.ready;
+  assign uart_out.mem_ready = r.ready;
+  assign rx_irq             = r.irq;
 
   always_ff @(posedge clock) begin
     if (reset == 0) begin

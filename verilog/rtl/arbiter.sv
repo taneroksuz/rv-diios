@@ -30,6 +30,10 @@ module arbiter (
     mem_in_type imem1_in;
     mem_in_type dmem0_in;
     mem_in_type dmem1_in;
+    logic [0:0] iactive0;
+    logic [0:0] iactive1;
+    logic [0:0] dactive0;
+    logic [0:0] dactive1;
   } reg_type;
 
   localparam reg_type init_reg = '{default: 0};
@@ -41,23 +45,27 @@ module arbiter (
 
     v = r;
 
+    v.mem_in = init_mem_in;
+
     if (mem_out.mem_ready == 1) begin
       v.access_type = no_access;
-    end else begin
-      v.mem_in = init_mem_in;
     end
 
-    if (dmem0_in.mem_valid == 1) begin
+    v.iactive0 = (v.access_type == instr0_access);
+    v.iactive1 = (v.access_type == instr1_access);
+    v.dactive0 = (v.access_type == data0_access);
+    v.dactive1 = (v.access_type == data1_access);
+
+    if (dmem0_in.mem_valid == 1 && v.dmem0_in.mem_valid == 0 && v.dactive0 == 0) begin
       v.dmem0_in = dmem0_in;
     end
-    if (dmem1_in.mem_valid == 1) begin
+    if (dmem1_in.mem_valid == 1 && v.dmem1_in.mem_valid == 0 && v.dactive1 == 0) begin
       v.dmem1_in = dmem1_in;
     end
-
-    if (imem0_in.mem_valid == 1) begin
+    if (imem0_in.mem_valid == 1 && v.imem0_in.mem_valid == 0 && v.iactive0 == 0) begin
       v.imem0_in = imem0_in;
     end
-    if (imem1_in.mem_valid == 1) begin
+    if (imem1_in.mem_valid == 1 && v.imem1_in.mem_valid == 0 && v.iactive1 == 0) begin
       v.imem1_in = imem1_in;
     end
 
@@ -81,35 +89,14 @@ module arbiter (
       end
     end
 
-    if (v.access_type != no_access) begin
-      mem_in = v.mem_in;
-    end else begin
-      mem_in = init_mem_in;
-    end
+    mem_in = v.mem_in;
 
     rin = v;
 
-    if (r.access_type == data0_access) begin
-      dmem0_out = mem_out;
-    end else begin
-      dmem0_out = init_mem_out;
-    end
-    if (r.access_type == data1_access) begin
-      dmem1_out = mem_out;
-    end else begin
-      dmem1_out = init_mem_out;
-    end
-
-    if (r.access_type == instr0_access) begin
-      imem0_out = mem_out;
-    end else begin
-      imem0_out = init_mem_out;
-    end
-    if (r.access_type == instr1_access) begin
-      imem1_out = mem_out;
-    end else begin
-      imem1_out = init_mem_out;
-    end
+    dmem0_out = (r.access_type == data0_access) ? mem_out : init_mem_out;
+    dmem1_out = (r.access_type == data1_access) ? mem_out : init_mem_out;
+    imem0_out = (r.access_type == instr0_access) ? mem_out : init_mem_out;
+    imem1_out = (r.access_type == instr1_access) ? mem_out : init_mem_out;
 
   end
 
