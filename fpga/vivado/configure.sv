@@ -13,8 +13,8 @@ package configure;
   localparam RAM_DEPTH = 1;
 
   localparam BTAC_ENABLE = 1;
-  localparam BTB_DEPTH = 512;
-  localparam BHT_DEPTH = 1024;
+  localparam BTB_DEPTH   = 512;
+  localparam BHT_DEPTH   = 1024;
 
   localparam ROM_BASE = 32'h00000000;
   localparam ROM_MASK = 32'hFFFFFF00;
@@ -43,8 +43,8 @@ package configure;
   localparam SYS_FREQ = 100000000;  // 100MHz
 
   localparam CPU_FREQ = 20000000;  // 20MHz
-  localparam PER_FREQ = 5000000;  // 5MHz
-  localparam RTC_FREQ = 1000000;  // 1MHz
+  localparam PER_FREQ = 5000000;   // 5MHz
+  localparam RTC_FREQ = 1000000;   // 1MHz
   localparam BAUDRATE = 115200;
 
   localparam CLK_DIVIDER_CPU = SYS_FREQ / CPU_FREQ;

@@ -68,8 +68,8 @@ for FILE in $BASEDIR/riscv/*.riscv; do
   NAME="${BASE%.*}"
   if [[ "$NAME" == "$PROGRAM"* ]]; then
     cp $BASEDIR/riscv/$NAME.riscv $BASEDIR/sim/vsim/output/$NAME.riscv
-    $RISCV/bin/riscv32-unknown-elf-nm -A $BASEDIR/sim/vsim/output/$NAME.riscv | grep -sw 'tohost' | sed -e 's/.*:\(.*\) D.*/\1/' > $BASEDIR/sim/vsim/output/$NAME.host
-    $RISCV/bin/riscv32-unknown-elf-objcopy -O binary $BASEDIR/sim/vsim/output/$NAME.riscv $BASEDIR/sim/vsim/output/$NAME.bin
+    ${RISCV}nm -A $BASEDIR/sim/vsim/output/$NAME.riscv | grep -sw 'tohost' | sed -e 's/.*:\(.*\) D.*/\1/' > $BASEDIR/sim/vsim/output/$NAME.host
+    ${RISCV}objcopy -O binary $BASEDIR/sim/vsim/output/$NAME.riscv $BASEDIR/sim/vsim/output/$NAME.bin
     $PYTHON $BASEDIR/py/bin2dat.py --input $BASEDIR/sim/vsim/output/$NAME.riscv --address 0x0 --offset 0x100000
     cp $BASEDIR/sim/vsim/output/$NAME.dat ram.dat
     cp $BASEDIR/sim/vsim/output/$NAME.host host.dat

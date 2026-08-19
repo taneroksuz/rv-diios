@@ -58,8 +58,8 @@ module axi (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam [1:0] idle = 0;
-  localparam [1:0] load = 1;
+  localparam [1:0] idle  = 0;
+  localparam [1:0] load  = 1;
   localparam [1:0] store = 2;
 
   logic [1 : 0] state;

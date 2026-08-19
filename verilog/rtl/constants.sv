@@ -27,23 +27,23 @@ package constants;
   localparam [6 : 0] opcode_fnmsub = 7'b1001011;
   localparam [6 : 0] opcode_fnmadd = 7'b1001111;
 
-  localparam [2 : 0] funct_add = 3'b000;
-  localparam [2 : 0] funct_sll = 3'b001;
-  localparam [2 : 0] funct_slt = 3'b010;
+  localparam [2 : 0] funct_add  = 3'b000;
+  localparam [2 : 0] funct_sll  = 3'b001;
+  localparam [2 : 0] funct_slt  = 3'b010;
   localparam [2 : 0] funct_sltu = 3'b011;
-  localparam [2 : 0] funct_xor = 3'b100;
-  localparam [2 : 0] funct_srl = 3'b101;
-  localparam [2 : 0] funct_or = 3'b110;
-  localparam [2 : 0] funct_and = 3'b111;
+  localparam [2 : 0] funct_xor  = 3'b100;
+  localparam [2 : 0] funct_srl  = 3'b101;
+  localparam [2 : 0] funct_or   = 3'b110;
+  localparam [2 : 0] funct_and  = 3'b111;
 
   localparam [2 : 0] funct_bclr = 3'b001;
   localparam [2 : 0] funct_bext = 3'b101;
   localparam [2 : 0] funct_binv = 3'b001;
   localparam [2 : 0] funct_bset = 3'b001;
 
-  localparam [2 : 0] funct_min = 3'b100;
+  localparam [2 : 0] funct_min  = 3'b100;
   localparam [2 : 0] funct_minu = 3'b101;
-  localparam [2 : 0] funct_max = 3'b110;
+  localparam [2 : 0] funct_max  = 3'b110;
   localparam [2 : 0] funct_maxu = 3'b111;
 
   localparam [2 : 0] funct_rol = 3'b001;
@@ -64,17 +64,17 @@ package constants;
   localparam [2 : 0] funct_rem = 3'b110;
   localparam [2 : 0] funct_remu = 3'b111;
 
-  localparam [2 : 0] funct_beq = 3'b000;
-  localparam [2 : 0] funct_bne = 3'b001;
-  localparam [2 : 0] funct_blt = 3'b100;
-  localparam [2 : 0] funct_bge = 3'b101;
+  localparam [2 : 0] funct_beq  = 3'b000;
+  localparam [2 : 0] funct_bne  = 3'b001;
+  localparam [2 : 0] funct_blt  = 3'b100;
+  localparam [2 : 0] funct_bge  = 3'b101;
   localparam [2 : 0] funct_bltu = 3'b110;
   localparam [2 : 0] funct_bgeu = 3'b111;
 
-  localparam [2 : 0] funct_lb = 3'b000;
-  localparam [2 : 0] funct_lh = 3'b001;
-  localparam [2 : 0] funct_lw = 3'b010;
-  localparam [2 : 0] funct_ld = 3'b011;
+  localparam [2 : 0] funct_lb  = 3'b000;
+  localparam [2 : 0] funct_lh  = 3'b001;
+  localparam [2 : 0] funct_lw  = 3'b010;
+  localparam [2 : 0] funct_ld  = 3'b011;
   localparam [2 : 0] funct_lbu = 3'b100;
   localparam [2 : 0] funct_lhu = 3'b101;
   localparam [2 : 0] funct_lwu = 3'b110;
@@ -84,9 +84,9 @@ package constants;
   localparam [2 : 0] funct_sw = 3'b010;
   localparam [2 : 0] funct_sd = 3'b011;
 
-  localparam [2 : 0] funct_csrrw = 3'b001;
-  localparam [2 : 0] funct_csrrs = 3'b010;
-  localparam [2 : 0] funct_csrrc = 3'b011;
+  localparam [2 : 0] funct_csrrw  = 3'b001;
+  localparam [2 : 0] funct_csrrs  = 3'b010;
+  localparam [2 : 0] funct_csrrc  = 3'b011;
   localparam [2 : 0] funct_csrrwi = 3'b101;
   localparam [2 : 0] funct_csrrsi = 3'b110;
   localparam [2 : 0] funct_csrrci = 3'b111;
@@ -124,12 +124,12 @@ package constants;
   localparam [2 : 0] c1_beqz = 3'b110;
   localparam [2 : 0] c1_bnez = 3'b111;
 
-  localparam [2 : 0] c2_slli = 3'b000;
+  localparam [2 : 0] c2_slli  = 3'b000;
   localparam [2 : 0] c2_fldsp = 3'b001;
-  localparam [2 : 0] c2_lwsp = 3'b010;
+  localparam [2 : 0] c2_lwsp  = 3'b010;
   localparam [2 : 0] c2_flwsp = 3'b011;
-  localparam [2 : 0] c2_alu = 3'b100;
-  localparam [2 : 0] c2_swsp = 3'b110;
+  localparam [2 : 0] c2_alu   = 3'b100;
+  localparam [2 : 0] c2_swsp  = 3'b110;
   localparam [2 : 0] c2_fsdsp = 3'b101;
   localparam [2 : 0] c2_fswsp = 3'b111;
 
@@ -137,7 +137,7 @@ package constants;
   localparam [1 : 0] opcode_c1 = 2'b01;
   localparam [1 : 0] opcode_c2 = 2'b10;
 
-  localparam [11 : 0] csr_ecall = 12'h000;
+  localparam [11 : 0] csr_ecall  = 12'h000;
   localparam [11 : 0] csr_ebreak = 12'h001;
 
   localparam [11 : 0] csr_uret = 12'h002;
@@ -185,20 +185,20 @@ package constants;
   localparam [11 : 0] csr_mtval = 12'h343;
   localparam [11 : 0] csr_mip = 12'h344;
 
-  localparam [11 : 0] csr_pmpcfg0 = 12'h3A0;
-  localparam [11 : 0] csr_pmpcfg1 = 12'h3A1;
-  localparam [11 : 0] csr_pmpcfg2 = 12'h3A2;
-  localparam [11 : 0] csr_pmpcfg3 = 12'h3A3;
-  localparam [11 : 0] csr_pmpaddr0 = 12'h3B0;
-  localparam [11 : 0] csr_pmpaddr1 = 12'h3B1;
-  localparam [11 : 0] csr_pmpaddr2 = 12'h3B2;
-  localparam [11 : 0] csr_pmpaddr3 = 12'h3B3;
-  localparam [11 : 0] csr_pmpaddr4 = 12'h3B4;
-  localparam [11 : 0] csr_pmpaddr5 = 12'h3B5;
-  localparam [11 : 0] csr_pmpaddr6 = 12'h3B6;
-  localparam [11 : 0] csr_pmpaddr7 = 12'h3B7;
-  localparam [11 : 0] csr_pmpaddr8 = 12'h3B8;
-  localparam [11 : 0] csr_pmpaddr9 = 12'h3B9;
+  localparam [11 : 0] csr_pmpcfg0   = 12'h3A0;
+  localparam [11 : 0] csr_pmpcfg1   = 12'h3A1;
+  localparam [11 : 0] csr_pmpcfg2   = 12'h3A2;
+  localparam [11 : 0] csr_pmpcfg3   = 12'h3A3;
+  localparam [11 : 0] csr_pmpaddr0  = 12'h3B0;
+  localparam [11 : 0] csr_pmpaddr1  = 12'h3B1;
+  localparam [11 : 0] csr_pmpaddr2  = 12'h3B2;
+  localparam [11 : 0] csr_pmpaddr3  = 12'h3B3;
+  localparam [11 : 0] csr_pmpaddr4  = 12'h3B4;
+  localparam [11 : 0] csr_pmpaddr5  = 12'h3B5;
+  localparam [11 : 0] csr_pmpaddr6  = 12'h3B6;
+  localparam [11 : 0] csr_pmpaddr7  = 12'h3B7;
+  localparam [11 : 0] csr_pmpaddr8  = 12'h3B8;
+  localparam [11 : 0] csr_pmpaddr9  = 12'h3B9;
   localparam [11 : 0] csr_pmpaddr10 = 12'h3BA;
   localparam [11 : 0] csr_pmpaddr11 = 12'h3BB;
   localparam [11 : 0] csr_pmpaddr12 = 12'h3BC;
@@ -211,10 +211,10 @@ package constants;
   localparam [11 : 0] csr_mcycleh = 12'hB80;
   localparam [11 : 0] csr_minstreth = 12'hB82;
 
-  localparam [11 : 0] csr_tselect = 12'h7A0;
-  localparam [11 : 0] csr_tdata1 = 12'h7A1;
-  localparam [11 : 0] csr_tdata2 = 12'h7A2;
-  localparam [11 : 0] csr_tdata3 = 12'h7A3;
+  localparam [11 : 0] csr_tselect  = 12'h7A0;
+  localparam [11 : 0] csr_tdata1   = 12'h7A1;
+  localparam [11 : 0] csr_tdata2   = 12'h7A2;
+  localparam [11 : 0] csr_tdata3   = 12'h7A3;
   localparam [11 : 0] csr_tcontrol = 12'h7A5;
 
   localparam [11 : 0] csr_dcsr = 12'h7B0;

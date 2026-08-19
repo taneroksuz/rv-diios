@@ -15,7 +15,7 @@ module clint #(
   timeunit 1ns; timeprecision 1ps;
 
   localparam DEPTH = $clog2(CLOCK_RATE);
-  localparam FULL = CLOCK_RATE - 1;
+  localparam FULL  = CLOCK_RATE - 1;
 
   logic [DEPTH-1 : 0] count = 0;
 

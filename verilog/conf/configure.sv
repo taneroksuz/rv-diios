@@ -13,8 +13,8 @@ package configure;
   localparam RAM_DEPTH = 262144;
 
   localparam BTAC_ENABLE = 1;
-  localparam BTB_DEPTH = 512;
-  localparam BHT_DEPTH = 1024;
+  localparam BTB_DEPTH   = 512;
+  localparam BHT_DEPTH   = 1024;
 
   localparam ROM_BASE = 32'h00000000;
   localparam ROM_MASK = 32'hFFFFFF80;

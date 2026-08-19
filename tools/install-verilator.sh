@@ -3,7 +3,7 @@ set -e
 
 sudo apt-get -y install git help2man perl python3 make autoconf g++ flex bison ccache \
                         libgoogle-perftools-dev numactl perl-doc libfl2 libfl-dev \
-                        zlib1g zlib1g-dev
+                        zlib1g zlib1g-dev liblz4-dev
 
 if [ -d "$BASEDIR/tools/verilator" ]; then
   rm -rf $BASEDIR/tools/verilator
