@@ -69,17 +69,11 @@ module hazard_ctrl (
   timeunit 1ns; timeprecision 1ps;
 
   localparam DEPTH = $clog2(HAZARD_DEPTH);
-  localparam total = HAZARD_DEPTH - 2;
+  localparam TOTAL = 2 * (HAZARD_DEPTH - 2);
 
-  localparam [DEPTH-1:0] one = 1;
+  localparam [DEPTH-1:0] ONE = 1;
 
   typedef struct packed {
-    instruction_type    wdata0;
-    instruction_type    wdata1;
-    instruction_type    instr0;
-    instruction_type    instr1;
-    calculation_type    calc0;
-    calculation_type    calc1;
     logic [DEPTH-1 : 0] wid;
     logic [DEPTH : 0]   rid;
     logic [DEPTH : 0]   diff;
@@ -90,12 +84,6 @@ module hazard_ctrl (
   } reg_type;
 
   parameter reg_type init_reg = '{
-      wdata0 : init_instruction,
-      wdata1 : init_instruction,
-      instr0 : init_instruction,
-      instr1 : init_instruction,
-      calc0 : init_calculation,
-      calc1 : init_calculation,
       wid : 0,
       rid : 0,
       diff : 0,
@@ -104,6 +92,11 @@ module hazard_ctrl (
       single : 0,
       stall : 0
   };
+
+  instruction_type instr0;
+  instruction_type instr1;
+  calculation_type calc0;
+  calculation_type calc1;
 
   reg_type r, rin, v;
 
@@ -119,38 +112,39 @@ module hazard_ctrl (
 
     v.wen = (~hazard_in.clear) & (~r.stall) &
         (hazard_in.instr0.op.valid | hazard_in.instr1.op.valid);
-    v.wdata0 = hazard_in.instr0;
-    v.wdata1 = hazard_in.instr1;
 
     hazard_reg_in.wen0   = v.wen;
     hazard_reg_in.wen1   = v.wen;
     hazard_reg_in.waddr0 = v.wid;
     hazard_reg_in.waddr1 = v.wid;
-    hazard_reg_in.wdata0 = v.wdata0;
-    hazard_reg_in.wdata1 = v.wdata1;
+    hazard_reg_in.wdata0 = hazard_in.instr0;
+    hazard_reg_in.wdata1 = hazard_in.instr1;
+
+    instr0 = init_instruction;
+    instr1 = init_instruction;
 
     if (v.rid[0] == 0) begin
       hazard_reg_in.raddr0 = v.rid[DEPTH:1];
       hazard_reg_in.raddr1 = v.rid[DEPTH:1];
       if (v.wid == v.rid[DEPTH:1]) begin
-        v.instr0 = v.wdata0;
-        v.instr1 = v.wdata1;
+        instr0 = hazard_in.instr0;
+        instr1 = hazard_in.instr1;
       end else begin
-        v.instr0 = hazard_reg_out.rdata0;
-        v.instr1 = hazard_reg_out.rdata1;
+        instr0 = hazard_reg_out.rdata0;
+        instr1 = hazard_reg_out.rdata1;
       end
     end else begin
-      hazard_reg_in.raddr0 = v.rid[DEPTH:1] + one;
+      hazard_reg_in.raddr0 = v.rid[DEPTH:1] + ONE;
       hazard_reg_in.raddr1 = v.rid[DEPTH:1];
       if (v.wid == v.rid[DEPTH:1]) begin
-        v.instr0 = v.wdata1;
-        v.instr1 = v.wdata0;
-      end else if (v.wid == v.rid[DEPTH:1] + one) begin
-        v.instr0 = hazard_reg_out.rdata1;
-        v.instr1 = v.wdata0;
+        instr0 = hazard_in.instr0;
+        instr1 = hazard_in.instr1;
+      end else if (v.wid == v.rid[DEPTH:1] + ONE) begin
+        instr0 = hazard_reg_out.rdata1;
+        instr1 = hazard_in.instr0;
       end else begin
-        v.instr0 = hazard_reg_out.rdata1;
-        v.instr1 = hazard_reg_out.rdata0;
+        instr0 = hazard_reg_out.rdata1;
+        instr1 = hazard_reg_out.rdata0;
       end
     end
 
@@ -159,68 +153,68 @@ module hazard_ctrl (
       v.count = v.count + 2;
     end
 
-    v.calc0 = init_calculation;
-    v.calc1 = init_calculation;
+    calc0 = init_calculation;
+    calc1 = init_calculation;
 
-    v.calc0.pc     = v.instr0.pc;
-    v.calc0.npc    = v.instr0.npc;
-    v.calc0.instr  = v.instr0.instr;
-    v.calc0.imm    = v.instr0.imm;
-    v.calc0.waddr  = v.instr0.waddr;
-    v.calc0.raddr1 = v.instr0.raddr1;
-    v.calc0.raddr2 = v.instr0.raddr2;
-    v.calc0.raddr3 = v.instr0.raddr3;
-    v.calc0.caddr  = v.instr0.caddr;
-    v.calc0.fmt    = v.instr0.fmt;
-    v.calc0.rm     = v.instr0.rm;
-    v.calc0.op     = v.instr0.op;
-    v.calc0.alu_op = v.instr0.alu_op;
-    v.calc0.bcu_op = v.instr0.bcu_op;
-    v.calc0.lsu_op = v.instr0.lsu_op;
-    v.calc0.csr_op = v.instr0.csr_op;
-    v.calc0.div_op = v.instr0.div_op;
-    v.calc0.mul_op = v.instr0.mul_op;
-    v.calc0.bit_op = v.instr0.bit_op;
-    v.calc0.pred   = v.instr0.pred;
+    calc0.pc     = instr0.pc;
+    calc0.npc    = instr0.npc;
+    calc0.instr  = instr0.instr;
+    calc0.imm    = instr0.imm;
+    calc0.waddr  = instr0.waddr;
+    calc0.raddr1 = instr0.raddr1;
+    calc0.raddr2 = instr0.raddr2;
+    calc0.raddr3 = instr0.raddr3;
+    calc0.caddr  = instr0.caddr;
+    calc0.fmt    = instr0.fmt;
+    calc0.rm     = instr0.rm;
+    calc0.op     = instr0.op;
+    calc0.alu_op = instr0.alu_op;
+    calc0.bcu_op = instr0.bcu_op;
+    calc0.lsu_op = instr0.lsu_op;
+    calc0.csr_op = instr0.csr_op;
+    calc0.div_op = instr0.div_op;
+    calc0.mul_op = instr0.mul_op;
+    calc0.bit_op = instr0.bit_op;
+    calc0.pred   = instr0.pred;
 
-    v.calc1.pc     = v.instr1.pc;
-    v.calc1.npc    = v.instr1.npc;
-    v.calc1.instr  = v.instr1.instr;
-    v.calc1.imm    = v.instr1.imm;
-    v.calc1.waddr  = v.instr1.waddr;
-    v.calc1.raddr1 = v.instr1.raddr1;
-    v.calc1.raddr2 = v.instr1.raddr2;
-    v.calc1.raddr3 = v.instr1.raddr3;
-    v.calc1.caddr  = v.instr1.caddr;
-    v.calc1.fmt    = v.instr1.fmt;
-    v.calc1.rm     = v.instr1.rm;
-    v.calc1.op     = v.instr1.op;
-    v.calc1.alu_op = v.instr1.alu_op;
-    v.calc1.bcu_op = v.instr1.bcu_op;
-    v.calc1.lsu_op = v.instr1.lsu_op;
-    v.calc1.csr_op = v.instr1.csr_op;
-    v.calc1.div_op = v.instr1.div_op;
-    v.calc1.mul_op = v.instr1.mul_op;
-    v.calc1.bit_op = v.instr1.bit_op;
-    v.calc1.pred   = v.instr1.pred;
+    calc1.pc     = instr1.pc;
+    calc1.npc    = instr1.npc;
+    calc1.instr  = instr1.instr;
+    calc1.imm    = instr1.imm;
+    calc1.waddr  = instr1.waddr;
+    calc1.raddr1 = instr1.raddr1;
+    calc1.raddr2 = instr1.raddr2;
+    calc1.raddr3 = instr1.raddr3;
+    calc1.caddr  = instr1.caddr;
+    calc1.fmt    = instr1.fmt;
+    calc1.rm     = instr1.rm;
+    calc1.op     = instr1.op;
+    calc1.alu_op = instr1.alu_op;
+    calc1.bcu_op = instr1.bcu_op;
+    calc1.lsu_op = instr1.lsu_op;
+    calc1.csr_op = instr1.csr_op;
+    calc1.div_op = instr1.div_op;
+    calc1.mul_op = instr1.mul_op;
+    calc1.bit_op = instr1.bit_op;
+    calc1.pred   = instr1.pred;
 
-    v.single = v.calc0.op.fence | v.calc0.op.mret | v.calc0.op.wfi | v.calc0.op.csreg |
-        v.calc1.op.fence | v.calc1.op.mret | v.calc1.op.wfi | v.calc1.op.csreg;
-    v.single = v.single | (v.calc0.op.store & v.calc1.op.load);
-    v.single = v.single | (v.calc0.op.load & v.calc1.op.store);
-    v.single = v.single | (v.calc0.op.division & v.calc1.op.division);
-    v.single = v.single | (v.calc0.op.mult & v.calc1.op.mult);
+    v.single = calc0.op.fence | calc0.op.mret | calc0.op.wfi | calc0.op.csreg | calc1.op.fence |
+        calc1.op.mret | calc1.op.wfi | calc1.op.csreg;
+    v.single = v.single | (calc0.op.store & calc1.op.load);
+    v.single = v.single | (calc0.op.load & calc1.op.store);
+    v.single = v.single | (calc0.op.division & calc1.op.division);
+    v.single = v.single | (calc0.op.mult & calc1.op.mult);
 
     if (v.count > 1) begin
       if (v.single == 1) begin
         v.diff = 1;
       end else begin
         v.diff = 2;
-        if (v.calc0.op.wren == 1) begin
-          if (v.calc1.op.rden1 == 1 && v.calc1.raddr1 == v.calc0.waddr) begin
+        if (calc0.op.wren == 1) begin
+          if (calc1.op.rden1 == 1 && calc1.raddr1 == calc0.waddr) begin
             v.diff = 1;
           end
-          if (v.calc1.op.rden2 == 1 && v.calc1.raddr2 == v.calc0.waddr) begin
+          if (calc1.op.rden2 == 1 && calc1.raddr2 == calc0.waddr) begin
             v.diff = 1;
           end
         end
@@ -240,12 +234,12 @@ module hazard_ctrl (
 
     v.stall = 0;
 
-    if (v.count > total) begin
+    if (v.count > TOTAL) begin
       v.stall = 1;
     end
 
-    hazard_out.calc0 = v.diff > 0 ? v.calc0 : init_calculation;
-    hazard_out.calc1 = v.diff > 1 ? v.calc1 : init_calculation;
+    hazard_out.calc0 = v.diff > 0 ? calc0 : init_calculation;
+    hazard_out.calc1 = v.diff > 1 ? calc1 : init_calculation;
     hazard_out.stall = v.stall;
 
     rin = v;
