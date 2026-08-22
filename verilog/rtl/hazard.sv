@@ -93,6 +93,8 @@ module hazard_ctrl (
       stall : 0
   };
 
+  instruction_type wdata0;
+  instruction_type wdata1;
   instruction_type instr0;
   instruction_type instr1;
   calculation_type calc0;
@@ -113,12 +115,15 @@ module hazard_ctrl (
     v.wen = (~hazard_in.clear) & (~r.stall) &
         (hazard_in.instr0.op.valid | hazard_in.instr1.op.valid);
 
+    wdata0 = hazard_in.instr0;
+    wdata1 = hazard_in.instr1;
+
     hazard_reg_in.wen0   = v.wen;
     hazard_reg_in.wen1   = v.wen;
     hazard_reg_in.waddr0 = v.wid;
     hazard_reg_in.waddr1 = v.wid;
-    hazard_reg_in.wdata0 = hazard_in.instr0;
-    hazard_reg_in.wdata1 = hazard_in.instr1;
+    hazard_reg_in.wdata0 = wdata0;
+    hazard_reg_in.wdata1 = wdata1;
 
     instr0 = init_instruction;
     instr1 = init_instruction;
@@ -127,8 +132,8 @@ module hazard_ctrl (
       hazard_reg_in.raddr0 = v.rid[DEPTH:1];
       hazard_reg_in.raddr1 = v.rid[DEPTH:1];
       if (v.wid == v.rid[DEPTH:1]) begin
-        instr0 = hazard_in.instr0;
-        instr1 = hazard_in.instr1;
+        instr0 = wdata0;
+        instr1 = wdata1;
       end else begin
         instr0 = hazard_reg_out.rdata0;
         instr1 = hazard_reg_out.rdata1;
@@ -137,11 +142,11 @@ module hazard_ctrl (
       hazard_reg_in.raddr0 = v.rid[DEPTH:1] + ONE;
       hazard_reg_in.raddr1 = v.rid[DEPTH:1];
       if (v.wid == v.rid[DEPTH:1]) begin
-        instr0 = hazard_in.instr0;
-        instr1 = hazard_in.instr1;
+        instr0 = wdata0;
+        instr1 = wdata1;
       end else if (v.wid == v.rid[DEPTH:1] + ONE) begin
         instr0 = hazard_reg_out.rdata1;
-        instr1 = hazard_in.instr0;
+        instr1 = wdata0;
       end else begin
         instr0 = hazard_reg_out.rdata1;
         instr1 = hazard_reg_out.rdata0;
