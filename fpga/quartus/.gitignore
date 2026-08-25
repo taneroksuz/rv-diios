@@ -3,6 +3,7 @@
 !*.v
 !*.sv
 !*.sh
-!*.qsf
+!*.ip
+!*.tcl
 !*.sdc
 !*.bat

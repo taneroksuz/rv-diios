@@ -4,10 +4,7 @@ setlocal
 pushd "%~dp0"
 
 if %SYNTHESIS%==1 (
-    call quartus_map.exe --write_settings_files=off top.qsf
-    call quartus_fit.exe --write_settings_files=off top
-    call quartus_asm.exe --write_settings_files=off top
-    call quartus_sta.exe top
+    call quartus_sh.exe -t synthesis.tcl
 )
 
 tasklist /fi "imagename eq jtagd.exe" 2>nul | find /i "jtagd.exe" >nul

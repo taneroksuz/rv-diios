@@ -2,22 +2,26 @@ import configure::*;
 import wires::*;
 
 module top (
-  input           CLOCK_50_B5B,
+  input           CLOCK0_50,
   input  [ 3 : 0] KEY,
   output [ 9 : 0] LEDR,
-  input           UART_RX,
-  output          UART_TX,
-  output          SRAM_CE_n,
-  output          SRAM_WE_n,
-  output          SRAM_OE_n,
-  output          SRAM_UB_n,
-  output          SRAM_LB_n,
-  inout  [15 : 0] SRAM_D,
-  output [17 : 0] SRAM_A
+  input           FPGA_UART_RX,
+  output          FPGA_UART_TX,
+  output          DRAM_CLK,
+  output          DRAM_CKE,
+  output [ 1 : 0] DRAM_BA,
+  output          DRAM_CS_n,
+  output          DRAM_WE_n,
+  output          DRAM_CAS_n,
+  output          DRAM_RAS_n,
+  output [12 : 0] DRAM_ADDR,
+  output [ 3 : 0] DRAM_DQM,
+  inout  [31 : 0] DRAM_DQ
 );
 
   timeunit 1ns; timeprecision 1ps;
 
+  logic       CLOCK_SDR;
   logic       CLOCK_CPU;
   logic       LOCKED;
   logic       RESET;
@@ -30,6 +34,8 @@ module top (
 
   mem_in_type  ram_in;
   mem_out_type ram_out;
+  mem_in_type  sdram_in;
+  mem_out_type sdram_out;
 
   initial begin
     SCLK = 0;
@@ -39,9 +45,10 @@ module top (
   end
 
   pll pll_cpu_comp (
-    .refclk  (CLOCK_50_B5B),
+    .refclk  (CLOCK0_50),
     .rst     (~KEY[0]),
     .outclk_0(CLOCK_CPU),
+    .outclk_1(CLOCK_SDR),
     .locked  (LOCKED)
   );
 
@@ -63,11 +70,16 @@ module top (
     .mosi   (MOSI),
     .miso   (MISO),
     .ss     (SS),
-    .rx     (UART_RX),
-    .tx     (UART_TX),
+    .rx     (FPGA_UART_RX),
+    .tx     (FPGA_UART_TX),
     .ram_in (ram_in),
     .ram_out(ram_out)
   );
+
+  always_ff @(posedge CLOCK_CPU) begin
+    sdram_in <= ram_in;
+    ram_out  <= sdram_out;
+  end
 
   logic [9:0] REG_LED = 0;
 
@@ -81,22 +93,24 @@ module top (
     end
   end
 
-  assign LEDR = REG_LED;
+  assign LEDR     = REG_LED;
+  assign DRAM_CLK = CLOCK_SDR;
 
-  sram #(
-    .CLOCK_RATE(CLK_DIVIDER_PER)
-  ) sram_comp (
-    .reset    (RESET),
-    .clock    (CLOCK_CPU),
-    .sram_in  (ram_in),
-    .sram_out (ram_out),
-    .sram_ce_n(SRAM_CE_n),
-    .sram_we_n(SRAM_WE_n),
-    .sram_oe_n(SRAM_OE_n),
-    .sram_ub_n(SRAM_UB_n),
-    .sram_lb_n(SRAM_LB_n),
-    .sram_dq  (SRAM_D),
-    .sram_addr(SRAM_A)
+  sdram sdram_comp (
+    .reset      (RESET),
+    .clock      (CLOCK_CPU),
+    .sdram_in   (sdram_in),
+    .sdram_out  (sdram_out),
+    .sdram_clk  (CLOCK_SDR),
+    .sdram_cke  (DRAM_CKE),
+    .sdram_ba   (DRAM_BA),
+    .sdram_cs_n (DRAM_CS_n),
+    .sdram_we_n (DRAM_WE_n),
+    .sdram_cas_n(DRAM_CAS_n),
+    .sdram_ras_n(DRAM_RAS_n),
+    .sdram_sa   (DRAM_ADDR),
+    .sdram_dqm  (DRAM_DQM),
+    .sdram_dq   (DRAM_DQ)
   );
 
 endmodule

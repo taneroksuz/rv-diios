@@ -6,16 +6,14 @@
 #**************************************************************
 # Create Clock
 #**************************************************************
-create_clock -period 8 [get_ports CLOCK_125_p]
-create_clock -period 20 [get_ports CLOCK_50_B5B]
-create_clock -period 20 [get_ports CLOCK_50_B6A]
-create_clock -period 20 [get_ports CLOCK_50_B7A]
-create_clock -period 20 [get_ports CLOCK_50_B8A]
+# CLOCK
+create_clock -period "50MHz" [get_ports CLOCK0_50]
+
+
 
 #**************************************************************
 # Create Generated Clock
 #**************************************************************
-derive_pll_clocks
 
 
 
@@ -29,7 +27,6 @@ derive_pll_clocks
 # Set Clock Uncertainty
 #**************************************************************
 derive_clock_uncertainty
-
 
 
 #**************************************************************

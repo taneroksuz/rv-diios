@@ -11,10 +11,7 @@ cd ${BASEDIR}/fpga/quartus
 
 if [ "$SYNTHESIS" = "1" ]
 then
-  ${QUARTUS}_map --write_settings_files=off top.qsf
-  ${QUARTUS}_fit --write_settings_files=off top
-  ${QUARTUS}_asm --write_settings_files=off top
-  ${QUARTUS}_sta top
+  ${QUARTUS}_sh -t synthesis.tcl
 fi
 
 if pgrep -x "jtagd" > /dev/null
