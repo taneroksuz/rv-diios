@@ -17,9 +17,11 @@ module csr_alu (
 
     if (csr_alu_in.csr_op.csrrw == 1 | csr_alu_in.csr_op.csrrwi == 1) begin
       cdata = rdata1;
-    end else if (csr_alu_in.csr_op.csrrs == 1 | csr_alu_in.csr_op.csrrsi == 1) begin
+    end
+    else if (csr_alu_in.csr_op.csrrs == 1 | csr_alu_in.csr_op.csrrsi == 1) begin
       cdata = csr_alu_in.cdata | rdata1;
-    end else if (csr_alu_in.csr_op.csrrc == 1 | csr_alu_in.csr_op.csrrci == 1) begin
+    end
+    else if (csr_alu_in.csr_op.csrrc == 1 | csr_alu_in.csr_op.csrrci == 1) begin
       cdata = csr_alu_in.cdata & ~rdata1;
     end
 

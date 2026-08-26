@@ -7,14 +7,14 @@ package hazard_wires;
   localparam DEPTH = $clog2(HAZARD_DEPTH);
 
   typedef struct packed {
-    logic [0 : 0]       wen0;
-    logic [0 : 0]       wen1;
-    logic [DEPTH-1 : 0] waddr0;
-    logic [DEPTH-1 : 0] waddr1;
-    logic [DEPTH-1 : 0] raddr0;
-    logic [DEPTH-1 : 0] raddr1;
-    instruction_type    wdata0;
-    instruction_type    wdata1;
+    logic [0:0]       wen0;
+    logic [0:0]       wen1;
+    logic [DEPTH-1:0] waddr0;
+    logic [DEPTH-1:0] waddr1;
+    logic [DEPTH-1:0] raddr0;
+    logic [DEPTH-1:0] raddr1;
+    instruction_type  wdata0;
+    instruction_type  wdata1;
   } hazard_reg_in_type;
 
   typedef struct packed {
@@ -74,24 +74,16 @@ module hazard_ctrl (
   localparam [DEPTH-1:0] ONE = 1;
 
   typedef struct packed {
-    logic [DEPTH-1 : 0] wid;
-    logic [DEPTH : 0]   rid;
-    logic [DEPTH : 0]   diff;
-    logic [DEPTH : 0]   count;
-    logic [0 : 0]       wen;
-    logic [0 : 0]       single;
-    logic [0 : 0]       stall;
+    logic [DEPTH-1:0] wid;
+    logic [DEPTH:0]   rid;
+    logic [DEPTH:0]   diff;
+    logic [DEPTH:0]   count;
+    logic [0:0]       wen;
+    logic [0:0]       single;
+    logic [0:0]       stall;
   } reg_type;
 
-  parameter reg_type init_reg = '{
-      wid : 0,
-      rid : 0,
-      diff : 0,
-      count : 0,
-      wen : 0,
-      single : 0,
-      stall : 0
-  };
+  parameter reg_type init_reg = '{wid : 0, rid : 0, diff : 0, count : 0, wen : 0, single : 0, stall : 0};
 
   instruction_type wdata0;
   instruction_type wdata1;
@@ -112,8 +104,7 @@ module hazard_ctrl (
       v.count = 0;
     end
 
-    v.wen = (~hazard_in.clear) & (~r.stall) &
-        (hazard_in.instr0.op.valid | hazard_in.instr1.op.valid);
+    v.wen = (~hazard_in.clear) & (~r.stall) & (hazard_in.instr0.op.valid | hazard_in.instr1.op.valid);
 
     wdata0 = hazard_in.instr0;
     wdata1 = hazard_in.instr1;
@@ -134,20 +125,24 @@ module hazard_ctrl (
       if (v.wid == v.rid[DEPTH:1]) begin
         instr0 = wdata0;
         instr1 = wdata1;
-      end else begin
+      end
+      else begin
         instr0 = hazard_reg_out.rdata0;
         instr1 = hazard_reg_out.rdata1;
       end
-    end else begin
+    end
+    else begin
       hazard_reg_in.raddr0 = v.rid[DEPTH:1] + ONE;
       hazard_reg_in.raddr1 = v.rid[DEPTH:1];
       if (v.wid == v.rid[DEPTH:1]) begin
         instr0 = wdata0;
         instr1 = wdata1;
-      end else if (v.wid == v.rid[DEPTH:1] + ONE) begin
+      end
+      else if (v.wid == v.rid[DEPTH:1] + ONE) begin
         instr0 = hazard_reg_out.rdata1;
         instr1 = wdata0;
-      end else begin
+      end
+      else begin
         instr0 = hazard_reg_out.rdata1;
         instr1 = hazard_reg_out.rdata0;
       end
@@ -203,8 +198,8 @@ module hazard_ctrl (
     calc1.bit_op = instr1.bit_op;
     calc1.pred   = instr1.pred;
 
-    v.single = calc0.op.fence | calc0.op.mret | calc0.op.wfi | calc0.op.csreg | calc1.op.fence |
-        calc1.op.mret | calc1.op.wfi | calc1.op.csreg;
+    v.single = calc0.op.fence | calc0.op.mret | calc0.op.wfi | calc0.op.csreg | calc1.op.fence | calc1.op.mret |
+        calc1.op.wfi | calc1.op.csreg;
     v.single = v.single | (calc0.op.store & calc1.op.load);
     v.single = v.single | (calc0.op.load & calc1.op.store);
     v.single = v.single | (calc0.op.division & calc1.op.division);
@@ -213,7 +208,8 @@ module hazard_ctrl (
     if (v.count > 1) begin
       if (v.single == 1) begin
         v.diff = 1;
-      end else begin
+      end
+      else begin
         v.diff = 2;
         if (calc0.op.wren == 1) begin
           if (calc1.op.rden1 == 1 && calc1.raddr1 == calc0.waddr) begin
@@ -224,9 +220,11 @@ module hazard_ctrl (
           end
         end
       end
-    end else if (v.count > 0) begin
+    end
+    else if (v.count > 0) begin
       v.diff = 1;
-    end else begin
+    end
+    else begin
       v.diff = 0;
     end
 
@@ -254,7 +252,8 @@ module hazard_ctrl (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

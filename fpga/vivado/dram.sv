@@ -113,7 +113,8 @@ module dram (
       stPreset: begin
         if (|v_in.mem_wstrb) begin
           v_in.state = stSendData;
-        end else begin
+        end
+        else begin
           v_in.state = stSetCmdRd;
         end
       end
@@ -214,7 +215,8 @@ module dram (
   always_ff @(posedge app_ui_clk) begin
     if (app_ui_rst == 1) begin
       r_in <= init_register_in;
-    end else begin
+    end
+    else begin
       r_in <= rin_in;
     end
   end

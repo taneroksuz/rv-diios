@@ -59,8 +59,8 @@ module execute_stage (
 
     v.stall = 0;
 
-    v.enable = ~(d.e.stall | a.m.stall | d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap |
-                 csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear);
+    v.enable = ~(d.e.stall | a.m.stall | d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret |
+                 btac_out.pred_miss0 | btac_out.pred_miss1 | clear);
 
     alu0_in.rdata1 = v.calc0.rdata1;
     alu0_in.rdata2 = v.calc0.rdata2;
@@ -124,15 +124,18 @@ module execute_stage (
       v.calc0.op.exception = 1;
       v.calc0.ecause       = except_illegal_instruction;
       v.calc0.etval        = v.calc0.instr;
-    end else if (v.calc0.op.ebreak == 1) begin
+    end
+    else if (v.calc0.op.ebreak == 1) begin
       v.calc0.op.exception = 1;
       v.calc0.ecause       = except_breakpoint;
       v.calc0.etval        = v.calc0.instr;
-    end else if (v.calc0.op.ecall == 1) begin
+    end
+    else if (v.calc0.op.ecall == 1) begin
       v.calc0.op.exception = 1;
       v.calc0.ecause       = except_env_call_mach;
       v.calc0.etval        = v.calc0.instr;
-    end else begin
+    end
+    else begin
       v.calc0.op.exception = agu0_out.exception;
       v.calc0.ecause       = agu0_out.ecause;
       v.calc0.etval        = agu0_out.etval;
@@ -140,9 +143,11 @@ module execute_stage (
         if (v.calc0.op.load == 1) begin
           v.calc0.op.load = 0;
           v.calc0.op.wren = 0;
-        end else if (v.calc0.op.store == 1) begin
+        end
+        else if (v.calc0.op.store == 1) begin
           v.calc0.op.store = 0;
-        end else if (v.calc0.op.jump == 1) begin
+        end
+        else if (v.calc0.op.jump == 1) begin
           v.calc0.op.jump = 0;
           v.calc0.op.wren = 0;
         end
@@ -153,15 +158,18 @@ module execute_stage (
       v.calc1.op.exception = 1;
       v.calc1.ecause       = except_illegal_instruction;
       v.calc1.etval        = v.calc1.instr;
-    end else if (v.calc1.op.ebreak == 1) begin
+    end
+    else if (v.calc1.op.ebreak == 1) begin
       v.calc1.op.exception = 1;
       v.calc1.ecause       = except_breakpoint;
       v.calc1.etval        = v.calc1.instr;
-    end else if (v.calc1.op.ecall == 1) begin
+    end
+    else if (v.calc1.op.ecall == 1) begin
       v.calc1.op.exception = 1;
       v.calc1.ecause       = except_env_call_mach;
       v.calc1.etval        = v.calc1.instr;
-    end else begin
+    end
+    else begin
       v.calc1.op.exception = agu1_out.exception;
       v.calc1.ecause       = agu1_out.ecause;
       v.calc1.etval        = agu1_out.etval;
@@ -169,19 +177,19 @@ module execute_stage (
         if (v.calc1.op.load == 1) begin
           v.calc1.op.load = 0;
           v.calc1.op.wren = 0;
-        end else if (v.calc1.op.store == 1) begin
+        end
+        else if (v.calc1.op.store == 1) begin
           v.calc1.op.store = 0;
-        end else if (v.calc1.op.jump == 1) begin
+        end
+        else if (v.calc1.op.jump == 1) begin
           v.calc1.op.jump = 0;
           v.calc1.op.wren = 0;
         end
       end
     end
 
-    v.calc0.sdata = store_data(v.calc0.rdata2, v.calc0.lsu_op.lsu_sb, v.calc0.lsu_op.lsu_sh,
-                               v.calc0.lsu_op.lsu_sw);
-    v.calc1.sdata = store_data(v.calc1.rdata2, v.calc1.lsu_op.lsu_sb, v.calc1.lsu_op.lsu_sh,
-                               v.calc1.lsu_op.lsu_sw);
+    v.calc0.sdata = store_data(v.calc0.rdata2, v.calc0.lsu_op.lsu_sb, v.calc0.lsu_op.lsu_sh, v.calc0.lsu_op.lsu_sw);
+    v.calc1.sdata = store_data(v.calc1.rdata2, v.calc1.lsu_op.lsu_sb, v.calc1.lsu_op.lsu_sh, v.calc1.lsu_op.lsu_sw);
 
     mul_in.rdata1 = v.calc0.op.mult ? v.calc0.rdata1 : v.calc1.rdata1;
     mul_in.rdata2 = v.calc0.op.mult ? v.calc0.rdata2 : v.calc1.rdata2;
@@ -218,37 +226,51 @@ module execute_stage (
 
     if (v.calc0.op.auipc == 1) begin
       v.calc0.wdata = v.calc0.address;
-    end else if (v.calc0.op.lui == 1) begin
+    end
+    else if (v.calc0.op.lui == 1) begin
       v.calc0.wdata = v.calc0.imm;
-    end else if (v.calc0.op.jal == 1) begin
+    end
+    else if (v.calc0.op.jal == 1) begin
       v.calc0.wdata = v.calc0.npc;
-    end else if (v.calc0.op.jalr == 1) begin
+    end
+    else if (v.calc0.op.jalr == 1) begin
       v.calc0.wdata = v.calc0.npc;
-    end else if (v.calc0.op.crden == 1) begin
+    end
+    else if (v.calc0.op.crden == 1) begin
       v.calc0.wdata = v.calc0.crdata;
-    end else if (v.calc0.op.division == 1) begin
+    end
+    else if (v.calc0.op.division == 1) begin
       v.calc0.wdata = v.calc0.ddata;
-    end else if (v.calc0.op.mult == 1) begin
+    end
+    else if (v.calc0.op.mult == 1) begin
       v.calc0.wdata = v.calc0.mdata;
-    end else if (v.calc0.op.bitm == 1) begin
+    end
+    else if (v.calc0.op.bitm == 1) begin
       v.calc0.wdata = v.calc0.bdata;
     end
 
     if (v.calc1.op.auipc == 1) begin
       v.calc1.wdata = v.calc1.address;
-    end else if (v.calc1.op.lui == 1) begin
+    end
+    else if (v.calc1.op.lui == 1) begin
       v.calc1.wdata = v.calc1.imm;
-    end else if (v.calc1.op.jal == 1) begin
+    end
+    else if (v.calc1.op.jal == 1) begin
       v.calc1.wdata = v.calc1.npc;
-    end else if (v.calc1.op.jalr == 1) begin
+    end
+    else if (v.calc1.op.jalr == 1) begin
       v.calc1.wdata = v.calc1.npc;
-    end else if (v.calc1.op.crden == 1) begin
+    end
+    else if (v.calc1.op.crden == 1) begin
       v.calc1.wdata = v.calc1.crdata;
-    end else if (v.calc1.op.division == 1) begin
+    end
+    else if (v.calc1.op.division == 1) begin
       v.calc1.wdata = v.calc1.ddata;
-    end else if (v.calc1.op.mult == 1) begin
+    end
+    else if (v.calc1.op.mult == 1) begin
       v.calc1.wdata = v.calc1.mdata;
-    end else if (v.calc1.op.bitm == 1) begin
+    end
+    else if (v.calc1.op.bitm == 1) begin
       v.calc1.wdata = v.calc1.bdata;
     end
 
@@ -297,8 +319,7 @@ module execute_stage (
       v.calc1.pred = init_prediction;
     end
 
-    if ((d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | clear) ==
-        1) begin
+    if ((d.e.calc0.op.exception | d.e.calc0.op.mret | csr_out.trap | csr_out.mret | clear) == 1) begin
       v.calc0 = init_calculation;
       v.calc1 = init_calculation;
     end
@@ -326,7 +347,8 @@ module execute_stage (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_execute_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

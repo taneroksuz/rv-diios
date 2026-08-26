@@ -33,7 +33,8 @@ module writeback_stage (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_writeback_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

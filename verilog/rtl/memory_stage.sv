@@ -103,7 +103,8 @@ module memory_stage (
     if (v.stall == 1) begin
       v.calc0.op = init_operation;
       v.calc1.op = init_operation;
-    end else begin
+    end
+    else begin
       v.ready0 = 0;
       v.ready1 = 0;
     end
@@ -161,7 +162,8 @@ module memory_stage (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_memory_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

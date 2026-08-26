@@ -32,8 +32,8 @@ module fetch_stage (
     v.valid = 0;
     v.stall = buffer_out.stall;
 
-    v.spec = clear | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 |
-        d.m.calc0.op.fence | btac_out.pred0.taken | btac_out.pred1.taken;
+    v.spec = clear | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | d.m.calc0.op.fence |
+        btac_out.pred0.taken | btac_out.pred1.taken;
 
     if (imem0_out.mem_ready == 1) begin
       v.irdata0 = imem0_out.mem_rdata;
@@ -50,7 +50,8 @@ module fetch_stage (
       v.ready   = 1;
       v.iready0 = 0;
       v.iready1 = 0;
-    end else begin
+    end
+    else begin
       v.rdata = 0;
       v.ready = 0;
     end
@@ -72,11 +73,13 @@ module fetch_stage (
         if (v.ready == 1) begin
           v.state = BUSY;
           v.valid = 1;
-        end else if (v.spec == 1) begin
+        end
+        else if (v.spec == 1) begin
           v.state = INVALID;
           v.valid = 0;
           v.stall = 1;
-        end else begin
+        end
+        else begin
           v.state = BUSY;
           v.valid = 0;
           v.stall = 1;
@@ -88,7 +91,8 @@ module fetch_stage (
           v.ready = 0;
           v.valid = 1;
           v.stall = 1;
-        end else begin
+        end
+        else begin
           v.state = INVALID;
           v.ready = 0;
           v.valid = 0;
@@ -101,21 +105,29 @@ module fetch_stage (
 
     if (clear == 1) begin
       v.ipc0 = 0;
-    end else if (csr_out.trap == 1) begin
+    end
+    else if (csr_out.trap == 1) begin
       v.ipc0 = csr_out.mtvec;
-    end else if (csr_out.mret == 1) begin
+    end
+    else if (csr_out.mret == 1) begin
       v.ipc0 = csr_out.mepc;
-    end else if (btac_out.pred_miss0 == 1) begin
+    end
+    else if (btac_out.pred_miss0 == 1) begin
       v.ipc0 = btac_out.pred_maddr0;
-    end else if (btac_out.pred_miss1 == 1) begin
+    end
+    else if (btac_out.pred_miss1 == 1) begin
       v.ipc0 = btac_out.pred_maddr1;
-    end else if (d.m.calc0.op.fence == 1) begin
+    end
+    else if (d.m.calc0.op.fence == 1) begin
       v.ipc0 = d.m.calc0.npc;
-    end else if (btac_out.pred0.taken == 1) begin
+    end
+    else if (btac_out.pred0.taken == 1) begin
       v.ipc0 = btac_out.pred0.taddr;
-    end else if (btac_out.pred1.taken == 1) begin
+    end
+    else if (btac_out.pred1.taken == 1) begin
       v.ipc0 = btac_out.pred1.taddr;
-    end else if (v.stall == 0) begin
+    end
+    else if (v.stall == 0) begin
       v.ipc0 = v.ipc0 + 8;
     end
 
@@ -178,7 +190,8 @@ module fetch_stage (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_fetch_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

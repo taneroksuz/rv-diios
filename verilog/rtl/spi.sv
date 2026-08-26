@@ -18,16 +18,16 @@ module spi #(
   localparam FULL = CLOCK_RATE - 1;
 
   typedef struct packed {
-    logic [31 : 0] counter;
-    logic [7 : 0]  data;
-    logic [2 : 0]  state;
-    logic [0 : 0]  write;
-    logic [0 : 0]  read;
-    logic [5 : 0]  incr;
-    logic [0 : 0]  sclk;
-    logic [0 : 0]  ss;
-    logic [2 : 0]  dim;
-    logic [0 : 0]  ready;
+    logic [31:0] counter;
+    logic [7:0]  data;
+    logic [2:0]  state;
+    logic [0:0]  write;
+    logic [0:0]  read;
+    logic [5:0]  incr;
+    logic [0:0]  sclk;
+    logic [0:0]  ss;
+    logic [2:0]  dim;
+    logic [0:0]  ready;
   } register_type;
 
   register_type init_register = 0;
@@ -52,7 +52,8 @@ module spi #(
         v.ready = 1;
         v.write = 0;
         v.read  = 0;
-      end else begin
+      end
+      else begin
         v.data  = {v.data[6:0], 1'b0};
         v.state = v.state + 1;
       end
@@ -71,7 +72,8 @@ module spi #(
 
     if (v.write == 1) begin
       v.ss = 0;
-    end else if (v.read == 1) begin
+    end
+    else if (v.read == 1) begin
       v.ss      = 0;
       v.data[0] = miso;
     end
@@ -91,7 +93,8 @@ module spi #(
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_register;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

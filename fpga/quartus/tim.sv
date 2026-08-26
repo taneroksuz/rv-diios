@@ -4,7 +4,7 @@ package tim_wires;
   import configure::*;
 
   localparam TIM_WORDS = TIM_WIDTH * TIM_DEPTH;
-  localparam TADDR = $clog2(TIM_WORDS);
+  localparam TADDR     = $clog2(TIM_WORDS);
 
   typedef struct packed {
     logic [1:0][0:0]       en;
@@ -209,7 +209,8 @@ module tim_ctrl (
     if (reset == 0) begin
       r_f <= init_front;
       r_b <= init_back;
-    end else begin
+    end
+    else begin
       r_f <= rin_f;
       r_b <= rin_b;
     end

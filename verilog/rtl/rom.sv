@@ -9,14 +9,14 @@ module rom (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  logic [31 : 0] rdata;
-  logic [ 0 : 0] ready;
+  logic [31:0] rdata;
+  logic [ 0:0] ready;
 
   generate
 
     if (HARDWARE == 0) begin : rom_simulation
 
-      logic [4 : 0] raddr;
+      logic [4:0] raddr;
 
       assign raddr = rom_in.mem_addr[6:2];
 
@@ -61,7 +61,7 @@ module rom (
 
     if (HARDWARE == 1) begin : rom_hardware
 
-      logic [5 : 0] raddr;
+      logic [5:0] raddr;
 
       assign raddr = rom_in.mem_addr[7:2];
 
@@ -142,7 +142,8 @@ module rom (
 
     if (rom_in.mem_valid == 1) begin
       ready <= 1;
-    end else begin
+    end
+    else begin
       ready <= 0;
     end
 

@@ -1,30 +1,30 @@
 import configure::*;
 
 module avl (
-  input  logic          reset,
-  input  logic          clock,
+  input  logic        reset,
+  input  logic        clock,
   /////////////////////////////////
-  input  logic [ 0 : 0] avl_valid,
-  input  logic [ 0 : 0] avl_instr,
-  input  logic [31 : 0] avl_addr,
-  input  logic [31 : 0] avl_wdata,
-  input  logic [ 3 : 0] avl_wstrb,
-  output logic [31 : 0] avl_rdata,
-  output logic [ 0 : 0] avl_ready,
+  input  logic [ 0:0] avl_valid,
+  input  logic [ 0:0] avl_instr,
+  input  logic [31:0] avl_addr,
+  input  logic [31:0] avl_wdata,
+  input  logic [ 3:0] avl_wstrb,
+  output logic [31:0] avl_rdata,
+  output logic [ 0:0] avl_ready,
   /////////////////////////////////
-  output logic [31 : 0] m_avl_address,
-  output logic [ 3 : 0] m_avl_byteenable,
-  output logic [ 0 : 0] m_avl_lock,
-  output logic [ 0 : 0] m_avl_read,
-  output logic [31 : 0] m_avl_writedata,
-  output logic [ 0 : 0] m_avl_write,
-  output logic [ 2 : 0] m_avl_burstcount,
+  output logic [31:0] m_avl_address,
+  output logic [ 3:0] m_avl_byteenable,
+  output logic [ 0:0] m_avl_lock,
+  output logic [ 0:0] m_avl_read,
+  output logic [31:0] m_avl_writedata,
+  output logic [ 0:0] m_avl_write,
+  output logic [ 2:0] m_avl_burstcount,
   /////////////////////////////////
-  input  logic [31 : 0] m_avl_readdata,
-  input  logic [ 1 : 0] m_avl_response,
-  input  logic [ 0 : 0] m_avl_waitrequest,
-  input  logic [ 0 : 0] m_avl_readdatavalid,
-  input  logic [ 0 : 0] m_avl_writeresponsevalid
+  input  logic [31:0] m_avl_readdata,
+  input  logic [ 1:0] m_avl_response,
+  input  logic [ 0:0] m_avl_waitrequest,
+  input  logic [ 0:0] m_avl_readdatavalid,
+  input  logic [ 0:0] m_avl_writeresponsevalid
   /////////////////////////////////
 );
   timeunit 1ns; timeprecision 1ps;
@@ -33,24 +33,24 @@ module avl (
   localparam [1:0] load  = 1;
   localparam [1:0] store = 2;
 
-  logic [1 : 0] state;
-  logic [1 : 0] state_reg;
+  logic [1:0] state;
+  logic [1:0] state_reg;
 
-  logic [ 31:0] address;
-  logic [ 31:0] address_reg;
-  logic [3 : 0] byteenable;
-  logic [3 : 0] byteenable_reg;
-  logic [0 : 0] read;
-  logic [0 : 0] read_reg;
-  logic [ 31:0] writedata;
-  logic [ 31:0] writedata_reg;
-  logic [0 : 0] write;
-  logic [0 : 0] write_reg;
+  logic [31:0] address;
+  logic [31:0] address_reg;
+  logic [ 3:0] byteenable;
+  logic [ 3:0] byteenable_reg;
+  logic [ 0:0] read;
+  logic [ 0:0] read_reg;
+  logic [31:0] writedata;
+  logic [31:0] writedata_reg;
+  logic [ 0:0] write;
+  logic [ 0:0] write_reg;
 
-  logic [ 31:0] rdata;
-  logic [ 31:0] rdata_reg;
-  logic [0 : 0] ready;
-  logic [0 : 0] ready_reg;
+  logic [31:0] rdata;
+  logic [31:0] rdata_reg;
+  logic [ 0:0] ready;
+  logic [ 0:0] ready_reg;
 
   always_comb begin
     state      = state_reg;
@@ -68,7 +68,8 @@ module avl (
             state      = load;
             read       = 1;
             byteenable = 4'hF;
-          end else if (|avl_wstrb == 1) begin
+          end
+          else if (|avl_wstrb == 1) begin
             state      = store;
             write      = 1;
             byteenable = avl_wstrb;
@@ -82,7 +83,8 @@ module avl (
           state = idle;
           rdata = m_avl_readdata;
           ready = 1;
-        end else if (m_avl_waitrequest == 1) begin
+        end
+        else if (m_avl_waitrequest == 1) begin
           address    = address_reg;
           byteenable = byteenable_reg;
           read       = read_reg;
@@ -94,7 +96,8 @@ module avl (
         if (m_avl_waitrequest == 0) begin
           state = idle;
           ready = 1;
-        end else if (m_avl_waitrequest == 1) begin
+        end
+        else if (m_avl_waitrequest == 1) begin
           address    = address_reg;
           byteenable = byteenable_reg;
           read       = read_reg;
@@ -129,7 +132,8 @@ module avl (
       write_reg      <= 0;
       rdata_reg      <= 0;
       ready_reg      <= 0;
-    end else begin
+    end
+    else begin
       state_reg      <= state;
       address_reg    <= address;
       byteenable_reg <= byteenable;

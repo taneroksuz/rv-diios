@@ -75,23 +75,23 @@ module buffer_reg (
   end
 
   always_comb begin
-    buffer_reg_out.rdata0 = (buffer_reg_in.wen0 == 1 && buffer_reg_in.raddr0 == buffer_reg_in.waddr0
-        ) ? buffer_reg_in.wdata0 : buffer_reg_array0[buffer_reg_in.raddr0];
+    buffer_reg_out.rdata0 = (buffer_reg_in.wen0 == 1 && buffer_reg_in.raddr0 == buffer_reg_in.waddr0) ?
+        buffer_reg_in.wdata0 : buffer_reg_array0[buffer_reg_in.raddr0];
   end
 
   always_comb begin
-    buffer_reg_out.rdata1 = (buffer_reg_in.wen1 == 1 && buffer_reg_in.raddr1 == buffer_reg_in.waddr1
-        ) ? buffer_reg_in.wdata1 : buffer_reg_array1[buffer_reg_in.raddr1];
+    buffer_reg_out.rdata1 = (buffer_reg_in.wen1 == 1 && buffer_reg_in.raddr1 == buffer_reg_in.waddr1) ?
+        buffer_reg_in.wdata1 : buffer_reg_array1[buffer_reg_in.raddr1];
   end
 
   always_comb begin
-    buffer_reg_out.rdata2 = (buffer_reg_in.wen2 == 1 && buffer_reg_in.raddr2 == buffer_reg_in.waddr2
-        ) ? buffer_reg_in.wdata2 : buffer_reg_array2[buffer_reg_in.raddr2];
+    buffer_reg_out.rdata2 = (buffer_reg_in.wen2 == 1 && buffer_reg_in.raddr2 == buffer_reg_in.waddr2) ?
+        buffer_reg_in.wdata2 : buffer_reg_array2[buffer_reg_in.raddr2];
   end
 
   always_comb begin
-    buffer_reg_out.rdata3 = (buffer_reg_in.wen3 == 1 && buffer_reg_in.raddr3 == buffer_reg_in.waddr3
-        ) ? buffer_reg_in.wdata3 : buffer_reg_array3[buffer_reg_in.raddr3];
+    buffer_reg_out.rdata3 = (buffer_reg_in.wen3 == 1 && buffer_reg_in.raddr3 == buffer_reg_in.waddr3) ?
+        buffer_reg_in.wdata3 : buffer_reg_array3[buffer_reg_in.raddr3];
   end
 
 endmodule
@@ -106,7 +106,7 @@ module buffer_ctrl (
 );
   timeunit 1ns; timeprecision 1ps;
 
-  localparam W = BDEPTH + 2;
+  localparam W     = BDEPTH + 2;
   localparam TOTAL = 4 * (BUFFER_DEPTH - 2);
 
   typedef struct packed {
@@ -280,7 +280,8 @@ module buffer_ctrl (
         v.ready0 = 1;
         v.diff   = W'(1);
       end
-    end else begin
+    end
+    else begin
       if (v.count > v.align + W'(1)) begin
         v.pc0    = v.pc_base;
         v.instr0 = {v.rdata1, v.rdata0};
@@ -297,7 +298,8 @@ module buffer_ctrl (
           v.ready1 = 1;
           v.diff   = W'(2);
         end
-      end else begin
+      end
+      else begin
         if (v.count > v.align + W'(2)) begin
           v.pc1    = v.pc_base + 32'd2;
           v.instr1 = {v.rdata2, v.rdata1};
@@ -305,7 +307,8 @@ module buffer_ctrl (
           v.diff   = W'(3);
         end
       end
-    end else begin
+    end
+    else begin
       if (v.comp2 == 1) begin
         if (v.count > v.align + W'(2)) begin
           v.pc1    = v.pc_base + 32'd4;
@@ -313,7 +316,8 @@ module buffer_ctrl (
           v.ready1 = 1;
           v.diff   = W'(3);
         end
-      end else begin
+      end
+      else begin
         if (v.count > v.align + W'(3)) begin
           v.pc1    = v.pc_base + 32'd4;
           v.instr1 = {v.rdata3, v.rdata2};
@@ -335,7 +339,8 @@ module buffer_ctrl (
 
     if (v.count > TOTAL) begin
       v.stall = 1;
-    end else begin
+    end
+    else begin
       v.stall = 0;
     end
 
@@ -354,7 +359,8 @@ module buffer_ctrl (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

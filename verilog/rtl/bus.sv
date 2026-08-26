@@ -48,15 +48,15 @@ module bus (
   mem_out_type dbridge0_out;
   mem_out_type dbridge1_out;
 
-  logic [0 : 0] itim0_rev;
-  logic [0 : 0] itim1_rev;
-  logic [0 : 0] dtim0_rev;
-  logic [0 : 0] dtim1_rev;
+  logic [0:0] itim0_rev;
+  logic [0:0] itim1_rev;
+  logic [0:0] dtim0_rev;
+  logic [0:0] dtim1_rev;
 
-  logic [0 : 0] itim0_rev_reg;
-  logic [0 : 0] itim1_rev_reg;
-  logic [0 : 0] dtim0_rev_reg;
-  logic [0 : 0] dtim1_rev_reg;
+  logic [0:0] itim0_rev_reg;
+  logic [0:0] itim1_rev_reg;
+  logic [0:0] dtim0_rev_reg;
+  logic [0:0] dtim1_rev_reg;
 
   always_comb begin
 
@@ -79,7 +79,8 @@ module bus (
       itim0_in          = imem0_in;
       itim0_in.mem_addr = imem0_in.mem_addr - ITIM_BASE;
       itim0_rev         = 0;
-    end else if (dmem0_in.mem_valid & ~|(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK))) begin
+    end
+    else if (dmem0_in.mem_valid & ~|(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK))) begin
       itim0_in          = dmem0_in;
       itim0_in.mem_addr = dmem0_in.mem_addr - ITIM_BASE;
       itim0_rev         = 1;
@@ -89,7 +90,8 @@ module bus (
       itim1_in          = imem1_in;
       itim1_in.mem_addr = imem1_in.mem_addr - ITIM_BASE;
       itim1_rev         = 0;
-    end else if (dmem1_in.mem_valid & ~|(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK))) begin
+    end
+    else if (dmem1_in.mem_valid & ~|(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK))) begin
       itim1_in          = dmem1_in;
       itim1_in.mem_addr = dmem1_in.mem_addr - ITIM_BASE;
       itim1_rev         = 1;
@@ -99,7 +101,8 @@ module bus (
       dtim0_in          = imem0_in;
       dtim0_in.mem_addr = imem0_in.mem_addr - DTIM_BASE;
       dtim0_rev         = 1;
-    end else if (dmem0_in.mem_valid & ~|(DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
+    end
+    else if (dmem0_in.mem_valid & ~|(DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
       dtim0_in          = dmem0_in;
       dtim0_in.mem_addr = dmem0_in.mem_addr - DTIM_BASE;
       dtim0_rev         = 0;
@@ -109,26 +112,27 @@ module bus (
       dtim1_in          = imem1_in;
       dtim1_in.mem_addr = imem1_in.mem_addr - DTIM_BASE;
       dtim1_rev         = 1;
-    end else if (dmem1_in.mem_valid & ~|(DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
+    end
+    else if (dmem1_in.mem_valid & ~|(DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
       dtim1_in          = dmem1_in;
       dtim1_in.mem_addr = dmem1_in.mem_addr - DTIM_BASE;
       dtim1_rev         = 0;
     end
 
-    if (imem0_in.mem_valid & |(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK)) & |(
-        DTIM_BASE ^ (imem0_in.mem_addr & DTIM_MASK))) begin
+    if (imem0_in.mem_valid & |(ITIM_BASE ^ (imem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^
+                                                                                (imem0_in.mem_addr & DTIM_MASK))) begin
       ibridge0_in = imem0_in;
     end
-    if (imem1_in.mem_valid & |(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK)) & |(
-        DTIM_BASE ^ (imem1_in.mem_addr & DTIM_MASK))) begin
+    if (imem1_in.mem_valid & |(ITIM_BASE ^ (imem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^
+                                                                                (imem1_in.mem_addr & DTIM_MASK))) begin
       ibridge1_in = imem1_in;
     end
-    if (dmem0_in.mem_valid & |(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK)) & |(
-        DTIM_BASE ^ (dmem0_in.mem_addr & DTIM_MASK))) begin
+    if (dmem0_in.mem_valid & |(ITIM_BASE ^ (dmem0_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^
+                                                                                (dmem0_in.mem_addr & DTIM_MASK))) begin
       dbridge0_in = dmem0_in;
     end
-    if (dmem1_in.mem_valid & |(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK)) & |(
-        DTIM_BASE ^ (dmem1_in.mem_addr & DTIM_MASK))) begin
+    if (dmem1_in.mem_valid & |(ITIM_BASE ^ (dmem1_in.mem_addr & ITIM_MASK)) & |(DTIM_BASE ^
+                                                                                (dmem1_in.mem_addr & DTIM_MASK))) begin
       dbridge1_in = dmem1_in;
     end
 
@@ -184,7 +188,8 @@ module bus (
       itim1_rev_reg <= 0;
       dtim0_rev_reg <= 0;
       dtim1_rev_reg <= 0;
-    end else begin
+    end
+    else begin
       itim0_rev_reg <= itim0_rev;
       itim1_rev_reg <= itim1_rev;
       dtim0_rev_reg <= dtim0_rev;

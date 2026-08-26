@@ -15,15 +15,20 @@ module bcu (
     if (bcu_in.enable == 1) begin
       if (bcu_in.bcu_op.bcu_beq == 1) begin
         branch = bcu_in.rdata1 == bcu_in.rdata2;
-      end else if (bcu_in.bcu_op.bcu_bne == 1) begin
+      end
+      else if (bcu_in.bcu_op.bcu_bne == 1) begin
         branch = bcu_in.rdata1 != bcu_in.rdata2;
-      end else if (bcu_in.bcu_op.bcu_blt == 1) begin
+      end
+      else if (bcu_in.bcu_op.bcu_blt == 1) begin
         branch = $signed(bcu_in.rdata1) < $signed(bcu_in.rdata2);
-      end else if (bcu_in.bcu_op.bcu_bge == 1) begin
+      end
+      else if (bcu_in.bcu_op.bcu_bge == 1) begin
         branch = $signed(bcu_in.rdata1) >= $signed(bcu_in.rdata2);
-      end else if (bcu_in.bcu_op.bcu_bltu == 1) begin
+      end
+      else if (bcu_in.bcu_op.bcu_bltu == 1) begin
         branch = bcu_in.rdata1 < bcu_in.rdata2;
-      end else if (bcu_in.bcu_op.bcu_bgeu == 1) begin
+      end
+      else if (bcu_in.bcu_op.bcu_bgeu == 1) begin
         branch = bcu_in.rdata1 >= bcu_in.rdata2;
       end
     end

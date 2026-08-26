@@ -26,15 +26,7 @@ module uart_rx #(
     logic [1:0]  rx_sync;
   } register_type;
 
-  register_type init_register = '{
-      counter : 0,
-      rdata : 0,
-      ready : 0,
-      state : 0,
-      data : 0,
-      irq : 0,
-      rx_sync : 2'b11
-  };
+  register_type init_register = '{counter : 0, rdata : 0, ready : 0, state : 0, data : 0, irq : 0, rx_sync : 2'b11};
 
   register_type r, rin, v;
 
@@ -54,11 +46,13 @@ module uart_rx #(
         if (uart_in.mem_addr == 0) begin
           v.rdata = v.data[8:1];
           v.ready = 1;
-        end else if (uart_in.mem_addr == 8) begin
+        end
+        else if (uart_in.mem_addr == 8) begin
           v.rdata = {8{v.irq}};
           v.ready = 1;
         end
-      end else begin
+      end
+      else begin
         if (uart_in.mem_addr == 8) begin
           v.ready = 1;
           v.irq   = 0;
@@ -109,7 +103,8 @@ module uart_rx #(
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_register;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

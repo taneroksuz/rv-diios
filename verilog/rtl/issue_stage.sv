@@ -45,8 +45,8 @@ module issue_stage (
 
     hazard_in.instr0 = v.instr0;
     hazard_in.instr1 = v.instr1;
-    hazard_in.clear = a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 |
-        btac_out.pred_miss1 | clear;
+    hazard_in.clear = a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 |
+        clear;
     hazard_in.stall = d.i.stall | d.e.stall | d.m.stall;
 
     v.calc0 = hazard_out.calc0;
@@ -99,24 +99,23 @@ module issue_stage (
     v.calc1.rdata1 = forwarding1_out.data1;
     v.calc1.rdata2 = forwarding1_out.data2;
 
-    if (a.e.calc0.op.cwren == 1 || a.m.calc0.op.cwren == 1 || a.e.calc1.op.cwren == 1 ||
-        a.m.calc1.op.cwren == 1) begin
+    if (a.e.calc0.op.cwren == 1 || a.m.calc0.op.cwren == 1 || a.e.calc1.op.cwren == 1 || a.m.calc1.op.cwren == 1) begin
       v.stall = 1;
-    end else if (a.e.calc0.op.load == 1 &&
-                 ((v.calc0.op.rden1 == 1 && a.e.calc0.waddr == v.calc0.raddr1) ||
-                  (v.calc0.op.rden2 == 1 && a.e.calc0.waddr == v.calc0.raddr2))) begin
+    end
+    else if (a.e.calc0.op.load == 1 && ((v.calc0.op.rden1 == 1 && a.e.calc0.waddr == v.calc0.raddr1) ||
+                                        (v.calc0.op.rden2 == 1 && a.e.calc0.waddr == v.calc0.raddr2))) begin
       v.stall = 1;
-    end else if (a.e.calc1.op.load == 1 &&
-                 ((v.calc0.op.rden1 == 1 && a.e.calc1.waddr == v.calc0.raddr1) ||
-                  (v.calc0.op.rden2 == 1 && a.e.calc1.waddr == v.calc0.raddr2))) begin
+    end
+    else if (a.e.calc1.op.load == 1 && ((v.calc0.op.rden1 == 1 && a.e.calc1.waddr == v.calc0.raddr1) ||
+                                        (v.calc0.op.rden2 == 1 && a.e.calc1.waddr == v.calc0.raddr2))) begin
       v.stall = 1;
-    end else if (a.e.calc0.op.load == 1 &&
-                 ((v.calc1.op.rden1 == 1 && a.e.calc0.waddr == v.calc1.raddr1) ||
-                  (v.calc1.op.rden2 == 1 && a.e.calc0.waddr == v.calc1.raddr2))) begin
+    end
+    else if (a.e.calc0.op.load == 1 && ((v.calc1.op.rden1 == 1 && a.e.calc0.waddr == v.calc1.raddr1) ||
+                                        (v.calc1.op.rden2 == 1 && a.e.calc0.waddr == v.calc1.raddr2))) begin
       v.stall = 1;
-    end else if (a.e.calc1.op.load == 1 &&
-                 ((v.calc1.op.rden1 == 1 && a.e.calc1.waddr == v.calc1.raddr1) ||
-                  (v.calc1.op.rden2 == 1 && a.e.calc1.waddr == v.calc1.raddr2))) begin
+    end
+    else if (a.e.calc1.op.load == 1 && ((v.calc1.op.rden1 == 1 && a.e.calc1.waddr == v.calc1.raddr1) ||
+                                        (v.calc1.op.rden2 == 1 && a.e.calc1.waddr == v.calc1.raddr2))) begin
       v.stall = 1;
     end
 
@@ -139,8 +138,8 @@ module issue_stage (
       v.calc0 = init_calculation;
     end
 
-    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 |
-         btac_out.pred_miss1 | clear) == 1) begin
+    if ((a.m.calc0.op.fence | csr_out.trap | csr_out.mret | btac_out.pred_miss0 | btac_out.pred_miss1 | clear) ==
+        1) begin
       v.calc0 = init_calculation;
       v.calc1 = init_calculation;
     end
@@ -162,7 +161,8 @@ module issue_stage (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_issue_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end

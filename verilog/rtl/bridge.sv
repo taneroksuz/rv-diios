@@ -102,7 +102,8 @@ module bridge (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       error_out <= init_mem_out;
-    end else begin
+    end
+    else begin
       error_out.mem_rdata <= 0;
       error_out.mem_error <= error_in.mem_valid;
       error_out.mem_ready <= error_in.mem_valid;

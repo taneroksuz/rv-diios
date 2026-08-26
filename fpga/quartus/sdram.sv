@@ -30,14 +30,14 @@ module sdram_ctrl (
   localparam ASIZE = COLSIZE + ROWSIZE + BANKSIZE;
 
   localparam INIT_PER = 30000;
-  localparam REF_PER = 1280;
-  localparam SC_CL = 3;
-  localparam SC_RCD = 3;
-  localparam SC_RP = 3;
-  localparam SC_RFC = 9;
-  localparam SC_MRD = 3;
-  localparam SC_WR = 2;
-  localparam SC_REF = 8;
+  localparam REF_PER  = 1280;
+  localparam SC_CL    = 3;
+  localparam SC_RCD   = 3;
+  localparam SC_RP    = 3;
+  localparam SC_RFC   = 9;
+  localparam SC_MRD   = 3;
+  localparam SC_WR    = 2;
+  localparam SC_REF   = 8;
 
   localparam logic [12:0] MODE_REG = {3'b000, 1'b0, 2'b00, 3'b011, 1'b0, 3'b000};
 
@@ -117,7 +117,8 @@ module sdram_ctrl (
     if (r.refresh_timer == 0) begin
       v.refresh_timer = REF_PER;
       v.refresh_req   = 1;
-    end else begin
+    end
+    else begin
       v.refresh_timer = r.refresh_timer - 1'b1;
     end
 
@@ -134,7 +135,8 @@ module sdram_ctrl (
       S_INIT: begin
         if (r.delay != 0) begin
           v.delay = r.delay - 1'b1;
-        end else if (r.step == 0) begin
+        end
+        else if (r.step == 0) begin
           v.sa    = PRECHARGE_ALL;
           v.ba    = 0;
           v.ras_n = 0;
@@ -142,13 +144,15 @@ module sdram_ctrl (
           v.we_n  = 0;
           v.delay = SC_RP;
           v.step  = r.step + 1'b1;
-        end else if (r.step <= SC_REF) begin
+        end
+        else if (r.step <= SC_REF) begin
           v.ras_n = 0;
           v.cas_n = 0;
           v.we_n  = 1;
           v.delay = SC_RFC;
           v.step  = r.step + 1'b1;
-        end else if (r.step == SC_REF + 1) begin
+        end
+        else if (r.step == SC_REF + 1) begin
           v.sa    = MODE_REG;
           v.ba    = 0;
           v.ras_n = 0;
@@ -156,7 +160,8 @@ module sdram_ctrl (
           v.we_n  = 0;
           v.delay = SC_MRD;
           v.step  = r.step + 1'b1;
-        end else begin
+        end
+        else begin
           v.state = S_IDLE;
         end
       end
@@ -169,7 +174,8 @@ module sdram_ctrl (
           v.refresh_req = 0;
           v.delay       = SC_RFC;
           v.state       = S_WAIT;
-        end else if (v.pending == 1) begin
+        end
+        else if (v.pending == 1) begin
           v.sa      = v.addr[ROWSTART+ROWSIZE-1:ROWSTART];
           v.ba      = v.addr[BANKSTART+BANKSIZE-1:BANKSTART];
           v.ras_n   = 0;
@@ -184,7 +190,8 @@ module sdram_ctrl (
       S_ACTIVE: begin
         if (r.delay != 0) begin
           v.delay = r.delay - 1'b1;
-        end else begin
+        end
+        else begin
           v.sa    = {2'b00, 1'b1, 1'b0, r.addr[COLSTART+COLSIZE-1:COLSTART]};
           v.ras_n = 1;
           v.cas_n = 0;
@@ -195,7 +202,8 @@ module sdram_ctrl (
             v.ready = 1;
             v.delay = SC_WR + SC_RP;
             v.state = S_WAIT;
-          end else begin
+          end
+          else begin
             v.we_n  = 1;
             v.delay = SC_CL;
             v.state = S_READ;
@@ -206,7 +214,8 @@ module sdram_ctrl (
       S_READ: begin
         if (r.delay != 0) begin
           v.delay = r.delay - 1'b1;
-        end else begin
+        end
+        else begin
           v.rdata = sdram_dq;
           v.ready = 1;
           v.delay = SC_RP;
@@ -217,7 +226,8 @@ module sdram_ctrl (
       default: begin
         if (r.delay != 0) begin
           v.delay = r.delay - 1'b1;
-        end else begin
+        end
+        else begin
           v.state = S_IDLE;
         end
       end
@@ -244,7 +254,8 @@ module sdram_ctrl (
   always_ff @(posedge clock) begin
     if (reset == 0) begin
       r <= init_reg;
-    end else begin
+    end
+    else begin
       r <= rin;
     end
   end
@@ -280,7 +291,8 @@ module sdram (
   always_ff @(posedge sdram_clk) begin
     if (reset == 0) begin
       sdram_reset <= 2'b00;
-    end else begin
+    end
+    else begin
       sdram_reset <= {sdram_reset[0], 1'b1};
     end
   end

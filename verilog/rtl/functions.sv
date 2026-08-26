@@ -98,7 +98,8 @@ package functions;
       end
       if ($signed(r1) < $signed(r2)) begin
         bit_minmax = rs2;
-      end else begin
+      end
+      else begin
         bit_minmax = rs1;
       end
     end
@@ -201,7 +202,8 @@ package functions;
     begin
       if (rs1[rs2[4:0]] == 1) begin
         bit_bext = 1;
-      end else begin
+      end
+      else begin
         bit_bext = 0;
       end
     end

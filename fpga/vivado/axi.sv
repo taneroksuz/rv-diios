@@ -1,59 +1,59 @@
 import configure::*;
 
 module axi (
-  input  logic          reset,
-  input  logic          clock,
+  input  logic        reset,
+  input  logic        clock,
   /////////////////////////////////
-  input  logic [ 0 : 0] axi_valid,
-  input  logic [ 0 : 0] axi_instr,
-  input  logic [31 : 0] axi_addr,
-  input  logic [31 : 0] axi_wdata,
-  input  logic [ 3 : 0] axi_wstrb,
-  output logic [31 : 0] axi_rdata,
-  output logic [ 0 : 0] axi_ready,
+  input  logic [ 0:0] axi_valid,
+  input  logic [ 0:0] axi_instr,
+  input  logic [31:0] axi_addr,
+  input  logic [31:0] axi_wdata,
+  input  logic [ 3:0] axi_wstrb,
+  output logic [31:0] axi_rdata,
+  output logic [ 0:0] axi_ready,
   /////////////////////////////////
   // Write address channel
-  output logic [31 : 0] m_axi_awaddr,
-  output logic [ 7 : 0] m_axi_awlen,
-  output logic [ 2 : 0] m_axi_awsize,
-  output logic [ 1 : 0] m_axi_awburst,
-  output logic [ 0 : 0] m_axi_awlock,
-  output logic [ 3 : 0] m_axi_awcache,
-  output logic [ 2 : 0] m_axi_awprot,
-  output logic [ 3 : 0] m_axi_awqos,
-  output logic [ 0 : 0] m_axi_awvalid,
-  input  logic [ 0 : 0] m_axi_awready,
+  output logic [31:0] m_axi_awaddr,
+  output logic [ 7:0] m_axi_awlen,
+  output logic [ 2:0] m_axi_awsize,
+  output logic [ 1:0] m_axi_awburst,
+  output logic [ 0:0] m_axi_awlock,
+  output logic [ 3:0] m_axi_awcache,
+  output logic [ 2:0] m_axi_awprot,
+  output logic [ 3:0] m_axi_awqos,
+  output logic [ 0:0] m_axi_awvalid,
+  input  logic [ 0:0] m_axi_awready,
   /////////////////////////////////
   // Write data channel
-  output logic [31 : 0] m_axi_wdata,
-  output logic [ 3 : 0] m_axi_wstrb,
-  output logic [ 0 : 0] m_axi_wlast,
-  output logic [ 0 : 0] m_axi_wvalid,
-  input  logic [ 0 : 0] m_axi_wready,
+  output logic [31:0] m_axi_wdata,
+  output logic [ 3:0] m_axi_wstrb,
+  output logic [ 0:0] m_axi_wlast,
+  output logic [ 0:0] m_axi_wvalid,
+  input  logic [ 0:0] m_axi_wready,
   /////////////////////////////////
   // Write response channel
-  input  logic [ 1 : 0] m_axi_bresp,
-  input  logic [ 0 : 0] m_axi_bvalid,
-  output logic [ 0 : 0] m_axi_bready,
+  input  logic [ 1:0] m_axi_bresp,
+  input  logic [ 0:0] m_axi_bvalid,
+  output logic [ 0:0] m_axi_bready,
   /////////////////////////////////
   // Read address channel
-  output logic [31 : 0] m_axi_araddr,
-  output logic [ 7 : 0] m_axi_arlen,
-  output logic [ 2 : 0] m_axi_arsize,
-  output logic [ 1 : 0] m_axi_arburst,
-  output logic [ 0 : 0] m_axi_arlock,
-  output logic [ 3 : 0] m_axi_arcache,
-  output logic [ 2 : 0] m_axi_arprot,
-  output logic [ 3 : 0] m_axi_arqos,
-  output logic [ 0 : 0] m_axi_arvalid,
-  input  logic [ 0 : 0] m_axi_arready,
+  output logic [31:0] m_axi_araddr,
+  output logic [ 7:0] m_axi_arlen,
+  output logic [ 2:0] m_axi_arsize,
+  output logic [ 1:0] m_axi_arburst,
+  output logic [ 0:0] m_axi_arlock,
+  output logic [ 3:0] m_axi_arcache,
+  output logic [ 2:0] m_axi_arprot,
+  output logic [ 3:0] m_axi_arqos,
+  output logic [ 0:0] m_axi_arvalid,
+  input  logic [ 0:0] m_axi_arready,
   /////////////////////////////////
   // Read data channel
-  input  logic [31 : 0] m_axi_rdata,
-  input  logic [ 1 : 0] m_axi_rresp,
-  input  logic [ 0 : 0] m_axi_rlast,
-  input  logic [ 0 : 0] m_axi_rvalid,
-  output logic [ 0 : 0] m_axi_rready
+  input  logic [31:0] m_axi_rdata,
+  input  logic [ 1:0] m_axi_rresp,
+  input  logic [ 0:0] m_axi_rlast,
+  input  logic [ 0:0] m_axi_rvalid,
+  output logic [ 0:0] m_axi_rready
   /////////////////////////////////
 );
   timeunit 1ns; timeprecision 1ps;
@@ -62,34 +62,34 @@ module axi (
   localparam [1:0] load  = 1;
   localparam [1:0] store = 2;
 
-  logic [1 : 0] state;
-  logic [1 : 0] state_reg;
+  logic [1:0] state;
+  logic [1:0] state_reg;
 
-  logic [0 : 0] awvalid;
-  logic [0 : 0] awvalid_reg;
-  logic [0 : 0] wvalid;
-  logic [0 : 0] wvalid_reg;
-  logic [0 : 0] bready;
-  logic [0 : 0] bready_reg;
-  logic [0 : 0] arvalid;
-  logic [0 : 0] arvalid_reg;
-  logic [0 : 0] rready;
-  logic [0 : 0] rready_reg;
-  logic [ 31:0] addr;
-  logic [ 31:0] addr_reg;
-  logic [2 : 0] prot;
-  logic [2 : 0] prot_reg;
-  logic [ 31:0] wdata;
-  logic [ 31:0] wdata_reg;
-  logic [3 : 0] wstrb;
-  logic [3 : 0] wstrb_reg;
-  logic [0 : 0] wlast;
-  logic [0 : 0] wlast_reg;
+  logic [ 0:0] awvalid;
+  logic [ 0:0] awvalid_reg;
+  logic [ 0:0] wvalid;
+  logic [ 0:0] wvalid_reg;
+  logic [ 0:0] bready;
+  logic [ 0:0] bready_reg;
+  logic [ 0:0] arvalid;
+  logic [ 0:0] arvalid_reg;
+  logic [ 0:0] rready;
+  logic [ 0:0] rready_reg;
+  logic [31:0] addr;
+  logic [31:0] addr_reg;
+  logic [ 2:0] prot;
+  logic [ 2:0] prot_reg;
+  logic [31:0] wdata;
+  logic [31:0] wdata_reg;
+  logic [ 3:0] wstrb;
+  logic [ 3:0] wstrb_reg;
+  logic [ 0:0] wlast;
+  logic [ 0:0] wlast_reg;
 
-  logic [ 31:0] rdata;
-  logic [ 31:0] rdata_reg;
-  logic [0 : 0] ready;
-  logic [0 : 0] ready_reg;
+  logic [31:0] rdata;
+  logic [31:0] rdata_reg;
+  logic [ 0:0] ready;
+  logic [ 0:0] ready_reg;
 
   always_comb begin
     state   = state_reg;
@@ -112,7 +112,8 @@ module axi (
             state   = load;
             arvalid = 1;
             rready  = 1;
-          end else if (|axi_wstrb == 1) begin
+          end
+          else if (|axi_wstrb == 1) begin
             state   = store;
             awvalid = 1;
             wvalid  = 1;
@@ -135,7 +136,8 @@ module axi (
           state = idle;
           rdata = m_axi_rdata;
           ready = 1;
-        end else if (m_axi_rvalid == 0) begin
+        end
+        else if (m_axi_rvalid == 0) begin
           rready = rready_reg;
         end
       end
@@ -154,7 +156,8 @@ module axi (
         if (m_axi_bvalid == 1) begin
           state = idle;
           ready = 1;
-        end else if (m_axi_bvalid == 0) begin
+        end
+        else if (m_axi_bvalid == 0) begin
           bready = bready_reg;
         end
       end
@@ -211,7 +214,8 @@ module axi (
       bready_reg  <= 0;
       rdata_reg   <= 0;
       ready_reg   <= 0;
-    end else begin
+    end
+    else begin
       state_reg   <= state;
       arvalid_reg <= arvalid;
       awvalid_reg <= awvalid;

@@ -27,7 +27,8 @@ module uart_tx #(
           uart_out.mem_error <= 0;
           uart_out.mem_ready <= 1;
 
-        end else begin
+        end
+        else begin
 
           uart_out.mem_rdata <= 0;
           uart_out.mem_error <= 0;
@@ -72,11 +73,13 @@ module uart_tx #(
             if (uart_in.mem_addr == 0 && v.state == 0) begin
               v.data  = {1'b1, uart_in.mem_wdata[7:0], 1'b0};
               v.state = 1;
-            end else if (uart_in.mem_addr == 8) begin
+            end
+            else if (uart_in.mem_addr == 8) begin
               v.ready = 1;
               v.irq   = 0;
             end
-          end else begin
+          end
+          else begin
             if (uart_in.mem_addr == 8) begin
               v.rdata = {8{v.irq}};
               v.ready = 1;
@@ -118,7 +121,8 @@ module uart_tx #(
       always_ff @(posedge clock) begin
         if (reset == 0) begin
           r <= init_register;
-        end else begin
+        end
+        else begin
           r <= rin;
         end
       end

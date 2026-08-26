@@ -47,7 +47,8 @@ module cdc (
   always_ff @(posedge src_clk) begin
     if (!src_rstn) begin
       current_in_state <= IDLE;
-    end else begin
+    end
+    else begin
       current_in_state <= next_in_state;
     end
   end
@@ -57,21 +58,24 @@ module cdc (
       IDLE: begin
         if (src_mem_in.mem_valid) begin
           next_in_state = WAIT;
-        end else begin
+        end
+        else begin
           next_in_state = IDLE;
         end
       end
       WAIT: begin
         if (!(req_in_valid ^ ack_in_valid_sync)) begin
           next_in_state = HOLD;
-        end else begin
+        end
+        else begin
           next_in_state = WAIT;
         end
       end
       HOLD: begin
         if (!src_mem_in.mem_valid) begin
           next_in_state = IDLE;
-        end else begin
+        end
+        else begin
           next_in_state = HOLD;
         end
       end
@@ -83,7 +87,8 @@ module cdc (
     if (!src_rstn) begin
       req_in_valid <= 1'b0;
       mem_in_reg   <= '0;
-    end else if (current_in_state == IDLE && src_mem_in.mem_valid) begin
+    end
+    else if (current_in_state == IDLE && src_mem_in.mem_valid) begin
       req_in_valid <= ~req_in_valid;
       mem_in_reg   <= src_mem_in;
     end
@@ -93,7 +98,8 @@ module cdc (
     if (!dst_rstn) begin
       req_in_valid_meta <= 1'b0;
       req_in_valid_sync <= 1'b0;
-    end else begin
+    end
+    else begin
       req_in_valid_meta <= req_in_valid;
       req_in_valid_sync <= req_in_valid_meta;
     end
@@ -103,7 +109,8 @@ module cdc (
     if (!src_rstn) begin
       ack_in_valid_meta <= 1'b0;
       ack_in_valid_sync <= 1'b0;
-    end else begin
+    end
+    else begin
       ack_in_valid_meta <= ack_in_valid;
       ack_in_valid_sync <= ack_in_valid_meta;
     end
@@ -113,10 +120,12 @@ module cdc (
     if (!dst_rstn) begin
       ack_in_valid <= 1'b0;
       dst_mem_in   <= '0;
-    end else if (req_in_valid_sync ^ ack_in_valid) begin
+    end
+    else if (req_in_valid_sync ^ ack_in_valid) begin
       ack_in_valid <= ~ack_in_valid;
       dst_mem_in   <= mem_in_reg;
-    end else begin
+    end
+    else begin
       dst_mem_in <= '0;
     end
   end
@@ -124,7 +133,8 @@ module cdc (
   always_ff @(posedge dst_clk) begin
     if (!dst_rstn) begin
       current_out_state <= IDLE;
-    end else begin
+    end
+    else begin
       current_out_state <= next_out_state;
     end
   end
@@ -134,14 +144,16 @@ module cdc (
       IDLE: begin
         if (dst_mem_out.mem_ready) begin
           next_out_state = WAIT;
-        end else begin
+        end
+        else begin
           next_out_state = IDLE;
         end
       end
       WAIT: begin
         if (!(req_out_ready ^ ack_out_ready_sync)) begin
           next_out_state = IDLE;
-        end else begin
+        end
+        else begin
           next_out_state = WAIT;
         end
       end
@@ -153,7 +165,8 @@ module cdc (
     if (!dst_rstn) begin
       req_out_ready <= 1'b0;
       mem_out_reg   <= '0;
-    end else if (current_out_state == IDLE && dst_mem_out.mem_ready) begin
+    end
+    else if (current_out_state == IDLE && dst_mem_out.mem_ready) begin
       req_out_ready <= ~req_out_ready;
       mem_out_reg   <= dst_mem_out;
     end
@@ -163,7 +176,8 @@ module cdc (
     if (!src_rstn) begin
       req_out_ready_meta <= 1'b0;
       req_out_ready_sync <= 1'b0;
-    end else begin
+    end
+    else begin
       req_out_ready_meta <= req_out_ready;
       req_out_ready_sync <= req_out_ready_meta;
     end
@@ -173,7 +187,8 @@ module cdc (
     if (!dst_rstn) begin
       ack_out_ready_meta <= 1'b0;
       ack_out_ready_sync <= 1'b0;
-    end else begin
+    end
+    else begin
       ack_out_ready_meta <= ack_out_ready;
       ack_out_ready_sync <= ack_out_ready_meta;
     end
@@ -183,10 +198,12 @@ module cdc (
     if (!src_rstn) begin
       ack_out_ready <= 1'b0;
       src_mem_out   <= '0;
-    end else if (req_out_ready_sync ^ ack_out_ready) begin
+    end
+    else if (req_out_ready_sync ^ ack_out_ready) begin
       ack_out_ready <= ~ack_out_ready;
       src_mem_out   <= mem_out_reg;
-    end else begin
+    end
+    else begin
       src_mem_out <= '0;
     end
   end
