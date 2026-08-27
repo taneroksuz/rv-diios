@@ -30,7 +30,7 @@ module sdram_ctrl (
   localparam ASIZE = COLSIZE + ROWSIZE + BANKSIZE;
 
   localparam INIT_PER = 30000;
-  localparam REF_PER  = 1280;
+  localparam REF_PER  = 950;
   localparam SC_CL    = 3;
   localparam SC_RCD   = 3;
   localparam SC_RP    = 3;
@@ -38,6 +38,8 @@ module sdram_ctrl (
   localparam SC_MRD   = 3;
   localparam SC_WR    = 2;
   localparam SC_REF   = 8;
+
+  localparam SC_RDLAT = SC_CL + 2;
 
   localparam logic [12:0] MODE_REG = {3'b000, 1'b0, 2'b00, 3'b011, 1'b0, 3'b000};
 
@@ -73,7 +75,7 @@ module sdram_ctrl (
     logic [0:0]       dq_oe;
   } reg_type;
 
-  parameter reg_type init_reg = '{
+  localparam reg_type init_reg = '{
       state : S_INIT,
       step : 0,
       delay : INIT_PER,
@@ -99,7 +101,13 @@ module sdram_ctrl (
 
   reg_type r, rin, v;
 
+  logic [31:0] dq_in;
+
   assign sdram_dq = (r.dq_oe == 1) ? r.wdata : 32'bz;
+
+  always_ff @(posedge clock) begin
+    dq_in <= sdram_dq;
+  end
 
   always_comb begin
 
@@ -122,7 +130,7 @@ module sdram_ctrl (
       v.refresh_timer = r.refresh_timer - 1'b1;
     end
 
-    if (sdram_in.mem_valid == 1) begin
+    if (sdram_in.mem_valid == 1 && r.pending == 0) begin
       v.addr    = sdram_in.mem_addr[ASIZE+1:2];
       v.wdata   = sdram_in.mem_wdata;
       v.wstrb   = sdram_in.mem_wstrb;
@@ -167,7 +175,7 @@ module sdram_ctrl (
       end
 
       S_IDLE: begin
-        if (r.refresh_req == 1) begin
+        if (v.refresh_req == 1) begin
           v.ras_n       = 0;
           v.cas_n       = 0;
           v.we_n        = 1;
@@ -205,7 +213,7 @@ module sdram_ctrl (
           end
           else begin
             v.we_n  = 1;
-            v.delay = SC_CL;
+            v.delay = SC_RDLAT;
             v.state = S_READ;
           end
         end
@@ -216,7 +224,7 @@ module sdram_ctrl (
           v.delay = r.delay - 1'b1;
         end
         else begin
-          v.rdata = sdram_dq;
+          v.rdata = dq_in;
           v.ready = 1;
           v.delay = SC_RP;
           v.state = S_WAIT;
