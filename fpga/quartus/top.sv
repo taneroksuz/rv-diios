@@ -95,7 +95,7 @@ module top (
     end
   end
 
-  assign LEDR     = REG_LED;
+  assign LEDR     = ~REG_LED;
   assign DRAM_CLK = CLOCK_SDR;
 
   sdram sdram_comp (
