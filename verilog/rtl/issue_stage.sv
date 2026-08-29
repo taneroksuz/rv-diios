@@ -36,12 +36,14 @@ module issue_stage (
     v.instr0 = d.d.instr0;
     v.instr1 = d.d.instr1;
 
-    v.instr0.pred.taken = btac_out.pred0.taken;
-    v.instr1.pred.taken = btac_out.pred1.taken;
-    v.instr0.pred.taddr = btac_out.pred0.taddr;
-    v.instr1.pred.taddr = btac_out.pred1.taddr;
-    v.instr0.pred.tsat  = btac_out.pred0.tsat;
-    v.instr1.pred.tsat  = btac_out.pred1.tsat;
+    v.instr0.pred.taken  = btac_out.pred0.taken;
+    v.instr1.pred.taken  = btac_out.pred1.taken;
+    v.instr0.pred.taddr  = btac_out.pred0.taddr;
+    v.instr1.pred.taddr  = btac_out.pred1.taddr;
+    v.instr0.pred.tsat   = btac_out.pred0.tsat;
+    v.instr1.pred.tsat   = btac_out.pred1.tsat;
+    v.instr0.pred.tmatch = btac_out.pred0.tmatch;
+    v.instr1.pred.tmatch = btac_out.pred1.tmatch;
 
     hazard_in.instr0 = v.instr0;
     hazard_in.instr1 = v.instr1;

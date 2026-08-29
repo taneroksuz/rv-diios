@@ -299,9 +299,10 @@ package wires;
     logic [0:0]  taken;
     logic [31:0] taddr;
     logic [1:0]  tsat;
+    logic [0:0]  tmatch;
   } prediction_type;
 
-  localparam prediction_type init_prediction = '{taken : 0, taddr : 0, tsat : 0};
+  localparam prediction_type init_prediction = '{taken : 0, taddr : 0, tsat : 0, tmatch : 0};
 
   typedef struct packed {
     logic [31:0]    get_pc0;
