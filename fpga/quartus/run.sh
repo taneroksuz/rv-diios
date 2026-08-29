@@ -19,4 +19,4 @@ then
   killall jtagd
 fi
 $JTAGCONFIG
-${QUARTUS}_pgm -m jtag -o "p;${BASEDIR}/fpga/quartus/output_files/top.sof"
+${QUARTUS}_pgm -m jtag -o "p;${BASEDIR}/fpga/quartus/top.sof"
